@@ -6,8 +6,6 @@ Shader "Universal Render Pipeline/2D/Spire-Lit-Custom"
         _MaskTex("Mask", 2D) = "white" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
 
-        _Color("Tint2", Color) = (1,1,1,1)
-
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color("Tint", Color) = (1,1,1,1)
         [HideInInspector] _RendererColor("RendererColor", Color) = (1,1,1,1)

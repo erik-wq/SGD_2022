@@ -104,7 +104,7 @@ half4 CombinedShapeLightShared(in SurfaceData2D surfaceData, in InputData2D inpu
 
     finalOutput.a = alpha;
     finalOutput = lerp(color, finalOutput, _UseSceneLighting);
-
+    
     return max(0, finalOutput);
 }
 #endif
