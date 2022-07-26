@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private BasicFollow HopesFollow;
     [SerializeField] private Transform MouseIndicatorTransform;
     [SerializeField] private Camera MainCamera;
+    [SerializeField] private CameraManagement CameraManagement;
 
     [SerializeField] private AnimationCurve SprintCurve;
     [SerializeField] private float SprintLenght = 3;
@@ -62,7 +63,15 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move(_movementInput);
+        if (_movementInput != Vector2.zero)
+        {
+            Move(_movementInput);
+        }
+        else
+        {
+            CameraManagement.SetMoving(false);
+        }
+
         MoveIndicator();
     }
 
@@ -185,8 +194,7 @@ public class PlayerController : MonoBehaviour
             movementSpeed = GetMovementSpeed(input);
         }
 
-        Debug.Log(_sprintInProgress);
-        Debug.Log(movementSpeed);
+        CameraManagement.SetPlayersSpeed(movementSpeed);
 
         List<RaycastHit2D> foundCollisions = new List<RaycastHit2D>();
         var freeDirection = MovementUtility.CastAndAdjust(_rigidBody2D,
@@ -200,16 +208,6 @@ public class PlayerController : MonoBehaviour
         {
             _rigidBody2D.MovePosition(_rigidBody2D.position + freeDirection * movementSpeed * Time.fixedDeltaTime);
         }
-    }
-
-    private void Sprint()
-    {
-        Debug.Log("Sprint");
-    }
-
-    private void Look(Vector2 direction)
-    {
-        Debug.Log(direction);
     }
     #endregion
 }
