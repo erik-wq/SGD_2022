@@ -12,14 +12,19 @@ public class WanderingAI : MonoBehaviour
     [Header("Stay timers variables")]
     public float minStayTime;
     public float maxStayTime;
+    [Header("Collision timers variables")]
+    public float minCollTime;
+    public float maxCollTime;
     [Header("Enemy variables")]
     public float speed;
+    public BasicFollow folow;
     #endregion
 
     #region Private
     private Rigidbody2D _rb;
     private Vector2 _direction;
     private EnemySpawn _spawner;
+    private bool _stop;
     #endregion
     #region Serialized
     [Header("Angle modifiers.\nHow much angle will go in direction of midle spawn point\nHigher value higher chance for midle direction")]
@@ -44,31 +49,24 @@ public class WanderingAI : MonoBehaviour
 
     private void Awake()
     {
+        _stop = false;
         _rb = GetComponent<Rigidbody2D>();
     }
     private void Start()
     {
-        //for (int i =0; i< 20; i++)
-        //{
-        //    print(MathUtility.NormalRNG(0, 180 / innerModifier) + " /"+innerModifier);
-        //}
-        //for (int i = 0; i < 20; i++)
-        //{
-        //    print(MathUtility.NormalRNG(0, 180 / midModifier)+ " /"+ midModifier);
-        //}
-        //for (int i = 0; i < 20; i++)
-        //{
-        //    print(MathUtility.NormalRNG(0, 180/outerModifier)+ " /"+outerModifier);
-        //}
-        //for (int i = 0; i < 20; i++)
-        //{
-        //    print(MathUtility.NormalRNG(0, 180 / farModifier) + " /"+farModifier);
-        //}
+        folow.enabled = false;
         StartCoroutine(Moving());
     }
     private void FixedUpdate()
     {
-        _rb.velocity = _direction * speed;
+        if (!_stop)
+        {
+            _rb.velocity = _direction * speed;
+        }
+        else
+        {
+            _rb.velocity = Vector2.zero;
+        }
     }
     void ChangeDirention()
     {
@@ -121,5 +119,56 @@ public class WanderingAI : MonoBehaviour
     public void Init(EnemySpawn spawner)
     {
         this._spawner = spawner;
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (_stop)
+        {
+            return;
+        }
+        if(collision.gameObject.tag == "Zombie")
+        {
+            _stop = true;
+            StopAllCoroutines();
+            Vector2 dir = -(collision.transform.position - transform.position).normalized;
+            float angle = MathUtility.NormalRNG(0, 180 / 5);
+            _direction = MathUtility.RotateVector(dir, angle);
+            StartCoroutine(CollisionTimer());
+        }
+    }
+    IEnumerator CollisionTimer()
+    {
+        yield return new WaitForSeconds(Random.Range(0.1f, 0.25f));
+        _stop = false;
+        yield return new WaitForSeconds(Random.Range(minCollTime, maxCollTime));
+        StartCoroutine(Moving());
+    }
+    public void ChasePlayer(Transform player)
+    {
+        StopAllCoroutines();
+        _stop = true;
+        folow.enabled = true;
+        folow.SetTarget(player);
+    }
+    public void ReturnToSpawn()
+    {
+        folow.SetTarget(_spawner.transform);
+        StartCoroutine(Returning());
+    }
+    IEnumerator Returning()
+    {
+        bool inside = false;
+        while (!inside)
+        {
+            yield return new WaitForSeconds(0.2f);
+            if (_spawner.InsideBounds(transform.position))
+            {
+                inside = true;
+            }
+        }
+        folow.SetTarget(null);
+        folow.enabled = false;
+        _stop = false;
+        StartCoroutine(Moving());
     }
 }

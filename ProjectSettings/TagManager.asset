@@ -6,11 +6,12 @@ TagManager:
   tags:
   - CollisionObject
   - Hope
+  - Zombie
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Spawner
   - Water
   - UI
   - Background

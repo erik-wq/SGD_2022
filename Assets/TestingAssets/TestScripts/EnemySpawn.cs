@@ -193,7 +193,6 @@ public class EnemySpawn : MonoBehaviour
     }
     bool CheckPosition(Vector2 pos)
     {
-        Debug.Log(Physics2D.OverlapCircle(pos, 1.7f,enemyMask));
         if (Physics2D.OverlapCircle(pos, 1.7f, enemyMask)){
             return false;
         }
@@ -225,6 +224,9 @@ public class EnemySpawn : MonoBehaviour
     #region Spawning
     IEnumerator Spawning()
     {
+        outerPolygon.enabled = false;
+        spawnShape.enabled = false;
+        max.enabled = false;
         Vector2 pos;
         int x = 0;
         while (x < numberOfEnemies)
