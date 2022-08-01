@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Assets.TestingAssets
 {
-    public interface IShadowEnemy
+    public interface IShadowEnemy : IEnemy
     {
         void SetFree();
-        bool TakeDamage(float damage);
+        //bool TakeDamage(float damage);
         float Damage { get; set; }
     }
 }

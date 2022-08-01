@@ -1,3 +1,5 @@
+using Assets.Scripts.Utils;
+using Assets.TestingAssets;
 using Pathfinding;
 using System;
 using System.Collections;
@@ -13,7 +15,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MovementSpeedBackwards = 4f;
     [SerializeField] private float MovementSpeedBackwardsSideway = 3f;
 
-
     [SerializeField] private float CollisionOffset = 0.05f;
     [SerializeField] private ContactFilter2D CollisionsFilter;
     [SerializeField] private AstarPath Pathfinder;
@@ -21,14 +22,37 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform MouseIndicatorTransform;
     [SerializeField] private Camera MainCamera;
     [SerializeField] private CameraManagement CameraManagement;
+    [SerializeField] private Collider2D SwordSlashcollider;
 
+    [SerializeField] private Transform debugCircle;
+
+    [SerializeField] private DebugControl DebugScreenControl;
+
+    //Sword
+    [SerializeField] private SpriteRenderer SwordIndicator;
+    [SerializeField] private Transform SwordIndicatorTransform;
+    [SerializeField] private float SwordSlashZonesCount = 6;
+    [SerializeField] private float SwordAnimationLength = 2;
+    [SerializeField] private float SwordAttackCooldown = 3;
+    [SerializeField] private float SwordAnimationDistance = 4;
+    [SerializeField] private float SwordSlashRadius = 4;
+    [SerializeField] private ContactFilter2D EnemyFilter;
+    [SerializeField] private float SwordDamage = 4;
+    [SerializeField] private float SwordForce = 500;
+
+
+    //Sprint
     [SerializeField] private AnimationCurve SprintCurve;
-    [SerializeField] private float SprintLenght = 3;
-
-    /// <summary>
-    /// Speed added to normal movement speed;
-    /// </summary>
+    [SerializeField] private float CurveLength = 3;
     [SerializeField] private float SprintSpeed = 5;
+    [SerializeField] private float MaxEnergy = 100;
+    [SerializeField] private float SprintEnergyCost = 10;
+    [SerializeField] private float MinimalEnergyToStartSprint = 15;
+    [SerializeField] private float EnergyRechargeRateWhileStaying = 25;
+    [SerializeField] private float EnergyRechargeRateWhileRunning = 15;
+    [SerializeField] private float EnergyRechardDelayWhileStaying = 0.4f;
+    [SerializeField] private float EnergyRechardDelayWhileRunning = 0.8f;
+    
 
     #endregion
 
@@ -36,33 +60,38 @@ public class PlayerController : MonoBehaviour
     private Vector2 _movementInput = Vector2.zero;
     private Rigidbody2D _rigidBody2D;
     private float _mouseIndicatorOffset = 2;
-    //private PlayerControls _playerControls;
+    private bool _isSwordSlashInProgress = false;
+    private float _lastSlashTime = 0;
+    private float _currentEnergy = 0;
+
+    private List<Collider2D> _swordSlashZones = new List<Collider2D>();
+
+    //Sprint
     private float _sprintStart;
     private bool _sprintInProgress = false;
+    private float _sprintRegargeCounter = 0;
+    private Vector2 _lastStateMovement = Vector2.zero;
     #endregion
 
     // Start is called before the first frame update
     private void Start()
     {
         _rigidBody2D = GetComponent<Rigidbody2D>();
+        GenerateSlashZones();
         //_playerControls = new PlayerControls();
-        HopesFollow.Target = this.transform;
+        //HopesFollow.Target = this.transform;
     }
-
-    //void Awake()
-    //{
-    //    _playerControls = new PlayerControls();
-    //    _playerControls.Player.Sprint.performed += (arg) => StartSprint();
-    //}
 
     // Update is called once per frame
     private void Update()
     {
-        RegisterButtons();
+
     }
 
     private void FixedUpdate()
     {
+        CheckSwordAnimation();
+        HandleSprint();
         if (_movementInput != Vector2.zero)
         {
             Move(_movementInput);
@@ -70,33 +99,130 @@ public class PlayerController : MonoBehaviour
         else
         {
             CameraManagement.SetMoving(false);
+            DebugScreenControl.SetHeroSpeed(0);
         }
 
         MoveIndicator();
+
+        DebugScreenControl.SetEnergy(_currentEnergy);
     }
 
-    private void OnEnable()
+    private void GenerateSlashZones()
     {
-        //_playerControls.Disable();
-    }
-
-    private void OnDisable()
-    {
-        //_playerControls.Enable();
-    }
-
-    private void RegisterButtons()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
+        var step = 360.0f / SwordSlashZonesCount;
+        for (int i = 0; i < SwordSlashZonesCount; i++)
         {
-            StartSprint();
+            var polygon = this.gameObject.AddComponent<PolygonCollider2D>();
+            polygon.isTrigger = true;
+            var points = new List<Vector2>();
+            points.Add(Vector2.zero);
+            points.Add(MathUtility.RotateVector(new Vector2(0, 1), i * step));
+            points.Add(MathUtility.RotateVector(new Vector2(0, 1), (i * step) + (step / 3)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, 1), (i * step) + ((step / 3) *2)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, 1), (i * step) + step));
+            polygon.points = points.ToArray();
+            _swordSlashZones.Add(polygon);
+        }
+
+        TurnOffSlashZones();
+    }
+
+    private void HandleSprint()
+    {
+        if (_sprintInProgress)
+        {
+            if (!Input.GetKey(KeyCode.Space) || _movementInput == Vector2.zero)
+            {
+                ExitSprint();
+            }
+            else
+            {
+                SprintConsumeEnergy();
+            }
+        }
+        else
+        {
+            if (_currentEnergy < MaxEnergy)
+            {
+                RegainEnergy();
+            }
+        }
+    }
+
+    private void TurnOffSlashZones()
+    {
+        foreach (var item in _swordSlashZones)
+        {
+            if(item != null)
+            {
+                item.enabled = false;
+            }
+        }
+    }
+
+    private void TurnOnSlashZones()
+    {
+        foreach (var item in _swordSlashZones)
+        {
+            if (item != null)
+            {
+                item.enabled = true;
+            }
+        }
+    }
+
+
+    private void SprintConsumeEnergy()
+    {
+        _currentEnergy -= SprintEnergyCost * Time.fixedDeltaTime;
+        if (_currentEnergy < 0)
+        {
+            _currentEnergy = 0;
+            _sprintInProgress = false;
+        }
+    }
+
+    private void RegainEnergy()
+    {
+        var staying = _movementInput == Vector2.zero;
+        _sprintRegargeCounter += Time.fixedDeltaTime;
+        if (staying && _sprintRegargeCounter > EnergyRechardDelayWhileStaying)
+        {
+            _currentEnergy += EnergyRechargeRateWhileStaying * Time.fixedDeltaTime;
+            if (_currentEnergy > MaxEnergy)
+                _currentEnergy = MaxEnergy;
+        }
+        else if (_sprintRegargeCounter > EnergyRechardDelayWhileRunning)
+        {
+            _currentEnergy += EnergyRechargeRateWhileRunning * Time.fixedDeltaTime;
+            if (_currentEnergy > MaxEnergy)
+                _currentEnergy = MaxEnergy;
+        }
+    }
+
+    private void ExitSprint()
+    {
+        _sprintInProgress = false;
+        _sprintRegargeCounter = 0;
+    }
+
+    private void CheckSwordAnimation()
+    {
+        if (Time.time > _lastSlashTime + SwordAnimationLength)
+        {
+            SwordIndicator.enabled = false;
+            _isSwordSlashInProgress = false;
         }
     }
 
     private void StartSprint()
     {
-        _sprintStart = Time.time;
-        _sprintInProgress = true;
+        if (_currentEnergy > MinimalEnergyToStartSprint)
+        {
+            _sprintStart = Time.time;
+            _sprintInProgress = true;
+            _sprintRegargeCounter = 0;
+        }
     }
 
     private void MoveIndicator()
@@ -107,14 +233,19 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 GetFaceDirection()
     {
-        Ray ray = MainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Vector2 direction = ((Vector2)ray.direction).normalized;
-        return direction;
+        Vector3 mousePos = Mouse.current.position.ReadValue();
+        var worldPosition = MainCamera.ScreenPointToRay(mousePos);
+        Plane plane = new Plane(-Vector3.forward, Vector3.zero);
 
-        //Vector3 mousePos = Mouse.current.position.ReadValue();
-        //mousePos.z = MainCamera.nearClipPlane;
-        //var worldPosition = MainCamera.ScreenToWorldPoint(mousePos);
-        //return ((Vector2)this.transform.position - (Vector2)worldPosition).normalized;
+        float dist;
+        if (plane.Raycast(worldPosition, out dist))
+        {
+            Vector3 P = worldPosition.GetPoint(dist);
+            debugCircle.position = (Vector2)P;
+            return ((Vector2)P - (Vector2)this.transform.position).normalized;
+        }
+
+        return Vector2.zero;
     }
 
     private float GetMovementSpeed(Vector2 input)
@@ -150,16 +281,34 @@ public class PlayerController : MonoBehaviour
     public float GetMovementSpeedWithSprint(Vector2 input)
     {
         var basicSpeed = GetMovementSpeed(input);
-        var pointAtSprint = (Time.time - _sprintStart) / SprintLenght;
+        var pointAtSprint = (Time.time - _sprintStart) / CurveLength;
         var value = SprintCurve.Evaluate(pointAtSprint);
-
-        if ((_sprintStart + SprintLenght) < Time.time)
-        {
-            _sprintInProgress = false;
-        }
-
         return basicSpeed + value * SprintSpeed;
+    }
 
+    private void DamageEnemies(Vector2 direction)
+    {
+        if (_swordSlashZones.Count == 0)
+            return;
+
+        TurnOnSlashZones();
+        var angle = MathUtility.FullAngle(Vector2.up, direction);
+        var step = 360.0f / SwordSlashZonesCount;
+
+        var zone = Convert.ToInt32(Math.Floor(angle / step));
+
+        var enemies = new List<Collider2D>();
+        _swordSlashZones[zone].OverlapCollider(EnemyFilter, enemies);
+
+        foreach (var item in enemies)
+        {
+            if(item.gameObject.tag == "Enemy")
+            {
+                IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
+                iEnemy.TakeDamage(SwordDamage, SwordForce, this.transform.position);
+            }
+        }
+        TurnOffSlashZones();
     }
 
     #region Public Functions
@@ -195,6 +344,9 @@ public class PlayerController : MonoBehaviour
         }
 
         CameraManagement.SetPlayersSpeed(movementSpeed);
+        DebugScreenControl.SetHeroSpeed(movementSpeed);
+
+        SwordSlashcollider.enabled = false;
 
         List<RaycastHit2D> foundCollisions = new List<RaycastHit2D>();
         var freeDirection = MovementUtility.CastAndAdjust(_rigidBody2D,
@@ -208,6 +360,25 @@ public class PlayerController : MonoBehaviour
         {
             _rigidBody2D.MovePosition(_rigidBody2D.position + freeDirection * movementSpeed * Time.fixedDeltaTime);
         }
+
+        SwordSlashcollider.enabled = true;
+    }
+
+    private void OnFire()
+    {
+        if (!_isSwordSlashInProgress && Time.time > _lastSlashTime + SwordAttackCooldown)
+        {
+            var direction = GetFaceDirection();
+            SwordIndicator.enabled = true;
+            _lastSlashTime = Time.time;
+            SwordIndicator.transform.localPosition = direction * SwordAnimationDistance;
+            DamageEnemies(direction);
+        }
+    }
+
+    private void OnSprint()
+    {
+        StartSprint();
     }
     #endregion
 }

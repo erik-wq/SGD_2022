@@ -1,4 +1,4 @@
-#ifndef COMBINED_SHAPE_LIGHT_PASS
+﻿#ifndef COMBINED_SHAPE_LIGHT_PASS
 #define COMBINED_SHAPE_LIGHT_PASS
 
 #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/SurfaceData2D.hlsl"

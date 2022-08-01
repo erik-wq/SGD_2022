@@ -51,7 +51,7 @@ public class HopeAI : MonoBehaviour
 
         foreach (var item in _attackingEnemies)
         {
-            if (item.TakeDamage(Damage * Time.fixedDeltaTime))
+            if (item.TakeDamage(Damage * Time.fixedDeltaTime, 0, this.transform.position))
             {
                 toBeRemoved.Add(item);
             }
@@ -77,9 +77,6 @@ public class HopeAI : MonoBehaviour
         float percentageHP = _hp / MaxHP;
         float colorFactor = _maxColor * percentageHP;
         MainSprite.color = new Color(colorFactor, colorFactor, colorFactor, MainSprite.color.a);
-
-        Debug.Log("Hope took damage factor:" + colorFactor);
-
     }
 
     public bool GetAttacked(IShadowEnemy enemy)
