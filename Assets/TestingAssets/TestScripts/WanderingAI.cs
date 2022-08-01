@@ -63,10 +63,6 @@ public class WanderingAI : MonoBehaviour
         {
             _rb.velocity = _direction * speed;
         }
-        else
-        {
-            _rb.velocity = Vector2.zero;
-        }
     }
     void ChangeDirention()
     {
@@ -143,20 +139,26 @@ public class WanderingAI : MonoBehaviour
         yield return new WaitForSeconds(Random.Range(minCollTime, maxCollTime));
         StartCoroutine(Moving());
     }
-    public void ChasePlayer(Transform player)
+    public void ChasePlayer(Transform player, float range)
     {
+        if (_stop)
+        {
+            return;
+        }
         StopAllCoroutines();
         _stop = true;
+        _rb.velocity = Vector2.zero;
         folow.enabled = true;
         folow.SetTarget(player);
+        StartCoroutine(Returning(player, range));
     }
-    public void ReturnToSpawn()
+    IEnumerator Returning(Transform player, float range)
     {
+        while (Vector2.Distance(transform.position,player.position) < range)
+        {
+            yield return new WaitForSeconds(0.02f);
+        }
         folow.SetTarget(_spawner.transform);
-        StartCoroutine(Returning());
-    }
-    IEnumerator Returning()
-    {
         bool inside = false;
         while (!inside)
         {
@@ -171,4 +173,5 @@ public class WanderingAI : MonoBehaviour
         _stop = false;
         StartCoroutine(Moving());
     }
+
 }

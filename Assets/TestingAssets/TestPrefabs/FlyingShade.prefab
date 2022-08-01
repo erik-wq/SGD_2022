@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c1840ae2a834a04182dbafdd5c72cba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 1.5
+  MovementSpeed: 2.5
   CollisionOffset: 1
   NextWaypointDistance: 0.6
   MinimalDistance: 1.3

@@ -4,22 +4,26 @@ using UnityEngine;
 
 public class ZombieAgro : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    public float agroRange;
+    private Collider2D[] _cols;
+    [SerializeField] LayerMask mask;
+    private void FixedUpdate()
     {
-        Debug.Log("trigger");
-        if (collision.gameObject.tag == "Zombie")
+        _cols = Physics2D.OverlapCircleAll(transform.position, agroRange, mask);
+        if(_cols.Length > 0)
         {
-            print("chase");
-            WanderingAI ai = collision.gameObject.GetComponent<WanderingAI>();
-            ai.ChasePlayer(transform.parent.transform);
+            foreach(Collider2D x in _cols)
+            {
+                WanderingAI ai = x.GetComponent<WanderingAI>();
+                ai.ChasePlayer(transform,agroRange);
+            }
         }
     }
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnDrawGizmos()
     {
-        if (collision.gameObject.tag == "Zombie")
-        {
-            WanderingAI ai = collision.gameObject.GetComponent<WanderingAI>();
-            ai.ReturnToSpawn();
-        }
+        Color color = Color.yellow;
+        color.a = 0.2f;
+        Gizmos.color = color;
+        Gizmos.DrawSphere(transform.position, agroRange);
     }
 }
