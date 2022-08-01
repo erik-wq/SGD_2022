@@ -6,12 +6,16 @@ TagManager:
   tags:
   - CollisionObject
   - Hope
+<<<<<<< HEAD
   - Enemy
+=======
+  - Zombie
+>>>>>>> origin/Wandering_AI
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Spawner
   - Water
   - UI
   - Background

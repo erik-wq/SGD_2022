@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Assets.Scripts.Utils
 {
@@ -20,7 +21,7 @@ namespace Assets.Scripts.Utils
 
         public static float NormalRNG(float mean, float stdDev)
         {
-            Unity.Mathematics.Random rand = new Unity.Mathematics.Random();
+            Random rand = new Random();
             double u1 = 1.0 - rand.NextDouble();
             double u2 = 1.0 - rand.NextDouble();
             double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
