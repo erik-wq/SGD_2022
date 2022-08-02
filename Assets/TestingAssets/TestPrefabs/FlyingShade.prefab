@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 5483633885084885566}
   - component: {fileID: 2105660631}
   - component: {fileID: 1922458528000394454}
-  - component: {fileID: 4296470791052621452}
+  - component: {fileID: 5417011722076685627}
   - component: {fileID: 211367109003986475}
-  m_Layer: 11
+  m_Layer: 31
   m_Name: FlyingShade
   m_TagString: Zombie
   m_Icon: {fileID: 0}
@@ -162,12 +162,12 @@ MonoBehaviour:
   minCollTime: 0
   maxCollTime: 0
   speed: 4
-  folow: {fileID: 4296470791052621452}
+  folow: {fileID: 5417011722076685627}
   innerModifier: 1
   midModifier: 1.75
   outerModifier: 3.25
   farModifier: 7
---- !u!114 &4296470791052621452
+--- !u!114 &5417011722076685627
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,10 +176,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 526070885549310654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c1840ae2a834a04182dbafdd5c72cba, type: 3}
+  m_Script: {fileID: 11500000, guid: cd63d23315a48c742b3f4b60e7507df4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 2.5
+  Target: {fileID: 0}
+  MovementSpeed: 3
   CollisionOffset: 1
   NextWaypointDistance: 0.6
   MinimalDistance: 1.3

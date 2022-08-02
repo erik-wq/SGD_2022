@@ -62,6 +62,9 @@ public class WanderingAI : MonoBehaviour
         if (!_stop)
         {
             _rb.velocity = _direction * speed;
+        }else
+        {
+            _rb.velocity = Vector2.zero;
         }
     }
     void ChangeDirention()
@@ -118,25 +121,26 @@ public class WanderingAI : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (_stop)
-        {
-            return;
-        }
-        if(collision.gameObject.tag == "Zombie")
+        Vector2 dir;
+        if (collision.gameObject.tag == "Zombie")
         {
             _stop = true;
             StopAllCoroutines();
-            Vector2 dir = -(collision.transform.position - transform.position).normalized;
+            dir = -(collision.transform.position - transform.position).normalized;
             float angle = MathUtility.NormalRNG(0, 180 / 5);
             _direction = MathUtility.RotateVector(dir, angle);
             StartCoroutine(CollisionTimer());
+            return;
         }
+        StopAllCoroutines();
+        _stop = true;
+        StartCoroutine(CollisionTimer());
     }
     IEnumerator CollisionTimer()
     {
-        yield return new WaitForSeconds(Random.Range(0.1f, 0.25f));
-        _stop = false;
         yield return new WaitForSeconds(Random.Range(minCollTime, maxCollTime));
+        _stop = false;
+        yield return new WaitForSeconds(Random.Range(minWalkTime, maxWalkTime));
         StartCoroutine(Moving());
     }
     public void ChasePlayer(Transform player, float range)

@@ -1,0 +1,34 @@
+{
+    "name": "Pause",
+    "maps": [
+        {
+            "name": "Pause",
+            "id": "f54f19ee-5a6c-4f5c-b2c4-f84de23a2c90",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "8ada8a29-cfdc-41e1-999e-b8c96dd3135f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "620e31e3-422f-4d3c-8af7-f8d535d09aa1",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
