@@ -23,7 +23,7 @@ public class WanderingAI : MonoBehaviour
     #region Private
     private Rigidbody2D _rb;
     private Vector2 _direction;
-    private EnemySpawn _spawner;
+    public PositionCheck spawn;
     private bool _stop;
     #endregion
     #region Serialized
@@ -51,6 +51,7 @@ public class WanderingAI : MonoBehaviour
     {
         _stop = false;
         _rb = GetComponent<Rigidbody2D>();
+        _rb.velocity = Vector2.zero;
     }
     private void Start()
     {
@@ -69,29 +70,28 @@ public class WanderingAI : MonoBehaviour
     }
     void ChangeDirention()
     {
-        Vector2 dir = _spawner.transform.position - transform.position;
-        dir = dir.normalized;
+        Vector2 dir = spawn.transform.position - transform.position;
         float angle;
 
-        if (!_spawner.InsideBounds(transform.position))
+        if (!spawn.InsideBounds(transform.position))
         {
             angle = MathUtility.NormalRNG(0, 180/farModifier);
-            _direction = MathUtility.RotateVector(dir, angle);
+            _direction = MathUtility.RotateVector(dir, angle).normalized;
             return;
         }
-        if (Vector2.Distance(transform.position, _spawner.transform.position) < _spawner.GetInnerRadius() / 2) 
+        if (Vector2.Distance(transform.position, spawn.transform.position) < spawn.GetInnerRadius() / 2) 
         {
             angle = MathUtility.NormalRNG(0, 180 / innerModifier);
-            _direction = MathUtility.RotateVector(dir, angle);
+            _direction = MathUtility.RotateVector(dir, angle).normalized;
         }
-        else if(Vector2.Distance(transform.position, _spawner.transform.position) <= _spawner.GetInnerRadius()){
+        else if(Vector2.Distance(transform.position, spawn.transform.position) <= spawn.GetInnerRadius()){
             angle = MathUtility.NormalRNG(0, 180 / midModifier);
-            _direction = MathUtility.RotateVector(dir, angle);
+            _direction = MathUtility.RotateVector(dir, angle).normalized;
         }
         else
         {
             angle = MathUtility.NormalRNG(0, 180 / outerModifier);
-            _direction = MathUtility.RotateVector(dir, angle);
+            _direction = MathUtility.RotateVector(dir, angle).normalized;
         }
     }
     IEnumerator Moving()
@@ -99,7 +99,7 @@ public class WanderingAI : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         while (true)
         {
-            if (_spawner != null)
+            if (spawn != null)
             {
                 if(Random.value <= 0.5)
                 {
@@ -117,23 +117,33 @@ public class WanderingAI : MonoBehaviour
     }
     public void Init(EnemySpawn spawner)
     {
-        this._spawner = spawner;
+        this.spawn = spawner;
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 dir;
+        float angle;
+        ContactPoint2D[] points = collision.contacts;
         if (collision.gameObject.tag == "Zombie")
         {
             _stop = true;
             StopAllCoroutines();
-            dir = -(collision.transform.position - transform.position).normalized;
-            float angle = MathUtility.NormalRNG(0, 180 / 5);
+            dir = -(points[0].point - (Vector2)transform.position).normalized;
+            angle = MathUtility.NormalRNG(0, 180 / 5);
             _direction = MathUtility.RotateVector(dir, angle);
             StartCoroutine(CollisionTimer());
             return;
         }
+        foreach (ContactPoint2D x in points)
+        {
+            Debug.Log("collision" + this.gameObject.name + " other " + collision.gameObject.name);
+            Debug.Log(x.point);
+        }
         StopAllCoroutines();
         _stop = true;
+        dir = -(points[0].point - (Vector2)transform.position).normalized;
+        angle = MathUtility.NormalRNG(0, 180 / 5);
+        _direction = MathUtility.RotateVector(dir, angle);
         StartCoroutine(CollisionTimer());
     }
     IEnumerator CollisionTimer()
@@ -145,10 +155,6 @@ public class WanderingAI : MonoBehaviour
     }
     public void ChasePlayer(Transform player, float range)
     {
-        if (_stop)
-        {
-            return;
-        }
         StopAllCoroutines();
         _stop = true;
         _rb.velocity = Vector2.zero;
@@ -162,12 +168,12 @@ public class WanderingAI : MonoBehaviour
         {
             yield return new WaitForSeconds(0.02f);
         }
-        folow.SetTarget(_spawner.transform);
+        folow.SetTarget(spawn.transform);
         bool inside = false;
         while (!inside)
         {
             yield return new WaitForSeconds(0.2f);
-            if (_spawner.InsideBounds(transform.position))
+            if (spawn.InsideBounds(transform.position))
             {
                 inside = true;
             }

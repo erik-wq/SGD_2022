@@ -159,8 +159,8 @@ MonoBehaviour:
   maxWalkTime: 5
   minStayTime: 1
   maxStayTime: 3
-  minCollTime: 0
-  maxCollTime: 0
+  minCollTime: 0.2
+  maxCollTime: 1.2
   speed: 4
   folow: {fileID: 5417011722076685627}
   innerModifier: 1
