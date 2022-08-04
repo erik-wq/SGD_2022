@@ -139,6 +139,21 @@ public class EnemyAI : MonoBehaviour, IEnemy
         }
     }
 
+
+    public bool TakeDamage(float damage)
+    {
+        _currentHP -= damage;
+        if (_currentHP < 0)
+        {
+            UnityEngine.Object.Destroy(gameObject);
+            return true;
+        }
+        else
+        {
+            AdjustOpacity();
+            return false;
+        }
+    }
     private void AdjustOpacity()
     {
         float percentageHP = _currentHP / MaxHP;

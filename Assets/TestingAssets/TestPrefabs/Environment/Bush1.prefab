@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3869925004228367328
+--- !u!1 &202011225439010171
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6747664929985267768}
-  - component: {fileID: 6909844959764700014}
-  - component: {fileID: 9096504415799603877}
-  - component: {fileID: 4003666368232870942}
+  - component: {fileID: 37356699560446187}
+  - component: {fileID: 606825457513251290}
   m_Layer: 8
-  m_Name: Bush1
-  m_TagString: CollisionObject
+  m_Name: Square
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6747664929985267768
+--- !u!4 &37356699560446187
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3869925004228367328}
+  m_GameObject: {fileID: 202011225439010171}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 6747664929985267768}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &6909844959764700014
+--- !u!212 &606825457513251290
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3869925004228367328}
+  m_GameObject: {fileID: 202011225439010171}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -80,12 +78,47 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.5404217, y: 2.1299999}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &3869925004228367328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6747664929985267768}
+  - component: {fileID: 9096504415799603877}
+  - component: {fileID: 4003666368232870942}
+  - component: {fileID: 4937930741878812026}
+  m_Layer: 8
+  m_Name: Bush1
+  m_TagString: CollisionObject
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6747664929985267768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3869925004228367328}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 37356699560446187}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!60 &9096504415799603877
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -158,16 +191,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ShadowGroup: 0
   m_ComponentVersion: 1
-  m_HasRenderer: 1
-  m_UseRendererSilhouette: 1
+  m_HasRenderer: 0
+  m_UseRendererSilhouette: 0
   m_CastsShadows: 1
   m_SelfShadows: 0
   m_ApplyToSortingLayers: 00000000
   m_ShapePath:
-  - {x: -1.7702109, y: -1.0649999, z: 0}
-  - {x: -1.7702109, y: 1.0649999, z: 0}
-  - {x: 1.7702109, y: 1.0649999, z: 0}
-  - {x: 1.7702109, y: -1.0649999, z: 0}
-  m_ShapePathHash: 0
+  - {x: 0.38768533, y: -0.96377015, z: 0}
+  - {x: 0.66690874, y: -0.9472865, z: 0}
+  - {x: 0.87121785, y: -0.95514905, z: 0}
+  - {x: 0.95221853, y: -1.0400255, z: 0}
+  - {x: 1.1902734, y: -0.9260533, z: 0}
+  - {x: 1.4214272, y: -0.9682654, z: 0}
+  - {x: 1.5827742, y: -0.95240873, z: 0}
+  - {x: 1.6919074, y: -0.957576, z: 0}
+  - {x: 1.768597, y: -0.7941845, z: 0}
+  - {x: 1.7896948, y: -0.6810738, z: 0}
+  - {x: 1.7020234, y: -0.5664265, z: 0}
+  - {x: 1.7424871, y: -0.46526715, z: 0}
+  - {x: 1.7492311, y: -0.37085176, z: 0}
+  - {x: 1.7964387, y: -0.2123689, z: 0}
+  - {x: 1.7221395, y: -0.12446301, z: 0}
+  - {x: 1.6134994, y: 0.0064080507, z: 0}
+  - {x: 1.4245356, y: 0.028494373, z: 0}
+  - {x: 1.2793169, y: 0.14390464, z: 0}
+  - {x: 1.1341767, y: 0.31885433, z: 0}
+  - {x: 1.1380482, y: 0.49307, z: 0}
+  - {x: 0.9633743, y: 0.65365934, z: 0}
+  - {x: 0.69201344, y: 0.97922075, z: 0}
+  - {x: 0.5814975, y: 1.0954841, z: 0}
+  - {x: 0.14542012, y: 1.0954841, z: 0}
+  - {x: 0.124945454, y: 0.91727734, z: 0}
+  - {x: 0.038553923, y: 0.7989151, z: 0}
+  - {x: -0.14042887, y: 0.86008364, z: 0}
+  - {x: -0.4156613, y: 0.85234076, z: 0}
+  - {x: -0.6947652, y: 0.7583083, z: 0}
+  - {x: -0.8277514, y: 0.5857294, z: 0}
+  - {x: -1.0311823, y: 0.43162963, z: 0}
+  - {x: -1.1693399, y: 0.3691846, z: 0}
+  - {x: -1.2221209, y: 0.2552988, z: 0}
+  - {x: -1.3783987, y: 0.20271188, z: 0}
+  - {x: -1.3664823, y: 0.12730145, z: 0}
+  - {x: -1.5448714, y: 0.040110588, z: 0}
+  - {x: -1.5504363, y: -0.18852149, z: 0}
+  - {x: -1.6020023, y: -0.35710937, z: 0}
+  - {x: -1.757802, y: -0.40510717, z: 0}
+  - {x: -1.8623314, y: -0.48253638, z: 0}
+  - {x: -1.7810307, y: -0.57157993, z: 0}
+  - {x: -1.8584602, y: -0.6915951, z: 0}
+  - {x: -1.7375034, y: -0.69440466, z: 0}
+  - {x: -1.6494012, y: -0.7883816, z: 0}
+  - {x: -1.3411384, y: -0.8766026, z: 0}
+  - {x: -1.2316201, y: -1.0026042, z: 0}
+  - {x: -1.0144826, y: -1.0400255, z: 0}
+  - {x: -0.8981961, y: -0.9861207, z: 0}
+  - {x: -0.75970185, y: -1.0374475, z: 0}
+  - {x: -0.5785018, y: -0.9909899, z: 0}
+  - {x: -0.42240644, y: -0.9356721, z: 0}
+  - {x: -0.22184913, y: -0.9085719, z: 0}
+  - {x: 0.030811101, y: -0.8580669, z: 0}
+  - {x: 0.21809968, y: -0.8910906, z: 0}
+  m_ShapePathHash: 712080812
   m_Mesh: {fileID: 0}
-  m_InstanceId: -120718
+  m_InstanceId: 60140
+--- !u!114 &4937930741878812026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3869925004228367328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e21712ee40028b64eba95e61e43e6bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setOnAwake: 0
+  shadowCaster: {fileID: 4003666368232870942}
+  edgeCollider: {fileID: 0}
+  polyCollider: {fileID: 9096504415799603877}

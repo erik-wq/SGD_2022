@@ -5,25 +5,22 @@ TagManager:
   serializedVersion: 2
   tags:
   - CollisionObject
-  - Hope
-<<<<<<< HEAD
   - Enemy
-=======
-  - Zombie
->>>>>>> origin/Wandering_AI
+  - Hope
+  - EnemyHitCollider
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Spawner
+  - 
   - Water
   - UI
-  - Background
-  - Characters
-  - CollisionObjects
+  - Hope
   - Player
-  - LargeCollisionObjects
-  - FlyingShades
+  - SmallCollisionObject
+  - LargeCollisionObject
+  - Enemy
+  - 
   - 
   - 
   - 
