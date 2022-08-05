@@ -250,7 +250,22 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         _hp -= damage;
         if (_hp < 0)
         {
-            UnityEngine.Object.Destroy(this);
+            UnityEngine.Object.Destroy(gameObject);
+            return true;
+        }
+        else
+        {
+            AdjustOpacity();
+            return false;
+        }
+    }
+
+    public bool TakeDamage(float damage)
+    {
+        _hp -= damage;
+        if (_hp < 0)
+        {
+            UnityEngine.Object.Destroy(gameObject);
             return true;
         }
         else

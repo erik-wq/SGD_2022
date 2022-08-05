@@ -1,5 +1,5 @@
 {
-    "name": "Move",
+    "name": "PlayerControls",
     "maps": [
         {
             "name": "Player",
@@ -36,6 +36,33 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "c711ba8e-07a3-477f-b101-3047afea9835",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FireLaser",
+                    "type": "Button",
+                    "id": "0e8ba953-bd34-46b3-a41e-181af8ef1525",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Throw",
+                    "type": "Button",
+                    "id": "b9df66d1-02de-43ed-8c80-b222aa8d409a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CancelAction",
+                    "type": "Button",
+                    "id": "0ffad28c-d296-4489-878d-db42fdc4687e",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -271,6 +298,61 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "efa95813-8f43-4516-aa46-c00a2f586a7f",
+                    "path": "+",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "FireLaser",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9aea3a29-e1f8-4f49-b158-cb9cf52586b6",
+                    "path": "1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FireLaser",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "76c47f70-a0e3-4e7c-b162-158be7cea5d8",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FireLaser",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d88b222c-7f67-4ba0-b7cc-d9330a293b13",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "204af8de-0170-4e8c-92f1-1b26fd1d6ebb",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CancelAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

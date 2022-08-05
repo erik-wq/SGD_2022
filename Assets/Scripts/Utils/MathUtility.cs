@@ -43,5 +43,37 @@ namespace Assets.Scripts.Utils
             double degrees = (180 / Math.PI) * radians;
             return (degrees);
         }
+
+        public static float NormalizeAngle(float angle)
+        {
+            angle = angle % 360;
+
+            if (angle < 0)
+            {
+                angle += 360;
+            }
+            return angle;
+        }
+
+        public static float AngleDifference(float firstAngle, float secondAngle)
+        {
+            float difference = secondAngle - firstAngle;
+            while (difference < -180f) difference += 360f;
+            while (difference > 180f) difference -= 360f;
+            return difference;
+        }
+
+        public static float BringAnglesCloser(float source, float destination, float change)
+        {
+            var up = AngleDifference(source + change, destination);
+            var down = AngleDifference(source - change, destination);
+
+            if (Math.Abs(up) < Math.Abs(down))
+            {
+                return source + change;
+            }
+
+            return source - change;
+        }
     }
 }

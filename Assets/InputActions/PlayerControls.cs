@@ -62,6 +62,33 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FireLaser"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e8ba953-bd34-46b3-a41e-181af8ef1525"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Throw"",
+                    ""type"": ""Button"",
+                    ""id"": ""b9df66d1-02de-43ed-8c80-b222aa8d409a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CancelAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ffad28c-d296-4489-878d-db42fdc4687e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -293,6 +320,61 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""efa95813-8f43-4516-aa46-c00a2f586a7f"",
+                    ""path"": ""+"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""FireLaser"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9aea3a29-e1f8-4f49-b158-cb9cf52586b6"",
+                    ""path"": ""1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FireLaser"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""76c47f70-a0e3-4e7c-b162-158be7cea5d8"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FireLaser"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d88b222c-7f67-4ba0-b7cc-d9330a293b13"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""204af8de-0170-4e8c-92f1-1b26fd1d6ebb"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CancelAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -884,6 +966,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_FireLaser = m_Player.FindAction("FireLaser", throwIfNotFound: true);
+        m_Player_Throw = m_Player.FindAction("Throw", throwIfNotFound: true);
+        m_Player_CancelAction = m_Player.FindAction("CancelAction", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -959,6 +1044,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_FireLaser;
+    private readonly InputAction m_Player_Throw;
+    private readonly InputAction m_Player_CancelAction;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -967,6 +1055,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @FireLaser => m_Wrapper.m_Player_FireLaser;
+        public InputAction @Throw => m_Wrapper.m_Player_Throw;
+        public InputAction @CancelAction => m_Wrapper.m_Player_CancelAction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -988,6 +1079,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
+                @FireLaser.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireLaser;
+                @FireLaser.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireLaser;
+                @FireLaser.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireLaser;
+                @Throw.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrow;
+                @Throw.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrow;
+                @Throw.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrow;
+                @CancelAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCancelAction;
+                @CancelAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCancelAction;
+                @CancelAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCancelAction;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1004,6 +1104,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @FireLaser.started += instance.OnFireLaser;
+                @FireLaser.performed += instance.OnFireLaser;
+                @FireLaser.canceled += instance.OnFireLaser;
+                @Throw.started += instance.OnThrow;
+                @Throw.performed += instance.OnThrow;
+                @Throw.canceled += instance.OnThrow;
+                @CancelAction.started += instance.OnCancelAction;
+                @CancelAction.performed += instance.OnCancelAction;
+                @CancelAction.canceled += instance.OnCancelAction;
             }
         }
     }
@@ -1164,6 +1273,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnFireLaser(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
+        void OnCancelAction(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

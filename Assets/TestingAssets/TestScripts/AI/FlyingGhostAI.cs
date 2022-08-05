@@ -81,6 +81,21 @@ public class FlyingGhostAI : MonoBehaviour, IShadowEnemy
         }
     }
 
+    public bool TakeDamage(float damage)
+    {
+        _hp -= damage;
+        if (_hp < 0)
+        {
+            UnityEngine.Object.Destroy(this);
+            return true;
+        }
+        else
+        {
+            AdjustOpacity();
+            return false;
+        }
+    }
+
     protected void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Hope")
