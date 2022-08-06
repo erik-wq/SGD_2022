@@ -3,6 +3,8 @@ using Assets.TestingAssets.TestScripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
+using UnityEngine.Rendering.Universal;
 
 public class EnemyAI : MonoBehaviour, IEnemy
 {
@@ -37,7 +39,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected bool _knockbackCleared = true;
     protected float _maxOpacity = 1.0f;
     #endregion
-
+    public GameObject effect;
     // Start is called before the first frame update
     protected void Start()
     {
@@ -128,7 +130,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
         _currentHP -= damage;
         if (_currentHP < 0)
         {
-            UnityEngine.Object.Destroy(gameObject);
+            Killed();
             return true;
         }
         else
@@ -145,7 +147,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
         _currentHP -= damage;
         if (_currentHP < 0)
         {
-            UnityEngine.Object.Destroy(gameObject);
+            Killed();
             return true;
         }
         else
@@ -159,5 +161,22 @@ public class EnemyAI : MonoBehaviour, IEnemy
         float percentageHP = _currentHP / MaxHP;
         float opacity = _maxOpacity * percentageHP;
         MainSprite.color = new Color(MainSprite.color.r, MainSprite.color.g, MainSprite.color.b, opacity);
+    }
+    private void Killed()
+    {
+        _rigidBody.velocity = Vector2.zero;
+        MainSprite.enabled = false;
+        Sword.enabled = false;
+        effect.SetActive(true);
+        Collider2D[] cols = GetComponents<Collider2D>();
+        foreach (Collider2D x in cols)
+        {
+            x.enabled = false;
+        }
+        GetComponent<Seeker>().enabled = false;
+        GetComponent<DynamicGridObstacle>().enabled = false;
+        GetComponent<ShadowCaster2D>().enabled = false;
+        GetComponent<BasicFollow>().enabled = false;
+        this.enabled = false;
     }
 }

@@ -10,6 +10,9 @@ public class BasicFollow : MonoBehaviour, IFollow
     #region Public
     [SerializeField] public Transform Target;
     public bool Paused { get; set; }
+    public Path path {
+        get { return _path; }
+}
     #endregion
 
     #region Serialized
