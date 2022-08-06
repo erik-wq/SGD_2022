@@ -16,7 +16,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
         [SerializeField] private Transform PlayersTransform;
         [SerializeField] private PlayerController PlayerController;
         [SerializeField] private SpriteRenderer HopesSprite;
-        [SerializeField] private HopeAI HopeScript;
+        [SerializeField] private HopeAi HopeScript;
         [SerializeField] private SpriteRenderer LaserSprite;
         [SerializeField] private Transform LaserSpriteTransform;
         [SerializeField] private Camera MainCamera;

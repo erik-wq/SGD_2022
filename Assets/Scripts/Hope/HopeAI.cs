@@ -63,8 +63,8 @@ public class HopeAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _hp = MaxHP;
-        _followScript = GetComponent<IFollow>();
+        //_hp = MaxHP;
+        //_followScript = GetComponent<IFollow>();
         _hopeLaser = GetComponent<HopeLaser>();
         _hopeThrow = GetComponent<HopeThrow>();
 
@@ -78,10 +78,10 @@ public class HopeAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isFighting)
-        {
-            HandleAttack();
-        }
+        //if (_isFighting)
+        //{
+        //    HandleAttack();
+        //}
     }
 
     private void HandleAttack()

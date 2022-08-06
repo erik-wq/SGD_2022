@@ -14,7 +14,7 @@ public class EnemySpawn : PositionCheck
     [Header("Enemy spawn settings")]
     [Tooltip("Changes how clase to center of circle collider enemies will spaw. Higher number more in center")]
     [Range(3.5f,4.5f)]
-    public float deviations;
+    public float density;
     [Tooltip("It change how close to each other will enemies spawn to each other")]
     [Range(1.7f,2)]
     public float radius;
@@ -46,8 +46,8 @@ public class EnemySpawn : PositionCheck
         int x = 0;
         while (x < numberOfEnemies)
         {
-            float randx = MathUtility.NormalRNG(0, _max / deviations);
-            float randy = MathUtility.NormalRNG(0, _max / deviations);
+            float randx = MathUtility.NormalRNG(0, _max / density);
+            float randy = MathUtility.NormalRNG(0, _max / density);
             pos = new Vector2(transform.position.x + randx,transform.position.y + randy);
             if (IsInside(pos) && CheckPosition(pos))
             {

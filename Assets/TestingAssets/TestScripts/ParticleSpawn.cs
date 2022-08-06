@@ -17,7 +17,7 @@ public class ParticleSpawn : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (system.time >= 1.58f)
+        if (system.time >= 0.35f)
         {
             canColect = true;
         }
@@ -35,6 +35,8 @@ public class ParticleSpawn : MonoBehaviour
         Collider2D[] hope = Physics2D.OverlapCircleAll(transform.position, radius.radius, LayerMask.GetMask("Hope"));
         if (hope.Length == 0) return;
         hope[0].GetComponent<EnergyPool>().AddEnergy(ammount);
+        hope[0].GetComponent<HopeAi>().Collect();
+        //print("colected");
         Destroy(transform.parent.gameObject);
     }
 }

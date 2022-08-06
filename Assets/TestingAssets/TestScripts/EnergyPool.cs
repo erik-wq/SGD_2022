@@ -15,6 +15,5 @@ public class EnergyPool : MonoBehaviour
     {
         _energy += ammount;
         Mathf.Clamp(_energy, 0, energyLimit);
-        Debug.Log(_energy);
     }
 }

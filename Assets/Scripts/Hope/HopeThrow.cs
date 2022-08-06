@@ -21,7 +21,7 @@ namespace Assets.Scripts.Hope
         [SerializeField] private SpriteRenderer IndicatorSprite;
         [SerializeField] private Transform IndicatorTransform;
         [SerializeField] private PlayerController PlayerControllerScript;
-        [SerializeField] private HopeAI HopeScript;
+        [SerializeField] private HopeAi HopeScript;
 
         //Settings
         [SerializeField] private float EnergyCost;

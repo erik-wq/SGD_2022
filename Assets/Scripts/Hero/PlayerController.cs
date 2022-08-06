@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ContactFilter2D CollisionsFilter;
     [SerializeField] private AstarPath Pathfinder;
     [SerializeField] private BasicFollow HopesFollow;
-    [SerializeField] private HopeAI HopeAI;
+    [SerializeField] private HopeAi HopeAI;
     [SerializeField] private Transform MouseIndicatorTransform;
     [SerializeField] private Camera MainCamera;
     [SerializeField] private CameraManagement CameraManagement;
