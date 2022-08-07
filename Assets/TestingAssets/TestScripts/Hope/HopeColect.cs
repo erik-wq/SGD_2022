@@ -74,7 +74,7 @@ public class HopeColect : BaseState
         Physics2D.queriesHitTriggers = false;
         for (int i = 0; i < path.Count - 1; i++)
         {
-            Collider2D[] cols = Physics2D.OverlapCircleAll(path[i], 1.5f , _machine.AI.enemyMask);
+            Collider2D[] cols = Physics2D.OverlapCircleAll(path[i], _machine.AI.CheckRouteRadius , _machine.AI.enemyMask);
             if (cols.Length != 0)
             {
                 Physics2D.queriesHitTriggers = true;

@@ -15,7 +15,7 @@ public class HopeAi : MonoBehaviour
     public Transform player;
     [Header("Collecting parameters")]
     public float collectRadius;
-    public float CheckRouteradius;
+    public float CheckRouteRadius;
     public LayerMask enemyMask;
     private HopeStateMachine _machine;
     private bool _isMovementLocked = false;
