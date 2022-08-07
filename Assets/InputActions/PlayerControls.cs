@@ -89,6 +89,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Explode"",
+                    ""type"": ""Button"",
+                    ""id"": ""1c0d5c1c-737f-49af-9745-0ee58c594286"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -375,6 +384,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""CancelAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""39fe6999-a33e-4afa-a04e-850daafc0e51"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Explode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -969,6 +989,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_FireLaser = m_Player.FindAction("FireLaser", throwIfNotFound: true);
         m_Player_Throw = m_Player.FindAction("Throw", throwIfNotFound: true);
         m_Player_CancelAction = m_Player.FindAction("CancelAction", throwIfNotFound: true);
+        m_Player_Explode = m_Player.FindAction("Explode", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1047,6 +1068,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_FireLaser;
     private readonly InputAction m_Player_Throw;
     private readonly InputAction m_Player_CancelAction;
+    private readonly InputAction m_Player_Explode;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1058,6 +1080,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @FireLaser => m_Wrapper.m_Player_FireLaser;
         public InputAction @Throw => m_Wrapper.m_Player_Throw;
         public InputAction @CancelAction => m_Wrapper.m_Player_CancelAction;
+        public InputAction @Explode => m_Wrapper.m_Player_Explode;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1088,6 +1111,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @CancelAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCancelAction;
                 @CancelAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCancelAction;
                 @CancelAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCancelAction;
+                @Explode.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExplode;
+                @Explode.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExplode;
+                @Explode.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnExplode;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1113,6 +1139,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @CancelAction.started += instance.OnCancelAction;
                 @CancelAction.performed += instance.OnCancelAction;
                 @CancelAction.canceled += instance.OnCancelAction;
+                @Explode.started += instance.OnExplode;
+                @Explode.performed += instance.OnExplode;
+                @Explode.canceled += instance.OnExplode;
             }
         }
     }
@@ -1276,6 +1305,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFireLaser(InputAction.CallbackContext context);
         void OnThrow(InputAction.CallbackContext context);
         void OnCancelAction(InputAction.CallbackContext context);
+        void OnExplode(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

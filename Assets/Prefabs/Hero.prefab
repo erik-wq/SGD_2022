@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 1481788588840163304}
   - component: {fileID: -6103410680176893988}
   - component: {fileID: 3874908072947736129}
+  - component: {fileID: 2757483962049097912}
   m_Layer: 7
   m_Name: Hero
   m_TagString: Player
@@ -197,7 +198,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -209,19 +210,19 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750945812520451839}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_LinearDrag: 6
+  m_AngularDrag: 1.5
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &-6103410680176893988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,29 +243,42 @@ MonoBehaviour:
   m_SelfShadows: 0
   m_ApplyToSortingLayers: 00000000
   m_ShapePath:
-  - {x: -0.29828244, y: -0.3893053, z: 0}
-  - {x: -0.25095543, y: -0.24816455, z: 0}
-  - {x: -0.23626842, y: -0.046217926, z: 0}
-  - {x: -0.3317341, y: -0.01684387, z: 0}
-  - {x: -0.32806233, y: 0.27322492, z: 0}
-  - {x: -0.26564246, y: 0.37970588, z: 0}
+  - {x: -0.26011658, y: -0.34347597, z: -0.000004424102}
+  - {x: -0.23641586, y: -0.25183088, z: -0.0000018527886}
+  - {x: -0.25465775, y: -0.18987875, z: -0.000001989703}
+  - {x: -0.2526245, y: -0.00955444, z: -0.0000025197103}
+  - {x: -0.3408203, y: 0.036318317, z: -0.0000013446518}
+  - {x: -0.33098984, y: 0.14559282, z: -0.0000011411807}
+  - {x: -0.30080032, y: 0.24572742, z: -0.0000020616092}
+  - {x: -0.26564407, y: 0.3723734, z: -0.00000037042156}
+  - {x: -0.25462723, y: 0.46640107, z: -0.0000013590042}
+  - {x: -0.3036995, y: 0.5323962, z: -0.0000014156001}
   - {x: -0.335, y: 0.65, z: 0}
-  - {x: -0.27665892, y: 0.8900807, z: 0}
-  - {x: -0.052943394, y: 1.0104555, z: 0}
-  - {x: 0.1473263, y: 0.9580038, z: 0}
+  - {x: -0.3164215, y: 0.7670425, z: -0.000001637098}
+  - {x: -0.2730217, y: 0.87174904, z: -0.0000006513283}
+  - {x: -0.19465256, y: 0.95952594, z: -0.0000026385057}
+  - {x: -0.054763794, y: 0.9939571, z: -0.000004349259}
+  - {x: 0.02525711, y: 0.9833571, z: -0.0000024178544}
+  - {x: 0.1255188, y: 0.93967193, z: -0.0000013620402}
+  - {x: 0.23062515, y: 0.8587012, z: -0.000003157845}
+  - {x: 0.2742424, y: 0.7578768, z: -0.0000006290136}
   - {x: 0.2777801, y: 0.6833783, z: 0}
+  - {x: 0.2724266, y: 0.5818917, z: -0.0000011161694}
   - {x: 0.23315616, y: 0.51454943, z: 0}
   - {x: 0.22838785, y: 0.38103628, z: 0}
   - {x: 0.29991275, y: 0.2570598, z: 0}
   - {x: 0.32852268, y: 0.123546645, z: 0}
   - {x: 0.33805937, y: 0.05202175, z: 0}
   - {x: 0.25699782, y: 0.018643454, z: 0}
-  - {x: 0.31592664, y: -0.1636306, z: 0}
-  - {x: 0.29613632, y: -0.24449281, z: 0}
-  - {x: 0.28144926, y: -0.3546455, z: 0}
-  m_ShapePathHash: 576700520
+  - {x: 0.29229736, y: -0.2241254, z: -0.0000027542394}
+  - {x: 0.2543335, y: -0.24632601, z: -0.0000014743677}
+  - {x: 0.29598618, y: -0.32898113, z: -0.0000011730367}
+  - {x: 0.1924324, y: -0.36586347, z: -0.0000010988772}
+  - {x: 0.021595001, y: -0.371363, z: -0.0000015005603}
+  - {x: -0.15833282, y: -0.36952975, z: -0.000001154102}
+  m_ShapePathHash: -663938245
   m_Mesh: {fileID: 0}
-  m_InstanceId: 54716
+  m_InstanceId: -2696
 --- !u!58 &3874908072947736129
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -281,6 +295,119 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
+--- !u!114 &2757483962049097912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1750945812520451839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ecb76763097c8468f406839d880aea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MovementSpeedForward: 6
+  MovementSpeedForwardSideway: 8
+  MovementSpeedBackwards: 4
+  MovementSpeedBackwardsSideway: 3
+  CollisionOffset: 0.05
+  CollisionsFilter:
+    useTriggers: 0
+    useLayerMask: 1
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 768
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  Pathfinder: {fileID: 0}
+  HopesFollow: {fileID: 0}
+  HopeAI: {fileID: 0}
+  MouseIndicatorTransform: {fileID: 0}
+  MainCamera: {fileID: 0}
+  CameraManagement: {fileID: 0}
+  debugCircle: {fileID: 0}
+  DebugScreenControl: {fileID: 0}
+  SwordIndicator: {fileID: 3249745069285790320}
+  SwordIndicatorTransform: {fileID: 8192579557616511361}
+  SwordSlashZonesCount: 6
+  SwordAnimationLength: 2
+  SwordAttackCooldown: 2
+  SwordAnimationDistance: 1
+  SwordSlashRadius: 5
+  EnemyFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 1024
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  SwordDamage: 20
+  SwordForce: 500
+  SprintCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.29210225
+      outSlope: 0.29210225
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.26220343
+      value: 0.07659021
+      inSlope: 1.4966521
+      outSlope: 1.4966521
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5044908
+      value: 0.7310573
+      inSlope: 1.5297871
+      outSlope: 1.5297871
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.12350238
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.54276025
+      outSlope: 0.54276025
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  CurveLength: 3
+  SprintSpeed: 5
+  MaxEnergy: 100
+  SprintEnergyCost: 10
+  MinimalEnergyToStartSprint: 15
+  EnergyRechargeRateWhileStaying: 25
+  EnergyRechargeRateWhileRunning: 15
+  EnergyRechardDelayWhileStaying: 0.4
+  EnergyRechardDelayWhileRunning: 0.8
 --- !u!1 &3904693497940078910
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +418,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6473022299135151887}
   - component: {fileID: 526314854775823170}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}

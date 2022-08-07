@@ -36,6 +36,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected float _knockbackStart;
     protected bool _knockbackCleared = true;
     protected float _maxOpacity = 1.0f;
+    protected bool _circleClockwise = false;
     #endregion
 
     // Start is called before the first frame update

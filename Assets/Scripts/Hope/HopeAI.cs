@@ -15,6 +15,12 @@ public class HopeAI : MonoBehaviour
     [SerializeField] private float MaxHP = 100;
     [SerializeField] private float StunnedLenght = 1.3f;
     [SerializeField] private SpriteRenderer MainSprite;
+    [SerializeField] private Transform LightTransform;
+    [SerializeField] private UnityEngine.Rendering.Universal.Light2D Light;
+    [SerializeField] private float MaxLightScale = 20f;
+    [SerializeField] private float MaxLightIntensity = 2.5f;
+    [SerializeField] private float MinLightScale = 3f;
+    [SerializeField] private float MinLightIntensity = 0.5f;
     #endregion
 
     #region Private
@@ -27,8 +33,10 @@ public class HopeAI : MonoBehaviour
     private float _lastStunnedTime;
     private HopeLaser _hopeLaser;
     private HopeThrow _hopeThrow;
+    private HopeExplosion _hopeExplosion;
     private bool _isMovementLocked = false;
     private bool _isAbilityLocked = false;
+    private bool _isHopeLocked = false;
     #endregion
 
     #region Public
@@ -58,6 +66,19 @@ public class HopeAI : MonoBehaviour
             _isAbilityLocked = value;
         }
     }
+
+    public bool IsHopeLocked
+    {
+        get
+        {
+            return _isHopeLocked;
+        }
+
+        set
+        {
+            _isHopeLocked = value;
+        }
+    }
     #endregion
 
     // Start is called before the first frame update
@@ -67,6 +88,7 @@ public class HopeAI : MonoBehaviour
         _followScript = GetComponent<IFollow>();
         _hopeLaser = GetComponent<HopeLaser>();
         _hopeThrow = GetComponent<HopeThrow>();
+        _hopeExplosion = GetComponent<HopeExplosion>();
 
     }
 
@@ -145,7 +167,15 @@ public class HopeAI : MonoBehaviour
     public void OnThrow()
     {
         if (!IsAbilityLocked)
-            _hopeThrow.Activate();
+        {
+            if (_hp > _hopeThrow.GetCost())
+            {
+                if(_hopeThrow.Activate())
+                {
+                    SetHP(_hp - _hopeThrow.GetCost());
+                }
+            }
+        }
     }
 
     public void OnCancelAction()
@@ -156,11 +186,47 @@ public class HopeAI : MonoBehaviour
     public void OnFireLaser()
     {
         if (!IsAbilityLocked)
-            _hopeLaser.Activate();
+        {
+            if (_hp > _hopeLaser.GetCost())
+            {
+                if(_hopeLaser.Activate())
+                {
+                    SetHP(_hp - _hopeLaser.GetCost());
+                }
+            }
+        }
+    }
+
+    public void OnExplode()
+    {
+        if (!IsAbilityLocked && !IsHopeLocked)
+        {
+            if (_hp > _hopeExplosion.GetCost())
+            {
+                if (_hopeExplosion.Activate())
+                {
+                    SetHP(_hp - _hopeExplosion.GetCost());
+                }
+            }
+        }
     }
 
     public void MouseClick()
     {
         _hopeThrow.MouseClick();
+    }
+
+    private void SetHP(float hp)
+    {
+        this._hp = hp;
+        AdjustLight();
+    }
+
+    private void AdjustLight()
+    {
+        var lightIntensity = ((_hp / MaxHP) * (MaxLightIntensity - MinLightIntensity)) + MinLightIntensity;
+        var lightScale = ((_hp / MaxHP) * (MaxLightScale - MinLightScale)) + MinLightScale;
+        Light.intensity = lightIntensity;
+        LightTransform.localScale = new Vector3(lightScale, lightScale, 1);
     }
 }

@@ -45,8 +45,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
         void Start()
         {
         }
-
-        // Update is called once per frame
+        
         private void Update()
         {
 
@@ -132,7 +131,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
             LaserSprite.enabled = true;
         }
 
-        public void Activate()
+        public bool Activate()
         {
             _startTime = Time.time;
             HopeScript.IsAbilityLocked = true;
@@ -142,6 +141,8 @@ namespace Assets.TestingAssets.TestScripts.Hope
 
             if (MovementLocked)
                 PlayerController.IsMovementLocked = true;
+
+            return true;
         }
 
         public float GetCost()

@@ -17,7 +17,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     public enum FollowState
     {
-        Seeking = 0
+        Seeking = 0,
+        Circleing = 1
     }
 
     #region Public
@@ -47,10 +48,13 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     [SerializeField] private float PlayerPullDelay = 50;
     [SerializeField] private float PlayerLooseAggroRadius = 50;
     [SerializeField] private float PlayerLooseAggroDelay = 50;
+
+    [SerializeField] private float CircleRadiusLost = 5;
     #endregion
 
     #region Private
-    protected IShadowFollow _followScript;
+    protected IShadowFollow _seekingFollow;
+    protected ShadowCircleFollow _circleFollow;
     protected FollowState _followState;
     protected float _lastCrossing;
     protected bool _isLocked = false;
@@ -63,6 +67,9 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     protected float _outOfRangeTime = 0;
     protected float _switchTargetTime = 0;
     protected TargetTypes _target = TargetTypes.None;
+
+    protected float _circleRadius;
+    protected float _circleRadiusLostDistance;
     #endregion
 
     // Start is called before the first frame update
@@ -70,9 +77,17 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     {
         _hp = MaxHP;
         this.Damage = 10;
-        _followScript = GetComponent<ShadowSeekerFollow>();
+        _seekingFollow = GetComponent<ShadowSeekerFollow>();
+        _circleFollow = GetComponent<ShadowCircleFollow>();
+
+        _circleFollow.Init(GetRotation, SetRotation);
+
+        _circleFollow.Paused = true;
         _rigidBody = GetComponent<Rigidbody2D>();
-        _followScript.Init(GetRotation, SetRotation, ContactFilter, AggroColider, _rigidBody);
+        _seekingFollow.Init(GetRotation, SetRotation, ContactFilter, AggroColider, _rigidBody);
+
+        _circleRadius = _circleFollow.GetCircleRadius;
+        _circleRadiusLostDistance = _circleRadius + CircleRadiusLost;
     }
 
     // Update is called once per frame
@@ -84,6 +99,70 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     private void FixedUpdate()
     {
         CheckTargets();
+        CheckDistance();
+    }
+
+    private void CheckDistance()
+    {
+        var distance = DistanceFromTarget();
+        if (distance < 0)
+            return;
+
+        if(distance < _circleRadius && _followState == FollowState.Seeking)
+        {
+            SwitchToCircleFollow();
+        }
+        else if(distance > _circleRadiusLostDistance && _followState == FollowState.Circleing)
+        {
+            SwitchToSeeking();
+        }
+    }
+
+    private void SwitchToCircleFollow()
+    {
+        _followState = FollowState.Circleing;
+        _seekingFollow.Paused = true;
+        _circleFollow.Paused = false;
+        _circleFollow.InitCircle();
+        _circleFollow.SetTarget(GetTarget());
+    }
+
+    private void SwitchToSeeking()
+    {
+        _followState = FollowState.Seeking;
+        _seekingFollow.Paused = false;
+        _circleFollow.Paused = true;
+        _seekingFollow.SetTarget(GetTarget());
+    }
+
+    private Transform GetTarget()
+    {
+        if(_target == TargetTypes.Hope)
+        {
+            return HopeTransform;
+        }
+        else if(_target == TargetTypes.Player)
+        {
+            return PlayerTransform;
+        }
+
+        return null;
+    }
+
+    private float DistanceFromTarget()
+    {
+        if(_target == TargetTypes.Hope)
+        {
+            return Vector2.Distance(this.transform.position, HopeTransform.position);
+        }
+        else if(_target == TargetTypes.Player)
+        {
+            return Vector2.Distance(this.transform.position, PlayerTransform.transform.position);
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     private void CheckTargets()
@@ -194,7 +273,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     private void TargetPlayer()
     {
         _target = TargetTypes.Player;
-        _followScript.SetTarget(PlayerTransform);
+        _seekingFollow.SetTarget(PlayerTransform);
+        _circleFollow.SetTarget(PlayerTransform);
 
         if (DebugControlComponent != null)
             DebugControlComponent.ShowTarget("Player");
@@ -203,7 +283,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     private void TargetHope()
     {
         _target = TargetTypes.Hope;
-        _followScript.SetTarget(HopeTransform);
+        _seekingFollow.SetTarget(HopeTransform);
+        _circleFollow.SetTarget(HopeTransform);
 
         if (DebugControlComponent != null)
             DebugControlComponent.ShowTarget("Hope");
@@ -241,7 +322,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     public void SetFree()
     {
-        _followScript.Paused = false;
+        _seekingFollow.Paused = false;
         _isLocked = false;
     }
 
@@ -273,28 +354,5 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
             AdjustOpacity();
             return false;
         }
-    }
-
-    protected void OnTriggerEnter2D(Collider2D col)
-    {
-        //if (col.gameObject.tag == "Player")
-        //{
-        //    if (Vector2.Distance(this.transform.position, col.transform.position) < DistanceCheck)
-        //    {
-        //        if (!_isLocked)
-        //        {
-        //            var attackResult = (col.gameObject.GetComponent<HopeAI>()).GetAttacked(this);
-        //            if (attackResult)
-        //            {
-        //                _followScript.Paused = true;
-        //                _isLocked = true;
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        _followScript.SetTarget(col.transform);
-        //    }
-        //}
     }
 }

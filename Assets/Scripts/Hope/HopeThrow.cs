@@ -61,6 +61,7 @@ namespace Assets.Scripts.Hope
         private void UnlockHope()
         {
             HopeScript.IsMovementLocked = false;
+            HopeScript.IsHopeLocked = false;
             HopesSprite.enabled = true;
             HopeAimSprite.enabled = false;
             _isFireing = false;
@@ -165,7 +166,7 @@ namespace Assets.Scripts.Hope
                 Fire();
         }
 
-        public void Activate()
+        public bool Activate()
         {
             if(!_isAiming)
             {
@@ -173,12 +174,16 @@ namespace Assets.Scripts.Hope
                 {
                     StartAiming();
                     HopeScript.IsAbilityLocked = true;
+                    HopeScript.IsHopeLocked = true;
+                    return true;
                 }
                 else
                 {
                     //Show not in distnace somehow
                 }
             }
+
+            return false;
         }
 
         public float GetCost()

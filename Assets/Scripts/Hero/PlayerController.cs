@@ -380,5 +380,11 @@ public class PlayerController : MonoBehaviour
         if (!ActionLocked)
             HopeAI.OnThrow();
     }
+
+    private void OnExplode()
+    {
+        if (!ActionLocked)
+            HopeAI.OnExplode();
+    }
     #endregion
 }

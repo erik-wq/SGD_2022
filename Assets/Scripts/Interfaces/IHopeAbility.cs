@@ -9,8 +9,7 @@ namespace Assets.TestingAssets
 {
     public interface IHopeAbility
     {
-        public void Activate();
+        public bool Activate();
         public float GetCost();
-        public bool IsLocked();
     }
 }
