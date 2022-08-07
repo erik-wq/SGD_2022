@@ -79,17 +79,33 @@ public class HopeAI : MonoBehaviour
             _isHopeLocked = value;
         }
     }
+
+    [Header("PathFinding")]
+    public BasicFollow folow;
+    public Transform target;
+
+    [Header("Idle parameters")]
+    public float idleRadius;
+    public Transform player;
+    [Header("Collecting parameters")]
+    public float collectRadius;
+    public float CheckRouteRadius;
+    public LayerMask enemyMask;
+    private HopeStateMachine _machine;
     #endregion
 
     // Start is called before the first frame update
     void Start()
     {
-        _hp = MaxHP;
-        _followScript = GetComponent<IFollow>();
+        //_hp = MaxHP;
+        //_followScript = GetComponent<IFollow>();
         _hopeLaser = GetComponent<HopeLaser>();
         _hopeThrow = GetComponent<HopeThrow>();
+        _followScript = GetComponent<BasicFollow>();
         _hopeExplosion = GetComponent<HopeExplosion>();
-
+        folow.SetTarget(target);
+        _machine = new HopeStateMachine(this);
+        _hp = MaxHP;
     }
 
     // Update is called once per frame
@@ -100,10 +116,12 @@ public class HopeAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isFighting)
-        {
-            HandleAttack();
-        }
+        //_machine.state.FixedUpdate();
+
+        //if (_isFighting)
+        //{
+        //    HandleAttack();
+        //}
     }
 
     private void HandleAttack()
@@ -170,7 +188,7 @@ public class HopeAI : MonoBehaviour
         {
             if (_hp > _hopeThrow.GetCost())
             {
-                if(_hopeThrow.Activate())
+                if (_hopeThrow.Activate())
                 {
                     SetHP(_hp - _hopeThrow.GetCost());
                 }
@@ -189,7 +207,7 @@ public class HopeAI : MonoBehaviour
         {
             if (_hp > _hopeLaser.GetCost())
             {
-                if(_hopeLaser.Activate())
+                if (_hopeLaser.Activate())
                 {
                     SetHP(_hp - _hopeLaser.GetCost());
                 }
@@ -228,5 +246,24 @@ public class HopeAI : MonoBehaviour
         var lightScale = ((_hp / MaxHP) * (MaxLightScale - MinLightScale)) + MinLightScale;
         Light.intensity = lightIntensity;
         LightTransform.localScale = new Vector3(lightScale, lightScale, 1);
+    }
+
+    public void Collect()
+    {
+        _machine.Collect();
+        Debug.Log(_machine.state.GetType());
+        if (_machine.state.GetType() == typeof(HopeColect))
+        {
+            HopeColect stat = (HopeColect)_machine.state;
+            stat.Collect();
+        }
+    }
+
+    public void AddEnergy(float ammount)
+    {
+        var newHP = _hp + ammount;
+        if (newHP > MaxHP)
+            newHP = MaxHP;
+        SetHP(newHP);
     }
 }

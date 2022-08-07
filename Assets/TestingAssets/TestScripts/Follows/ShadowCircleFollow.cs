@@ -244,4 +244,20 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
             GenerateNextTargetOnCircle();
         }
     }
+
+    public void TakeDamage(float damage)
+    {
+        if(_isCrossing)
+        {
+            var toTarget = GetDirectionToTarget();
+            var toPoint = GetDirectionToNextPoint();
+
+            if(Vector2.Dot(toTarget, toPoint) > 0.25f)
+            {
+                toPoint = toPoint * -1;
+                toPoint = MathUtility.RotateVector(toPoint, 15);
+                _nextTarget = toPoint;
+            }
+        }
+    }
 }

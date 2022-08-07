@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Hope
   - EnemyHitCollider
+  - Zombie
   layers:
   - Default
   - TransparentFX
@@ -21,6 +22,7 @@ TagManager:
   - LargeCollisionObject
   - Enemy
   - FlyingEnemy
+  - EnemyHitCollider
   - 
   - 
   - 
@@ -39,8 +41,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Charge
   m_SortingLayers:
   - name: Default
     uniqueID: 0

@@ -173,7 +173,7 @@ namespace Assets.TestingAssets.TestScripts
                 }
             }
 
-            DebugControl.SetShadeSpeed(_currentSpeed);
+            //DebugControl.SetShadeSpeed(_currentSpeed);
         }
 
         private bool FindNextWaypoint()

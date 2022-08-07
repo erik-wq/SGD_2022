@@ -29,6 +29,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     [SerializeField] private float CrossingCooldown = 5;
     [SerializeField] private float DistanceCheck = 2;
     [SerializeField] private float MaxHP = 50;
+    [SerializeField] private float MinimalAlpha = 0.2f;
     [SerializeField] private SpriteRenderer MainSprite;
     [SerializeField] private ContactFilter2D ContactFilter;
     [SerializeField] private Collider2D AggroColider;
@@ -38,6 +39,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     [SerializeField] private Transform PlayerTransform;
     [SerializeField] private Transform HopeTransform;
+    [SerializeField] private GameObject Light;
 
 
     [SerializeField] private float HopePullRadius = 50;
@@ -70,6 +72,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     protected float _circleRadius;
     protected float _circleRadiusLostDistance;
+    protected bool _isDead = false;
     #endregion
 
     // Start is called before the first frame update
@@ -98,6 +101,9 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     private void FixedUpdate()
     {
+        if (_isDead)
+            return;
+
         CheckTargets();
         CheckDistance();
     }
@@ -317,6 +323,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     {
         float percentageHP = _hp / MaxHP;
         float opacity = _maxOpacity * percentageHP;
+        if (opacity < MinimalAlpha)
+            opacity = MinimalAlpha;
         MainSprite.color = new Color(MainSprite.color.r, MainSprite.color.g, MainSprite.color.b, opacity);
     }
 
@@ -329,9 +337,10 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     public bool TakeDamage(float damage, float force, Vector2 origin)
     {
         _hp -= damage;
+        DamageToFollow(damage);
         if (_hp < 0)
         {
-            UnityEngine.Object.Destroy(gameObject);
+            OnDeath();
             return true;
         }
         else
@@ -343,16 +352,20 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     public bool TakeDamage(float damage)
     {
-        _hp -= damage;
-        if (_hp < 0)
-        {
-            UnityEngine.Object.Destroy(gameObject);
-            return true;
-        }
-        else
-        {
-            AdjustOpacity();
-            return false;
-        }
+        return TakeDamage(damage, 0, Vector2.zero);
+    }
+
+    private void DamageToFollow(float damage)
+    {
+        _circleFollow.TakeDamage(damage);
+    }
+
+    private void OnDeath()
+    {
+        MainSprite.enabled = false;
+        Light.SetActive(true);
+        _circleFollow.enabled = false;
+        _seekingFollow.Paused = true;
+        _isDead = true;
     }
 }

@@ -290,9 +290,14 @@ public class PlayerController : MonoBehaviour
 
         foreach (var item in enemies)
         {
-            if (item.gameObject.tag == "Enemy")
+            if (item.gameObject.tag == "EnemyHitCollider")
             {
                 IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
+                if (iEnemy == null)
+                {
+                    iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
+                }
+
                 iEnemy.TakeDamage(SwordDamage, SwordForce, this.transform.position);
             }
         }

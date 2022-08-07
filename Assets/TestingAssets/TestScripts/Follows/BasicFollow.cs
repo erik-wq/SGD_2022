@@ -10,6 +10,10 @@ public class BasicFollow : MonoBehaviour, IFollow
     #region Public
     [SerializeField] public Transform Target;
     public bool Paused { get; set; }
+    public Path path {
+        get { return _path; }
+}
+    public float minDistance { get { return this.MinimalDistance; } }
     #endregion
 
     #region Serialized
@@ -31,7 +35,6 @@ public class BasicFollow : MonoBehaviour, IFollow
     private Path _path;
     private int _currentWaypoint;
     #endregion
-
     // Start is called before the first frame update
     void Start()
     {
