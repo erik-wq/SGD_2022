@@ -22,7 +22,6 @@ public class HopeIdle : BaseState
     {
         if (_machine.CheckCharge())
         {
-            //Debug.Log("charge");
             Exit();
             return;
         }
@@ -35,7 +34,6 @@ public class HopeIdle : BaseState
     }
     public override void Exit()
     {
-        //Debug.Log("exit idle");
         _machine.Collect();
     }
     #region postions

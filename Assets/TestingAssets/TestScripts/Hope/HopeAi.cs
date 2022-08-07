@@ -15,7 +15,8 @@ public class HopeAi : MonoBehaviour
     public Transform player;
     [Header("Collecting parameters")]
     public float collectRadius;
-    public Vector2 CheckRouteSize;
+    public float CheckRouteradius;
+    public LayerMask enemyMask;
     private HopeStateMachine _machine;
     private bool _isMovementLocked = false;
     private bool _isAbilityLocked = false;
@@ -63,7 +64,6 @@ public class HopeAi : MonoBehaviour
     private void FixedUpdate()
     {
         _machine.state.FixedUpdate();
-        //print(_machine.state.GetType());
     }
     public void Collect()
     {
