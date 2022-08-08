@@ -21,6 +21,7 @@ public class HopeIdle : BaseState
     }
     public override void FixedUpdate()
     {
+        _machine.CheckEnergy();
         if (_machine.CheckCharge())
         {
             Exit();
@@ -28,7 +29,7 @@ public class HopeIdle : BaseState
         }
         if (_machine.AI.folow.path == null) return;
         List<Vector3> path = _machine.AI.folow.path.vectorPath;
-        if (Vector2.Distance(_machine.AI.transform.position, path[path.Count - 1]) < 1.1f)
+        if (Vector2.Distance(_machine.AI.transform.position, path[path.Count - 1]) < 1.3f)
         {
             Count();
         }

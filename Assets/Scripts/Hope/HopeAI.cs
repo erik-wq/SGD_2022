@@ -21,6 +21,7 @@ public class HopeAI : MonoBehaviour
     [SerializeField] private float MaxLightIntensity = 2.5f;
     [SerializeField] private float MinLightScale = 3f;
     [SerializeField] private float MinLightIntensity = 0.5f;
+    [SerializeField][Range(0,100)] private float LowEnergyState = 20;
     #endregion
 
     #region Private
@@ -28,7 +29,7 @@ public class HopeAI : MonoBehaviour
     private IFollow _followScript;
     private List<IShadowEnemy> _attackingEnemies = new List<IShadowEnemy>();
     private int _maxEnemies = 1;
-    private float _hp;
+    [SerializeField]private float _hp;
     private float _maxColor = 1;
     private float _lastStunnedTime;
     private HopeLaser _hopeLaser;
@@ -79,6 +80,20 @@ public class HopeAI : MonoBehaviour
             _isHopeLocked = value;
         }
     }
+    public float hp 
+    { 
+        get 
+        { 
+            return _hp; 
+        } 
+    }
+    public float LowEnergy
+    {
+        get
+        {
+            return LowEnergyState;
+        }
+    }
 
     [Header("PathFinding")]
     public BasicFollow folow;
@@ -101,8 +116,6 @@ public class HopeAI : MonoBehaviour
         _hopeThrow = GetComponent<HopeThrow>();
         _followScript = GetComponent<BasicFollow>();
         _hopeExplosion = GetComponent<HopeExplosion>();
-        folow.SetTarget(target);
-        _machine = new HopeStateMachine(this);
         _hp = MaxHP;
     }
     private void Start()
