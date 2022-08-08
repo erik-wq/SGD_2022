@@ -70,7 +70,25 @@ public class HopeStateMachine
         }
         return final;
     }
-    private bool CheckPath()
+    public Collider2D Closest()
+    {
+        Collider2D[] cols = Physics2D.OverlapCircleAll(AI.transform.position, AI.collectRadius, LayerMask.GetMask("Charge"));
+        if (cols.Length == 1)
+        {
+            return cols[0];
+        }
+        float dist = Vector2.Distance(AI.transform.position, cols[0].transform.position);
+        Collider2D final = cols[0];
+        foreach (Collider2D x in cols)
+        {
+            if (Vector2.Distance(AI.transform.position, x.transform.position) < dist)
+            {
+                final = x;
+            }
+        }
+        return final;
+    }
+    public bool CheckPath()
     {
         List<Vector3> path = AI.folow.path.vectorPath;
         Physics2D.queriesHitTriggers = false;

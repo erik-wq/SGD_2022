@@ -16,8 +16,7 @@ public class HopeIdle : BaseState
     public override void Start()
     {
         _machine.AI.folow.SetTarget(_machine.AI.target);
-        Vector2 pos = RandomPos();
-        _machine.AI.target.position = pos;
+        _machine.AI.target.position = RandomPos();
     }
     public override void FixedUpdate()
     {
@@ -26,6 +25,19 @@ public class HopeIdle : BaseState
         {
             Exit();
             return;
+        }
+        if (CheckPosition())
+        {
+            Vector2 dest = RandomPos();
+            if (dest == Vector2.zero)
+            {
+                _machine.AI.folow.SetTarget(null);
+            }
+            else
+            {
+                _machine.AI.target.position = dest;
+                _machine.AI.folow.SetTarget(_machine.AI.target);
+            }
         }
         if (_machine.AI.folow.path == null) return;
         List<Vector3> path = _machine.AI.folow.path.vectorPath;
@@ -69,6 +81,14 @@ public class HopeIdle : BaseState
             _machine.AI.target.position = dest;
             _range = 0;
         }
+    }
+    private bool CheckPosition()
+    {
+        if (Physics2D.OverlapCircle(_machine.AI.target.position, 0.75f, _machine.AI.objectMask))
+        {
+            return true;
+        }
+        return false;
     }
     #endregion
 }

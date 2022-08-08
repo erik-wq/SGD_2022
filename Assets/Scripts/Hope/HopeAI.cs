@@ -22,6 +22,7 @@ public class HopeAI : MonoBehaviour
     [SerializeField] private float MinLightScale = 3f;
     [SerializeField] private float MinLightIntensity = 0.5f;
     [SerializeField][Range(0,100)] private float LowEnergyState = 20;
+    [SerializeField] LayerMask ObjectMaks;
     #endregion
 
     #region Private
@@ -41,6 +42,13 @@ public class HopeAI : MonoBehaviour
     #endregion
 
     #region Public
+    public LayerMask objectMask 
+    {
+        get
+        {
+            return ObjectMaks;
+        }
+    }
     public bool IsMovementLocked
     {
         get
