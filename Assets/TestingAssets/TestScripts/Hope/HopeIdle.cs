@@ -16,7 +16,8 @@ public class HopeIdle : BaseState
     public override void Start()
     {
         _machine.AI.folow.SetTarget(_machine.AI.target);
-        _machine.AI.target.position = RandomPos();
+        Vector2 pos = RandomPos();
+        _machine.AI.target.position = pos;
     }
     public override void FixedUpdate()
     {
