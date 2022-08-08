@@ -330,6 +330,7 @@ MonoBehaviour:
   CrossingCooldown: 5
   DistanceCheck: 2
   MaxHP: 50
+  MinimalAlpha: 0.2
   MainSprite: {fileID: 4308488964266912456}
   ContactFilter:
     useTriggers: 0
@@ -350,6 +351,7 @@ MonoBehaviour:
   DebugControlComponent: {fileID: 0}
   PlayerTransform: {fileID: 0}
   HopeTransform: {fileID: 0}
+  Light: {fileID: 0}
   HopePullRadius: 50
   HopeLooseAggroRadius: 50
   HopeLooseAgrroDelay: 4
@@ -357,6 +359,7 @@ MonoBehaviour:
   PlayerPullDelay: 50
   PlayerLooseAggroRadius: 50
   PlayerLooseAggroDelay: 50
+  CircleRadiusLost: 5
 --- !u!50 &1752580439676242969
 Rigidbody2D:
   serializedVersion: 4

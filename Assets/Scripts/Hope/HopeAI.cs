@@ -37,6 +37,7 @@ public class HopeAI : MonoBehaviour
     private bool _isMovementLocked = false;
     private bool _isAbilityLocked = false;
     private bool _isHopeLocked = false;
+    private Animator _animator;
     #endregion
 
     #region Public
@@ -97,11 +98,10 @@ public class HopeAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //_hp = MaxHP;
-        //_followScript = GetComponent<IFollow>();
         _hopeLaser = GetComponent<HopeLaser>();
         _hopeThrow = GetComponent<HopeThrow>();
         _followScript = GetComponent<BasicFollow>();
+        _animator = GetComponent<Animator>();
         _hopeExplosion = GetComponent<HopeExplosion>();
         folow.SetTarget(target);
         _machine = new HopeStateMachine(this);
@@ -116,7 +116,7 @@ public class HopeAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //_machine.state.FixedUpdate();
+        _machine.state.FixedUpdate();
 
         //if (_isFighting)
         //{

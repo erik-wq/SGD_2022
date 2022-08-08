@@ -30,11 +30,13 @@ public class HopeColect : BaseState
             Exit();
             return;
         }
+
         if (Vector2.Distance(_machine.AI.transform.position, path[path.Count - 1]) > _machine.AI.collectRadius)
         {
             Exit();
             return;
         }
+
         if(_machine.AI.folow.Target == null)
         {
             Exit();

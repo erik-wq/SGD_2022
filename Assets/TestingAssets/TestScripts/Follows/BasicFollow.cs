@@ -34,12 +34,14 @@ public class BasicFollow : MonoBehaviour, IFollow
     private Seeker _seeker;
     private Path _path;
     private int _currentWaypoint;
+    private Animator _animator;
     #endregion
     // Start is called before the first frame update
     void Start()
     {
         _rigidBody2D = GetComponent<Rigidbody2D>();
         _seeker = GetComponent<Seeker>();
+        _animator = GetComponent<Animator>();
         this.Paused = false;
         InvokeRepeating("UpdatePath", 0f, 0.5f);
     }
@@ -152,7 +154,7 @@ public class BasicFollow : MonoBehaviour, IFollow
             i++;
         }
 
-        return Vector2.zero;
+        return (Vector2)this.transform.position;
     }
 
     private Vector2 CheckAxisDirections(Vector2 direction)

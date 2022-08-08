@@ -137,8 +137,19 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
 
     private void MoveToCrossTarget()
     {
-        var moveVector = GetDirectionToNextPoint() * MovementSpeed * Time.fixedDeltaTime;
-        this.transform.position += new Vector3(moveVector.x, moveVector.y, 0);
+        var direction = GetDirectionToNextPoint();
+        var moveVector = direction * MovementSpeed * Time.fixedDeltaTime;
+
+        var nextDirection = (_nextTarget - ((Vector2)this.transform.position + moveVector)).normalized;
+
+        if (nextDirection != direction)
+        {
+            this.transform.position = _nextTarget;
+        }
+        else
+        {
+            this.transform.position += new Vector3(moveVector.x, moveVector.y, 0);
+        }
     }
 
     private void MoveToPointOnCircle()

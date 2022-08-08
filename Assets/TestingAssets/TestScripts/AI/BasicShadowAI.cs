@@ -40,6 +40,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     [SerializeField] private Transform PlayerTransform;
     [SerializeField] private Transform HopeTransform;
     [SerializeField] private GameObject Light;
+    [SerializeField] private TrailRenderer Trail;
 
 
     [SerializeField] private float HopePullRadius = 50;
@@ -326,6 +327,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         if (opacity < MinimalAlpha)
             opacity = MinimalAlpha;
         MainSprite.color = new Color(MainSprite.color.r, MainSprite.color.g, MainSprite.color.b, opacity);
+        Trail.startColor = new Color(Trail.startColor.r, Trail.startColor.g, Trail.startColor.b, opacity);
     }
 
     public void SetFree()
