@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
     //Sword
     [SerializeField] private SpriteRenderer SwordIndicator;
+    [SerializeField] private SpriteRenderer MainSprite;
     [SerializeField] private Transform SwordIndicatorTransform;
     [SerializeField] private float SwordSlashZonesCount = 6;
     [SerializeField] private float SwordAnimationLength = 2;
@@ -63,6 +64,7 @@ public class PlayerController : MonoBehaviour
     private float _currentEnergy = 0;
 
     private List<Collider2D> _swordSlashZones = new List<Collider2D>();
+    private Animator _animator;
 
     //Sprint
     private float _sprintStart;
@@ -81,6 +83,7 @@ public class PlayerController : MonoBehaviour
     {
         _rigidBody2D = GetComponent<Rigidbody2D>();
         IsMovementLocked = false;
+        _animator = GetComponentInChildren<Animator>();
         GenerateSlashZones();
     }
 
@@ -97,11 +100,14 @@ public class PlayerController : MonoBehaviour
         if (_movementInput != Vector2.zero && !IsMovementLocked)
         {
             Move(_movementInput);
+            AdjustFlip(_movementInput);
+            _animator.SetBool("IsRunning", true);
         }
         else
         {
             CameraManagement.SetMoving(false);
             DebugScreenControl.SetHeroSpeed(0);
+            _animator.SetBool("IsRunning", false);
         }
 
         MoveIndicator();
@@ -126,6 +132,18 @@ public class PlayerController : MonoBehaviour
         }
 
         TurnOffSlashZones();
+    }
+
+    private void AdjustFlip(Vector2 direction)
+    {
+        if(direction.x >= 0)
+        {
+            MainSprite.flipX = false;
+        }
+        else
+        {
+            MainSprite.flipX = true;
+        }
     }
 
     private void HandleSprint()
@@ -179,6 +197,7 @@ public class PlayerController : MonoBehaviour
         {
             _currentEnergy = 0;
             _sprintInProgress = false;
+            _animator.SetBool("IsSprinting", false);
         }
     }
 
@@ -203,6 +222,7 @@ public class PlayerController : MonoBehaviour
     private void ExitSprint()
     {
         _sprintInProgress = false;
+        _animator.SetBool("IsSprinting", false);
         _sprintRegargeCounter = 0;
     }
 
@@ -221,6 +241,7 @@ public class PlayerController : MonoBehaviour
         {
             _sprintStart = Time.time;
             _sprintInProgress = true;
+            _animator.SetBool("IsSprinting", true);
             _sprintRegargeCounter = 0;
         }
     }
@@ -338,20 +359,7 @@ public class PlayerController : MonoBehaviour
 
         CameraManagement.SetPlayersSpeed(movementSpeed);
         DebugScreenControl.SetHeroSpeed(movementSpeed);
-
-
-        List<RaycastHit2D> foundCollisions = new List<RaycastHit2D>();
-        var freeDirection = MovementUtility.CastAndAdjust(_rigidBody2D,
-                            input,
-                            CollisionsFilter,
-                            foundCollisions,
-                            movementSpeed * Time.fixedDeltaTime + CollisionOffset
-                          );
-
-        if (freeDirection != Vector2.zero)
-        {
-            _rigidBody2D.MovePosition(_rigidBody2D.position + freeDirection * movementSpeed * Time.fixedDeltaTime);
-        }
+        _rigidBody2D.MovePosition(_rigidBody2D.position + input * movementSpeed * Time.fixedDeltaTime);
     }
 
     private void OnFire()
