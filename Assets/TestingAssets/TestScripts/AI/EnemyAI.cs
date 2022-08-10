@@ -171,8 +171,8 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     private void FaceDirection(Vector2 direction)
     {
-        //var angle = MathUtility.FullAngle(Vector2.up, direction);
-        //this.transform.rotation = Quaternion.Euler(0, 0, angle + _rotationOffset);
+        var angle = MathUtility.FullAngle(Vector2.up, direction);
+        this.transform.rotation = Quaternion.Euler(0, 0, angle + _rotationOffset);
     }
 
     public bool TakeDamage(float damage)
