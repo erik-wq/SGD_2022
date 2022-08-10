@@ -113,6 +113,9 @@ namespace Assets.TestingAssets.TestScripts
             if (collisions.Count == 0)
             {
                 Move(direction);
+
+                var rotation = MathUtility.FullAngle(Vector2.up, direction);
+                _setRotation(rotation);
                 _currentRotationSpeed = RotationSpeed;
             }
             else
@@ -274,8 +277,6 @@ namespace Assets.TestingAssets.TestScripts
                 {
                     facingDirection = desiredDirection;
                 }
-
-                _setRotation(targetAngle);
                 return facingDirection;
             }
 

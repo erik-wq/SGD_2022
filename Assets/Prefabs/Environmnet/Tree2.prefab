@@ -490,7 +490,7 @@ MonoBehaviour:
   - {x: 2.8520234, y: -2.6449516, z: 0}
   m_ShapePathHash: -945370990
   m_Mesh: {fileID: 0}
-  m_InstanceId: 32940
+  m_InstanceId: -37378
 --- !u!50 &8285230325956839131
 Rigidbody2D:
   serializedVersion: 4

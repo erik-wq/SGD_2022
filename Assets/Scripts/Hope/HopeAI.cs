@@ -8,7 +8,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class HopeAI : MonoBehaviour
+public class HopeAI : MonoBehaviour, IEnemy
 {
     #region Serialized
     [SerializeField] private float Damage = 10;
@@ -21,6 +21,8 @@ public class HopeAI : MonoBehaviour
     [SerializeField] private float MaxLightIntensity = 2.5f;
     [SerializeField] private float MinLightScale = 3f;
     [SerializeField] private float MinLightIntensity = 0.5f;
+    [SerializeField][Range(0,100)] private float LowEnergyState = 20;
+    [SerializeField] LayerMask ObjectMaks;
     #endregion
 
     #region Private
@@ -28,7 +30,7 @@ public class HopeAI : MonoBehaviour
     private IFollow _followScript;
     private List<IShadowEnemy> _attackingEnemies = new List<IShadowEnemy>();
     private int _maxEnemies = 1;
-    private float _hp;
+    [SerializeField]private float _hp;
     private float _maxColor = 1;
     private float _lastStunnedTime;
     private HopeLaser _hopeLaser;
@@ -41,6 +43,13 @@ public class HopeAI : MonoBehaviour
     #endregion
 
     #region Public
+    public LayerMask objectMask 
+    {
+        get
+        {
+            return ObjectMaks;
+        }
+    }
     public bool IsMovementLocked
     {
         get
@@ -80,6 +89,20 @@ public class HopeAI : MonoBehaviour
             _isHopeLocked = value;
         }
     }
+    public float hp 
+    { 
+        get 
+        { 
+            return _hp; 
+        } 
+    }
+    public float LowEnergy
+    {
+        get
+        {
+            return LowEnergyState;
+        }
+    }
 
     [Header("PathFinding")]
     public BasicFollow folow;
@@ -95,60 +118,50 @@ public class HopeAI : MonoBehaviour
     private HopeStateMachine _machine;
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
         _hopeLaser = GetComponent<HopeLaser>();
         _hopeThrow = GetComponent<HopeThrow>();
         _followScript = GetComponent<BasicFollow>();
         _animator = GetComponent<Animator>();
         _hopeExplosion = GetComponent<HopeExplosion>();
-        folow.SetTarget(target);
-        _machine = new HopeStateMachine(this);
         _hp = MaxHP;
     }
-
-    // Update is called once per frame
-    private void Update()
+    private void Start()
     {
-
+        folow.SetTarget(target);
+        _machine = new HopeStateMachine(this);
     }
 
     private void FixedUpdate()
     {
         _machine.state.FixedUpdate();
-
         //if (_isFighting)
         //{
         //    HandleAttack();
         //}
     }
 
-    private void HandleAttack()
+    public void Collect()
     {
-        List<IShadowEnemy> toBeRemoved = new List<IShadowEnemy>();
-
-        foreach (var item in _attackingEnemies)
+        _machine.Collect();
+        if (_machine.state.GetType() == typeof(HopeColect))
         {
-            if (item.TakeDamage(Damage * Time.fixedDeltaTime, 0, this.transform.position))
-            {
-                toBeRemoved.Add(item);
-            }
-        }
-
-        _attackingEnemies = _attackingEnemies.Where(a => !toBeRemoved.Contains(a)).ToList();
-
-        if (_attackingEnemies.Count == 0)
-        {
-            _isFighting = false;
-            _followScript.Paused = false;
+            HopeColect stat = (HopeColect)_machine.state;
+            stat.Collect();
         }
     }
 
-    private void TakeDamage(float damage)
+    #region damage
+    public bool TakeDamage(float damage)
     {
         _hp -= damage;
         AdjustColor();
+
+        if (_hp > 0)
+            return false;
+        return true;
     }
 
     private void AdjustColor()
@@ -181,7 +194,8 @@ public class HopeAI : MonoBehaviour
             return false;
         }
     }
-
+    #endregion
+    #region ability
     public void OnThrow()
     {
         if (!IsAbilityLocked)
@@ -248,17 +262,6 @@ public class HopeAI : MonoBehaviour
         LightTransform.localScale = new Vector3(lightScale, lightScale, 1);
     }
 
-    public void Collect()
-    {
-        _machine.Collect();
-        Debug.Log(_machine.state.GetType());
-        if (_machine.state.GetType() == typeof(HopeColect))
-        {
-            HopeColect stat = (HopeColect)_machine.state;
-            stat.Collect();
-        }
-    }
-
     public void AddEnergy(float ammount)
     {
         var newHP = _hp + ammount;
@@ -266,4 +269,30 @@ public class HopeAI : MonoBehaviour
             newHP = MaxHP;
         SetHP(newHP);
     }
+
+    public bool TakeDamage(float damage, float force, Vector2 origin)
+    {
+        return this.TakeDamage(damage);
+    }
+    #endregion
+    //private void HandleAttack()
+    //{
+    //    List<IShadowEnemy> toBeRemoved = new List<IShadowEnemy>();
+
+    //    foreach (var item in _attackingEnemies)
+    //    {
+    //        if (item.TakeDamage(Damage * Time.fixedDeltaTime, 0, this.transform.position))
+    //        {
+    //            toBeRemoved.Add(item);
+    //        }
+    //    }
+
+    //    _attackingEnemies = _attackingEnemies.Where(a => !toBeRemoved.Contains(a)).ToList();
+
+    //    if (_attackingEnemies.Count == 0)
+    //    {
+    //        _isFighting = false;
+    //        _followScript.Paused = false;
+    //    }
+    //}
 }

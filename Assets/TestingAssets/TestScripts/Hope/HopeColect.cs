@@ -8,7 +8,7 @@ public class HopeColect : BaseState
     public HopeColect(HopeStateMachine machine)
     {
         _machine = machine;
-        Collider2D close = Closest();
+        Collider2D close = _machine.Closest();
         if(close == null)
         {
             Exit();
@@ -19,7 +19,7 @@ public class HopeColect : BaseState
     }
     public override void FixedUpdate()
     {
-        if (!CheckPath())
+        if (!_machine.CheckPath())
         {
             Exit();
             return;
@@ -50,40 +50,5 @@ public class HopeColect : BaseState
     public void Collect()
     {
         _collect = true;
-    }
-    private Collider2D Closest()
-    {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(_machine.AI.transform.position, _machine.AI.collectRadius, LayerMask.GetMask("Charge"));
-        if (cols.Length == 0) return null;
-        if (cols.Length == 1)
-        {
-            return cols[0];
-        }
-        float dist = Vector2.Distance(_machine.AI.transform.position, cols[0].transform.position);
-        Collider2D final = cols[0];
-        foreach (Collider2D x in cols)
-        {
-            if (Vector2.Distance(_machine.AI.transform.position, x.transform.position) < dist)
-            {
-                final = x;
-            }
-        }
-        return final;
-    }
-    private bool CheckPath()
-    {
-        List<Vector3> path = _machine.AI.folow.path.vectorPath;
-        Physics2D.queriesHitTriggers = false;
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            Collider2D[] cols = Physics2D.OverlapCircleAll(path[i], _machine.AI.CheckRouteRadius , _machine.AI.enemyMask);
-            if (cols.Length != 0)
-            {
-                Physics2D.queriesHitTriggers = true;
-                return false;
-            }
-        }
-        Physics2D.queriesHitTriggers = true;
-        return true;
     }
 }

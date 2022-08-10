@@ -11,7 +11,8 @@ public class HopeReturn : BaseState
     }
     public override void FixedUpdate()
     {
-        if(Vector2.Distance(_machine.AI.transform.position, _machine.AI.player.position) < _machine.AI.idleRadius)
+        _machine.CheckEnergy();
+        if (Vector2.Distance(_machine.AI.transform.position, _machine.AI.player.position) < _machine.AI.idleRadius)
         {
             Exit();
             return;

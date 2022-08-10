@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IEnemy
 {
     #region Serialized
     [SerializeField] private float MovementSpeedForward = 6f;
@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float MovementSpeedBackwardsSideway = 3f;
 
     [SerializeField] private float CollisionOffset = 0.05f;
+
     [SerializeField] private ContactFilter2D CollisionsFilter;
     [SerializeField] private AstarPath Pathfinder;
     [SerializeField] private BasicFollow HopesFollow;
@@ -23,8 +24,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform MouseIndicatorTransform;
     [SerializeField] private Camera MainCamera;
     [SerializeField] private CameraManagement CameraManagement;
-
-    [SerializeField] private Transform debugCircle;
 
     [SerializeField] private DebugControl DebugScreenControl;
 
@@ -41,6 +40,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float SwordDamage = 4;
     [SerializeField] private float SwordForce = 500;
 
+    [SerializeField] private float AttackMovementspeedForward = 10;
+    [SerializeField] private float AttackMovementspeedBackwards = 10;
 
     //Sprint
     [SerializeField] private AnimationCurve SprintCurve;
@@ -70,6 +71,8 @@ public class PlayerController : MonoBehaviour
     private float _sprintStart;
     private bool _sprintInProgress = false;
     private float _sprintRegargeCounter = 0;
+    private bool _isHeavyAttacking = false;
+    private bool _isAttackDirectionRight = false;
     private Vector2 _lastStateMovement = Vector2.zero;
     #endregion
 
@@ -114,6 +117,11 @@ public class PlayerController : MonoBehaviour
         DebugScreenControl.SetEnergy(_currentEnergy);
     }
 
+    public void OnAttackFinished()
+    {
+        _isHeavyAttacking = false;
+    }
+
     private void GenerateSlashZones()
     {
         var step = 360.0f / SwordSlashZonesCount;
@@ -123,10 +131,10 @@ public class PlayerController : MonoBehaviour
             polygon.isTrigger = true;
             var points = new List<Vector2>();
             points.Add(Vector2.zero);
-            points.Add(MathUtility.RotateVector(new Vector2(0, 1), i * step));
-            points.Add(MathUtility.RotateVector(new Vector2(0, 1), (i * step) + (step / 3)));
-            points.Add(MathUtility.RotateVector(new Vector2(0, 1), (i * step) + ((step / 3) * 2)));
-            points.Add(MathUtility.RotateVector(new Vector2(0, 1), (i * step) + step));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), i * step));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + (step / 3)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + ((step / 3) * 2)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + step));
             polygon.points = points.ToArray();
             _swordSlashZones.Add(polygon);
         }
@@ -136,6 +144,9 @@ public class PlayerController : MonoBehaviour
 
     private void AdjustFlip(Vector2 direction)
     {
+        if (_isHeavyAttacking)
+            return;
+
         if(direction.x >= 0)
         {
             MainSprite.flipX = false;
@@ -281,6 +292,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private float GetHeavyAttackMovementSpeed(Vector2 input)
+    {
+        if(_isAttackDirectionRight && input.x > 0)
+        {
+            return AttackMovementspeedForward;
+        }
+        else if (!_isAttackDirectionRight && input.x <= 0)
+        {
+            return AttackMovementspeedForward;
+        }
+        return AttackMovementspeedBackwards;
+    }
+
     public Vector2 GetFacingDirectionRounded()
     {
         var direction = GetFaceDirection();
@@ -348,13 +372,20 @@ public class PlayerController : MonoBehaviour
 
         float movementSpeed = 0;
 
-        if (_sprintInProgress)
+        if (!_isHeavyAttacking)
         {
-            movementSpeed = GetMovementSpeedWithSprint(input);
+            if (_sprintInProgress)
+            {
+                movementSpeed = GetMovementSpeedWithSprint(input);
+            }
+            else
+            {
+                movementSpeed = GetMovementSpeed(input);
+            }
         }
         else
         {
-            movementSpeed = GetMovementSpeed(input);
+            movementSpeed = GetHeavyAttackMovementSpeed(input);
         }
 
         CameraManagement.SetPlayersSpeed(movementSpeed);
@@ -362,18 +393,38 @@ public class PlayerController : MonoBehaviour
         _rigidBody2D.MovePosition(_rigidBody2D.position + input * movementSpeed * Time.fixedDeltaTime);
     }
 
+    private void AdjustAttackDirection()
+    {
+        var facingDirection = GetFaceDirection();
+        if(facingDirection.x > 0)
+        {
+            _isAttackDirectionRight = true;
+            MainSprite.flipX = false;
+        }
+        else
+        {
+            _isAttackDirectionRight = false;
+            MainSprite.flipX = true;
+        }
+    }
+
     private void OnFire()
     {
         if (!_isSwordSlashInProgress && Time.time > _lastSlashTime + SwordAttackCooldown && !ActionLocked)
         {
-            var direction = GetFaceDirection();
-            SwordIndicator.enabled = true;
             _lastSlashTime = Time.time;
-            SwordIndicator.transform.localPosition = direction * SwordAnimationDistance;
-            DamageEnemies(direction);
+            _animator.Play("Player_Attack");
+            _isHeavyAttacking = true;
+            AdjustAttackDirection();
         }
 
         HopeAI.MouseClick();
+    }
+
+    public void DoDamageFromAnimation()
+    {
+        var direction = GetFaceDirection();
+        DamageEnemies(direction);
     }
 
     private void OnSprint()
@@ -398,6 +449,17 @@ public class PlayerController : MonoBehaviour
     {
         if (!ActionLocked)
             HopeAI.OnExplode();
+    }
+
+    public bool TakeDamage(float damage, float force, Vector2 origin)
+    {
+        //Implement damage
+        return false;
+    }
+
+    public bool TakeDamage(float damage)
+    {
+        return this.TakeDamage(damage, 0, Vector2.zero);
     }
     #endregion
 }

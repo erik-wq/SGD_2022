@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
+//using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 public class SceneManagement : MonoBehaviour
@@ -27,10 +27,10 @@ public class SceneManagement : MonoBehaviour
         cam.gameObject.SetActive(true);
         loading = true;
         loadingScreen.gameObject.SetActive(true);
-        loadingScreen.DOFade(1,2.75f).OnComplete(() =>
-        {
+        //loadingScreen.DOFade(1, 2.75f).OnComplete(() =>
+        // {
             Load(newScene, curScene);
-        });
+        //});
         Time.timeScale = 1;
     }
     private void Load(string newScene, string curScene)
@@ -50,7 +50,7 @@ public class SceneManagement : MonoBehaviour
             }
         }
         yield return new WaitForSeconds(waitScreenTime);
-        loadingScreen.DOFade(0, 2.75f).OnComplete(Unload);
+        //loadingScreen.DOFade(0, 2.75f).OnComplete(Unload);
     }
     private void Unload()
     {
