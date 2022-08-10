@@ -134,6 +134,10 @@ public class HopeAI : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(_machine.state == null)
+        {
+            return;
+        }
         _machine.state.FixedUpdate();
     }
 

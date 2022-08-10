@@ -154,7 +154,8 @@ public class BasicFollow : MonoBehaviour, IFollow
             i++;
         }
 
-        return (Vector2)this.transform.position;
+        //return (Vector2)this.transform.position;
+        return Vector2.zero;
     }
 
     private Vector2 CheckAxisDirections(Vector2 direction)
