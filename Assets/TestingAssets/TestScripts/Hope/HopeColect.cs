@@ -45,7 +45,7 @@ public class HopeColect : BaseState
     }
     public override void Exit()
     {
-        _machine.Return();
+        _machine.Idle();
     }
     public void Collect()
     {

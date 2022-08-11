@@ -36,11 +36,6 @@ public class HopeStateMachine
         this.state = null;
         this.state = new HopeColect(this);
     }
-    public void Return()
-    {
-        this.state = null;
-        state = new HopeReturn(this);
-    }
     public void LowEnergy()
     {
         this.state = null;
@@ -73,6 +68,7 @@ public class HopeStateMachine
     public Collider2D Closest()
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(AI.transform.position, AI.collectRadius, LayerMask.GetMask("Charge"));
+        if (cols.Length <= 0) return null;
         if (cols.Length == 1)
         {
             return cols[0];

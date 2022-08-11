@@ -149,11 +149,13 @@ public class PlayerController : MonoBehaviour, IEnemy
 
         if(direction.x >= 0)
         {
+            //transform.rotation = Quaternion.Euler(0, 0, 0);
             MainSprite.flipX = false;
         }
         else
         {
             MainSprite.flipX = true;
+            //transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
 

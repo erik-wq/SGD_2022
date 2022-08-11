@@ -6,6 +6,7 @@ using UnityEngine;
 using Pathfinding;
 using UnityEngine.Rendering.Universal;
 using Assets.Scripts.Utils;
+using Assets.Scripts;
 
 public class EnemyAI : MonoBehaviour, IEnemy
 {
@@ -54,6 +55,9 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected float _lastAoeFiret = 0;
     protected Animator _animator;
     protected float _rotationOffset = -90;
+    protected EnemyControllerSingleton _enemyControl = EnemyControllerSingleton.GetInstance();
+
+    protected bool _hasAggro = false;
     #endregion
     public GameObject effect;
     // Start is called before the first frame update
@@ -77,16 +81,22 @@ public class EnemyAI : MonoBehaviour, IEnemy
     /// </summary>
     protected void FixedUpdate()
     {
-        CheckAttack();
-        ClearKnockback();
-        CheckAoe();
+        if (_hasAggro)
+        {
+            CheckAttack();
+            ClearKnockback();
+            CheckAoe();
+        }
     }
 
     protected void CheckAoe()
     {
         if(Time.time > _lastAoeFiret + SpikesCooldown)
         {
-            FireAoeRange();
+            if (_enemyControl.AskToFire())
+            {
+                FireAoeRange();
+            }
         }
     }
 
@@ -137,9 +147,11 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     protected void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.gameObject.tag == "Player")
+        if(col.gameObject.tag == "Player" || col.gameObject.tag == "Hope")
         {
             _followScript.SetTarget(PlayerTransform);
+            _hasAggro = true;
+            _enemyControl.Register(this);
         }
     }
 
@@ -239,6 +251,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
         GetComponent<DynamicGridObstacle>().enabled = false;
         GetComponent<ShadowCaster2D>().enabled = false;
         GetComponent<BasicFollow>().enabled = false;
+        _enemyControl.Unregister(this);
         this.enabled = false;
     }
 }

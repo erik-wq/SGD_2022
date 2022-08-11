@@ -10,6 +10,7 @@ public class BasicFollow : MonoBehaviour, IFollow
     #region Public
     [SerializeField] public Transform Target;
     public delegate void OnMoveAction(Vector2 direction);
+    public delegate void OnStopMovingAction();
     public bool Paused { get; set; }
     public Path path
     {
@@ -38,6 +39,7 @@ public class BasicFollow : MonoBehaviour, IFollow
     private int _currentWaypoint;
     private Animator _animator;
     private event OnMoveAction _onMove;
+    private event OnStopMovingAction _onStopMoving;
     #endregion
     // Start is called before the first frame update
     void Start()
@@ -83,7 +85,14 @@ public class BasicFollow : MonoBehaviour, IFollow
 
 
         if (!CheckNextDistance(direction))
+        {
+            if(_onStopMoving != null)
+            {
+                _onStopMoving();
+            }
+
             return;
+        }
 
         if (IgnoredCollider != null)
             IgnoredCollider.enabled = false;
@@ -173,7 +182,8 @@ public class BasicFollow : MonoBehaviour, IFollow
             i++;
         }
 
-        return (Vector2)this.transform.position;
+        //return (Vector2)this.transform.position;
+        return Vector2.zero;
     }
 
     private Vector2 CheckAxisDirections(Vector2 direction)
@@ -285,6 +295,11 @@ public class BasicFollow : MonoBehaviour, IFollow
     public void BindOnMove(OnMoveAction action)
     {
         _onMove += action;
+    }
+
+    public void BindOnStopMoving(OnStopMovingAction action)
+    {
+        _onStopMoving += action;
     }
 
     private void OnPathComplete(Path p)
