@@ -21,7 +21,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     [SerializeField] private float MaxLightIntensity = 2.5f;
     [SerializeField] private float MinLightScale = 3f;
     [SerializeField] private float MinLightIntensity = 0.5f;
-    [SerializeField][Range(0,100)] private float LowEnergyState = 20;
+    [SerializeField][Range(0,100)] private float LowEnergyState = 30;
     [SerializeField] LayerMask ObjectMaks;
     #endregion
 
@@ -39,6 +39,9 @@ public class HopeAI : MonoBehaviour, IEnemy
     private bool _isMovementLocked = false;
     private bool _isAbilityLocked = false;
     private bool _isHopeLocked = false;
+    private Animator _animator;
+    private Vector2 _lastPossition;
+    private float _lastTimeChecked = 0;
     #endregion
 
     #region Public
@@ -120,16 +123,38 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     void Awake()
     {
+        _animator = GetComponentInChildren<Animator>();
         _hopeLaser = GetComponent<HopeLaser>();
         _hopeThrow = GetComponent<HopeThrow>();
         _followScript = GetComponent<BasicFollow>();
         _hopeExplosion = GetComponent<HopeExplosion>();
         _hp = MaxHP;
+        _animator.SetFloat("Energy", _hp);
+
+        (_followScript as BasicFollow).BindOnMove(OnMove);
+        (_followScript as BasicFollow).BindOnStopMoving(OnStopedMoving);
     }
     private void Start()
     {
         folow.SetTarget(target);
+        (folow as BasicFollow).BindOnMove(OnMove);
+        (folow as BasicFollow).BindOnStopMoving(OnStopedMoving);
         _machine = new HopeStateMachine(this);
+        _animator = GetComponentInChildren<Animator>();
+        _animator.SetFloat("Energy", _hp);
+    }
+
+    private void OnMove(Vector2 direction)
+    {
+        if (direction != Vector2.zero)
+        {
+            _animator.SetBool("IsRunning", true);
+        }
+    }
+
+    private void OnStopedMoving()
+    {
+        _animator.SetBool("IsRunning", false);
     }
 
     private void FixedUpdate()
@@ -138,8 +163,24 @@ public class HopeAI : MonoBehaviour, IEnemy
         {
             return;
         }
+
         _machine.state.FixedUpdate();
+
+        //CheckStopedMoving();
     }
+
+    //private void CheckStopedMoving()
+    //{
+    //    if(Time.time > _lastTimeChecked + 0.5)
+    //    {
+    //        if(_lastPossition == (Vector2)this.transform.position)
+    //        {
+    //            _animator.SetBool("IsRunning", false);
+    //        }
+    //    }
+
+    //    _lastPossition = this.transform.position;
+    //}
 
     public void Collect()
     {
@@ -155,6 +196,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     public bool TakeDamage(float damage)
     {
         _hp -= damage;
+        _animator.SetFloat("Energy", _hp);
         AdjustColor();
 
         if (_hp > 0)
@@ -249,6 +291,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     private void SetHP(float hp)
     {
         this._hp = hp;
+        _animator.SetFloat("Energy", _hp);
         AdjustLight();
     }
 
