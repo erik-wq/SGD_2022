@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using Assets.Scripts.Utils;
 using Assets.TestingAssets;
 using Assets.TestingAssets.TestScripts;
@@ -18,7 +19,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     public enum FollowState
     {
         Seeking = 0,
-        Circleing = 1
+        Circleing = 1,
+        Idle = 3
     }
 
     #region Public
@@ -89,8 +91,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         _circleFollow.Paused = true;
         _rigidBody = GetComponent<Rigidbody2D>();
         _seekingFollow.Init(GetRotation, SetRotation, ContactFilter, AggroColider, _rigidBody);
-
-        _circleRadius = _circleFollow.GetCircleRadius;
+        
         _circleRadiusLostDistance = _circleRadius + CircleRadiusLost;
     }
 
@@ -114,6 +115,11 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         var distance = DistanceFromTarget();
         if (distance < 0)
             return;
+
+        if(_followState != FollowState.Idle)
+        {
+            RegisterFollow();
+        }
 
         if(distance < _circleRadius && _followState == FollowState.Seeking)
         {
@@ -283,8 +289,24 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         _seekingFollow.SetTarget(PlayerTransform);
         _circleFollow.SetTarget(PlayerTransform);
 
+        RegisterFollow();
+
         if (DebugControlComponent != null)
             DebugControlComponent.ShowTarget("Player");
+    }
+
+    private void RegisterFollow()
+    {
+        if (_circleRadius <= 0)
+        {
+            var radius = GhostsControlsSingleton.GetInstance().RegisterMe(_circleFollow, _target);
+            if (radius > 0)
+            {
+                _circleRadius = radius;
+                _circleFollow.CircleRadius = radius;
+                _circleRadiusLostDistance = _circleRadius + CircleRadiusLost;
+            }
+        }
     }
 
     private void TargetHope()
@@ -292,6 +314,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         _target = TargetTypes.Hope;
         _seekingFollow.SetTarget(HopeTransform);
         _circleFollow.SetTarget(HopeTransform);
+
+        RegisterFollow();
 
         if (DebugControlComponent != null)
             DebugControlComponent.ShowTarget("Hope");
@@ -301,6 +325,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     {
         if (DebugControlComponent != null)
             DebugControlComponent.ShowTarget("None");
+
+        GhostsControlsSingleton.GetInstance().RemoveMe(_circleFollow);
     }
 
     private void OnCrossFinish()
@@ -343,6 +369,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         if (_hp < 0)
         {
             OnDeath();
+            GhostsControlsSingleton.GetInstance().RemoveMe(_circleFollow);
             return true;
         }
         else

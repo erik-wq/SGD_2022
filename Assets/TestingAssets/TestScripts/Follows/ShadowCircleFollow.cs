@@ -12,15 +12,11 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     #region Public
     public Transform Target { get; set; }
     public bool Paused { get; set; }
-
-    public float CircleRadius { get { return _circleRadius; } }
     #endregion
 
     #region Serialized
     [SerializeField] private Seeker Seeker;
     [SerializeField] private float MovementSpeed = 5f;
-    [SerializeField] private float CircleRadiusMean = 8f;
-    [SerializeField] private float CircleRadiusStd = 2f;
 
     [SerializeField] private float CrossingCooldown = 5f;
     [SerializeField] private float CrossingChance = 0.6f;
@@ -28,7 +24,7 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     [SerializeField] private AnimationCurve CrossingCurve;
     [SerializeField] private float CrossingCurveTimeLength = 2;
     [SerializeField] private bool PredictiveCrossing = false;
-    [SerializeField] private float CrossingCharingLength = 1;
+    [SerializeField] private float CrossingChargingLength = 1;
 
     [SerializeField] private ContactFilter2D CollisionsFilter;
     [SerializeField] private string CollisionGraphMaskName = "Shadows";
@@ -37,6 +33,9 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     [SerializeField] private float AroundCircleReachTolerance = 0.5f;
     [SerializeField] private float CrossingReachTolerance = 0.1f;
     [SerializeField] private float CollisionRadius = 1f;
+
+    [SerializeField] private Transform DebugTransform;
+    [SerializeField] private Transform AttackAnimationTransform;
     #endregion
 
     #region Private
@@ -51,16 +50,24 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     private Path _path;
     private float _crossEndTime = 0;
     private float _lastCheck = 0;
+    private float _crossStartTime = 0f;
     private Func<float> _getRotation;
     private Func<float, float> _setRotation;
+    private Animator _animator;
+    private float _animationRotationOffset = -90;
     #endregion
 
     #region Public
-    public float GetCircleRadius
+    public float CircleRadius
     {
         get
         {
             return _circleRadius;
+        }
+
+        set
+        {
+            _circleRadius = value;
         }
     }
     #endregion
@@ -68,9 +75,9 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     private void Start()
     {
         InvokeRepeating("UpdatePath", 0f, 0.2f);
+        _animator = GetComponentInChildren<Animator>();
         _currentSpeed = MovementSpeed;
         Paused = true;
-        _circleRadius = MathUtility.NormalRNG(CircleRadiusMean, CircleRadiusStd);
     }
 
     public void Init(Func<float> getRotatio, Func<float, float> setRotation)
@@ -117,10 +124,10 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
         }
         else
         {
+            AdjustFacingDirection();
             MoveToPointOnCircle();
             CheckFlyingAroundCircle();
             CheckCrossTransition();
-            AdjustFacingDirection();
         }
     }
 
@@ -138,7 +145,8 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     private void MoveToCrossTarget()
     {
         var direction = GetDirectionToNextPoint();
-        var moveVector = direction * MovementSpeed * Time.fixedDeltaTime;
+        var crossSpeed = GetCrossingSpeed();
+        var moveVector = direction * crossSpeed * Time.fixedDeltaTime;
 
         var nextDirection = (_nextTarget - ((Vector2)this.transform.position + moveVector)).normalized;
 
@@ -150,6 +158,14 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
         {
             this.transform.position += new Vector3(moveVector.x, moveVector.y, 0);
         }
+    }
+
+    private float GetCrossingSpeed()
+    {
+        var percent = ((Time.time - _crossStartTime) / CrossingCurveTimeLength);
+        if (percent > 1)
+            percent = 1;
+        return CrossingSpeed * CrossingCurve.Evaluate(percent);
     }
 
     private void MoveToPointOnCircle()
@@ -169,6 +185,9 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
 
     private void AdjustFacingDirection()
     {
+        if (DebugTransform != null)
+            DebugTransform.transform.position = _nextTarget;
+
         var direction = GetDirectionToNextPoint();
         var angle = MathUtility.FullAngle(Vector2.up, direction);
         _setRotation(angle);
@@ -231,7 +250,9 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
             return false;
         
         _isCrossing = true;
+        _crossStartTime = Time.time;
         _nextTarget = (Vector2)Target.position + GetDirectionToTarget() * _circleRadius;
+        PlayAttackAnimation();
         return true;
     }
 
@@ -270,5 +291,20 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
                 _nextTarget = toPoint;
             }
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "Hope")
+        {
+
+        }
+    }
+
+    private void PlayAttackAnimation()
+    {
+        var angle = MathUtility.FullAngle(Vector2.up, GetDirectionToTarget());
+        AttackAnimationTransform.rotation = Quaternion.Euler(0, 0, _animationRotationOffset + angle);
+        _animator.Play("GhostAttack");
     }
 }

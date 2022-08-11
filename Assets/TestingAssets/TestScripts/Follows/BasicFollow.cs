@@ -9,10 +9,12 @@ public class BasicFollow : MonoBehaviour, IFollow
 {
     #region Public
     [SerializeField] public Transform Target;
+    public delegate void OnMoveAction(Vector2 direction);
     public bool Paused { get; set; }
-    public Path path {
+    public Path path
+    {
         get { return _path; }
-}
+    }
     public float minDistance { get { return this.MinimalDistance; } }
     #endregion
 
@@ -35,6 +37,7 @@ public class BasicFollow : MonoBehaviour, IFollow
     private Path _path;
     private int _currentWaypoint;
     private Animator _animator;
+    private event OnMoveAction _onMove;
     #endregion
     // Start is called before the first frame update
     void Start()
@@ -129,7 +132,23 @@ public class BasicFollow : MonoBehaviour, IFollow
                   );
 
         Physics2D.queriesHitTriggers = true;
-        return outCollisions;
+        return SoftUnstuck(direction, outCollisions);
+    }
+
+    private List<RaycastHit2D> SoftUnstuck(Vector2 direction, List<RaycastHit2D> collisions)
+    {
+        List<RaycastHit2D> relevantCollisions = new List<RaycastHit2D>();
+        foreach (var item in collisions)
+        {
+            var toObject = ((Vector2)item.transform.position - (Vector2)_rigidBody2D.transform.position).normalized;
+            var dot = Vector2.Dot(toObject, direction);
+            if (Vector2.Dot(toObject, direction) > 0)
+            {
+                relevantCollisions.Add(item);
+            }
+        }
+
+        return relevantCollisions;
     }
 
     private Vector2 TryAvoidingCharacter(Vector2 direction)
@@ -257,7 +276,18 @@ public class BasicFollow : MonoBehaviour, IFollow
         {
             _rigidBody2D.AddForce(direction * GetMoveDistance() * ForceModifier);
         }
+
+        if (_onMove != null)
+        {
+            _onMove(direction);
+        }
     }
+
+    public void BindOnMove(OnMoveAction action)
+    {
+        _onMove += action;
+    }
+
     private void OnPathComplete(Path p)
     {
         if (!p.error)

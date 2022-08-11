@@ -8,7 +8,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class HopeAI : MonoBehaviour
+public class HopeAI : MonoBehaviour, IEnemy
 {
     #region Serialized
     [SerializeField] private float Damage = 10;
@@ -152,10 +152,14 @@ public class HopeAI : MonoBehaviour
     }
 
     #region damage
-    private void TakeDamage(float damage)
+    public bool TakeDamage(float damage)
     {
         _hp -= damage;
         AdjustColor();
+
+        if (_hp > 0)
+            return false;
+        return true;
     }
 
     private void AdjustColor()
@@ -262,6 +266,11 @@ public class HopeAI : MonoBehaviour
         if (newHP > MaxHP)
             newHP = MaxHP;
         SetHP(newHP);
+    }
+
+    public bool TakeDamage(float damage, float force, Vector2 origin)
+    {
+        return this.TakeDamage(damage);
     }
     #endregion
     //private void HandleAttack()

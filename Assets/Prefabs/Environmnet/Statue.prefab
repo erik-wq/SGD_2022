@@ -249,7 +249,7 @@ MonoBehaviour:
   - {x: 1.8896686, y: -8.697321, z: 0}
   m_ShapePathHash: -874511124
   m_Mesh: {fileID: 0}
-  m_InstanceId: 57542
+  m_InstanceId: -37362
 --- !u!60 &8528801321451834430
 PolygonCollider2D:
   m_ObjectHideFlags: 0

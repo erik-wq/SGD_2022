@@ -1,5 +1,6 @@
 ﻿#ifndef COMBINED_SHAPE_LIGHT_PASS
 #define COMBINED_SHAPE_LIGHT_PASS
+#pragma enable_d3d11_debug_symbols
 
 #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/SurfaceData2D.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Debug/Debugging2D.hlsl"

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 using UnityEngine.Rendering.Universal;
+using Assets.Scripts.Utils;
 
 public class EnemyAI : MonoBehaviour, IEnemy
 {
@@ -25,13 +26,23 @@ public class EnemyAI : MonoBehaviour, IEnemy
     [SerializeField] protected float MinimalAlpha = 0.3f;
     [SerializeField] protected SpriteRenderer MainSprite;
 
+    [SerializeField] protected GameObject SpikesPrefab;
+    [SerializeField] protected int SpikesCount = 12;
+    [SerializeField] protected float SpikesSpeed = 25;
+    [SerializeField] protected int SpikesDamage = 15;
+    [SerializeField] protected int SpikesWaves = 2;
+    [SerializeField] protected float SpikesWaveDelay = 0.5f;
+    [SerializeField] protected float SpikesCooldown = 10;
+    [SerializeField] protected float SpikesRange = 100;
+    [SerializeField] protected float SpikeSpawnRange = 4;
+
     //Debug
     [SerializeField] protected SpriteRenderer Sword;
     #endregion
 
     #region Private
     protected Rigidbody2D _rigidBody;
-    protected IFollow _followScript;
+    protected BasicFollow _followScript;
     protected float _lastAttackTime;
     protected float _executionStartedAt;
     protected bool _executingAttack = false;
@@ -40,13 +51,18 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected bool _knockbackCleared = true;
     protected float _maxOpacity = 1.0f;
     protected bool _circleClockwise = false;
+    protected float _lastAoeFiret = 0;
+    protected Animator _animator;
+    protected float _rotationOffset = -90;
     #endregion
     public GameObject effect;
     // Start is called before the first frame update
     protected void Start()
     {
-        _followScript = GetComponent<IFollow>();
+        _followScript = GetComponent<BasicFollow>();
+        _followScript.BindOnMove(FaceDirection);
         _rigidBody = GetComponent<Rigidbody2D>();
+        _animator = GetComponentInChildren<Animator>();
         _currentHP = MaxHP;
     }
 
@@ -63,6 +79,15 @@ public class EnemyAI : MonoBehaviour, IEnemy
     {
         CheckAttack();
         ClearKnockback();
+        CheckAoe();
+    }
+
+    protected void CheckAoe()
+    {
+        if(Time.time > _lastAoeFiret + SpikesCooldown)
+        {
+            FireAoeRange();
+        }
     }
 
     protected void ClearKnockback()
@@ -85,7 +110,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
         {
             _executingAttack = true;
             _executionStartedAt = Time.time;
-            Sword.enabled = true;
+            _animator.Play("SpikeMeeleAttack");
         }
 
         if(_executingAttack && (Time.time - _executionStartedAt) >= AttackDelay)
@@ -137,12 +162,18 @@ public class EnemyAI : MonoBehaviour, IEnemy
         }
         else
         {
-            AdjustOpacity();
+            //AdjustOpacity();
             ApplyForce(force, origin);
+            _animator.Play("SpikeTakeDamage");
             return false;
         }
     }
 
+    private void FaceDirection(Vector2 direction)
+    {
+        var angle = MathUtility.FullAngle(Vector2.up, direction);
+        this.transform.rotation = Quaternion.Euler(0, 0, angle + _rotationOffset);
+    }
 
     public bool TakeDamage(float damage)
     {
@@ -154,10 +185,37 @@ public class EnemyAI : MonoBehaviour, IEnemy
         }
         else
         {
-            AdjustOpacity();
+            //AdjustOpacity();
+            _animator.Play("SpikeTakeDamage");
             return false;
         }
     }
+
+    private void FireAoeRange()
+    {
+        _animator.Play("SpikeRangeAttack");
+    }
+
+    public void FireAoeFromAnimation()
+    {
+        var step = 360.0f / SpikesCount;
+        var offSet = UnityEngine.Random.Range(0, step);
+
+        for (int i = 0; i < SpikesCount; i++)
+        {
+            var direction = MathUtility.RotateVector(Vector2.up, (step * i) + offSet).normalized;
+            var possition = (Vector2)this.transform.position + (direction * SpikeSpawnRange);
+            var newSpike = Instantiate(SpikesPrefab, possition, Quaternion.identity);
+            var projectileLogic = newSpike.AddComponent<ProjectileLogic>();
+            projectileLogic.MaxRange = SpikesRange;
+            projectileLogic.ProjectileDamage = SpikesDamage;
+            projectileLogic.ProjectileSpeed = SpikesSpeed;
+            projectileLogic.SetDirection(direction);
+        }
+
+        _lastAoeFiret = Time.time;
+    }
+
     private void AdjustOpacity()
     {
         float percentageHP = _currentHP / MaxHP;
