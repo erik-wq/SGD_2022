@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class HopeColect : BaseState
             Exit();
             return;
         }
+
         List<Vector3> path = _machine.AI.folow.path.vectorPath;
         if (Vector2.Distance(_machine.AI.transform.position,path[path.Count - 1]) < (_machine.AI.folow.minDistance + 0.25f) && _collect)
         {
@@ -42,6 +44,17 @@ public class HopeColect : BaseState
             Exit();
             return;
         }
+
+        if(PathLength() > 35)
+        {
+            Exit();
+            return;
+        }
+    }
+
+    private float PathLength()
+    {
+        return Vector2.Distance(Global.Instance.HopeTransform.position, _machine.AI.folow.path.vectorPath[_machine.AI.folow.path.vectorPath.Count - 1]);
     }
     public override void Exit()
     {

@@ -12,7 +12,7 @@ namespace Assets.Scripts
         private static EnemyControllerSingleton _instance = new EnemyControllerSingleton();
 
         #region Settings
-        private const int MAX_FIRE_AT_ONCE = 2;
+        private const int MAX_FIRE_AT_ONCE = 1;
         private const float FIRE_DELAY = 3.5f;
         #endregion
 

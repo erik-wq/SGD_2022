@@ -31,7 +31,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     [SerializeField] private float CrossingCooldown = 5;
     [SerializeField] private float DistanceCheck = 2;
     [SerializeField] private float MaxHP = 50;
-    [SerializeField] private float MinimalAlpha = 0.2f;
+    [SerializeField] private float MinimalAlpha = 0.5f;
     [SerializeField] private SpriteRenderer MainSprite;
     [SerializeField] private ContactFilter2D ContactFilter;
     [SerializeField] private Collider2D AggroColider;
@@ -43,7 +43,6 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     [SerializeField] private Transform HopeTransform;
     [SerializeField] private GameObject Light;
     [SerializeField] private TrailRenderer Trail;
-
 
     [SerializeField] private float HopePullRadius = 50;
     [SerializeField] private float HopeLooseAggroRadius = 50;
@@ -60,6 +59,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     #region Private
     protected IShadowFollow _seekingFollow;
     protected ShadowCircleFollow _circleFollow;
+    protected Animator _animator;
     protected FollowState _followState;
     protected float _lastCrossing;
     protected bool _isLocked = false;
@@ -85,14 +85,23 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         this.Damage = 10;
         _seekingFollow = GetComponent<ShadowSeekerFollow>();
         _circleFollow = GetComponent<ShadowCircleFollow>();
+        _animator = GetComponentInChildren<Animator>();
 
         _circleFollow.Init(GetRotation, SetRotation);
 
         _circleFollow.Paused = true;
         _rigidBody = GetComponent<Rigidbody2D>();
         _seekingFollow.Init(GetRotation, SetRotation, ContactFilter, AggroColider, _rigidBody);
-        
+
         _circleRadiusLostDistance = _circleRadius + CircleRadiusLost;
+
+        if ( HopeTransform == null || PlayerTransform == null)
+        {
+            //HopeAIScript = Global.Instance.HopeScript;
+            HopeTransform = Global.Instance.HopeTransform;
+            //Player = Global.Instance.PlayerScript;
+            PlayerTransform = Global.Instance.PlayerTransform;
+        }
     }
 
     // Update is called once per frame
@@ -116,16 +125,16 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         if (distance < 0)
             return;
 
-        if(_followState != FollowState.Idle)
+        if (_followState != FollowState.Idle)
         {
             RegisterFollow();
         }
 
-        if(distance < _circleRadius && _followState == FollowState.Seeking)
+        if (distance < _circleRadius && _followState == FollowState.Seeking)
         {
             SwitchToCircleFollow();
         }
-        else if(distance > _circleRadiusLostDistance && _followState == FollowState.Circleing)
+        else if (distance > _circleRadiusLostDistance && _followState == FollowState.Circleing)
         {
             SwitchToSeeking();
         }
@@ -150,11 +159,11 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     private Transform GetTarget()
     {
-        if(_target == TargetTypes.Hope)
+        if (_target == TargetTypes.Hope)
         {
             return HopeTransform;
         }
-        else if(_target == TargetTypes.Player)
+        else if (_target == TargetTypes.Player)
         {
             return PlayerTransform;
         }
@@ -162,13 +171,18 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         return null;
     }
 
+    public void OnDeathStarts()
+    {
+        MainSprite.enabled = false;
+    }
+
     private float DistanceFromTarget()
     {
-        if(_target == TargetTypes.Hope)
+        if (_target == TargetTypes.Hope)
         {
             return Vector2.Distance(this.transform.position, HopeTransform.position);
         }
-        else if(_target == TargetTypes.Player)
+        else if (_target == TargetTypes.Player)
         {
             return Vector2.Distance(this.transform.position, PlayerTransform.transform.position);
         }
@@ -349,9 +363,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     private void AdjustOpacity()
     {
         float percentageHP = _hp / MaxHP;
-        float opacity = _maxOpacity * percentageHP;
-        if (opacity < MinimalAlpha)
-            opacity = MinimalAlpha;
+        float opacity = ((_maxOpacity - MinimalAlpha) * percentageHP) + MinimalAlpha;
         MainSprite.color = new Color(MainSprite.color.r, MainSprite.color.g, MainSprite.color.b, opacity);
         Trail.startColor = new Color(Trail.startColor.r, Trail.startColor.g, Trail.startColor.b, opacity);
     }
@@ -391,7 +403,17 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     private void OnDeath()
     {
+        if (!_isDead)
+        {
+            _isDead = true;
+            _animator.Play("GhostDeath");
+        }
+    }
+
+    public void OnDeathFromAnimation()
+    {
         MainSprite.enabled = false;
+        Trail.enabled = false;
         Light.SetActive(true);
         _circleFollow.enabled = false;
         _seekingFollow.Paused = true;

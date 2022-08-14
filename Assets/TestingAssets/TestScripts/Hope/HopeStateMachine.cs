@@ -17,6 +17,10 @@ public class HopeStateMachine
         if (cols.Length != 0)
         {
             Collider2D col = Closest(cols);
+
+            if (Vector2.Distance(col.transform.position, AI.transform.position) > 40)
+                return false;
+
             AI.folow.SetTarget(col.transform);
             if (CheckPath())
             {
@@ -63,6 +67,7 @@ public class HopeStateMachine
                 final = x;
             }
         }
+
         return final;
     }
     public Collider2D Closest()

@@ -12,7 +12,9 @@ public class EnemyAI : MonoBehaviour, IEnemy
 {
     #region Serialized
     [SerializeField] protected Transform PlayerTransform;
+    [SerializeField] protected Transform HopeTransform;
     [SerializeField] protected PlayerController Player;
+    [SerializeField] protected HopeAI HopeAIScript;
 
     [SerializeField] protected int MaxHP = 100;
     [SerializeField] protected int Damage = 5;
@@ -37,8 +39,6 @@ public class EnemyAI : MonoBehaviour, IEnemy
     [SerializeField] protected float SpikesRange = 100;
     [SerializeField] protected float SpikeSpawnRange = 4;
 
-    //Debug
-    [SerializeField] protected SpriteRenderer Sword;
     #endregion
 
     #region Private
@@ -55,6 +55,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected float _lastAoeFiret = 0;
     protected Animator _animator;
     protected float _rotationOffset = -90;
+    private bool _isDead = false;
     protected EnemyControllerSingleton _enemyControl = EnemyControllerSingleton.GetInstance();
 
     protected bool _hasAggro = false;
@@ -68,12 +69,17 @@ public class EnemyAI : MonoBehaviour, IEnemy
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
         _currentHP = MaxHP;
+
+        if (HopeTransform == null || PlayerTransform == null || Player == null || HopeAIScript == null)
+        {
+            LoadBasics();
+        }
     }
 
     // Update is called once per frame
     protected void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -81,7 +87,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     /// </summary>
     protected void FixedUpdate()
     {
-        if (_hasAggro)
+        if (_hasAggro && !_isDead)
         {
             CheckAttack();
             ClearKnockback();
@@ -89,9 +95,18 @@ public class EnemyAI : MonoBehaviour, IEnemy
         }
     }
 
+    private void LoadBasics()
+    {
+        HopeAIScript = Global.Instance.HopeScript;
+        HopeTransform = Global.Instance.HopeTransform;
+        Player = Global.Instance.PlayerScript;
+        PlayerTransform = Global.Instance.PlayerTransform;
+        _followScript = GetComponent<BasicFollow>();
+    }
+
     protected void CheckAoe()
     {
-        if(Time.time > _lastAoeFiret + SpikesCooldown)
+        if (Time.time > _lastAoeFiret + SpikesCooldown)
         {
             if (_enemyControl.AskToFire())
             {
@@ -102,9 +117,9 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     protected void ClearKnockback()
     {
-        if(!_knockbackCleared)
+        if (!_knockbackCleared)
         {
-            if(Time.time > _knockbackStart + KnockbackLenght)
+            if (Time.time > _knockbackStart + KnockbackLenght)
             {
                 _rigidBody.velocity = Vector3.zero;
                 _rigidBody.angularVelocity = 0;
@@ -122,15 +137,22 @@ public class EnemyAI : MonoBehaviour, IEnemy
             _executionStartedAt = Time.time;
             _animator.Play("SpikeMeeleAttack");
         }
+    }
 
-        if(_executingAttack && (Time.time - _executionStartedAt) >= AttackDelay)
+    public void DoMeleeDamageFromAnimation()
+    {
+        if (_executingAttack)
         {
             _executingAttack = false;
-            Sword.enabled = false;
             _lastAttackTime = Time.time;
-            if(CheckAttackRangeHit())
+            if (CheckAttackRangeHit())
             {
-                Player.TakeHit(Damage, _rigidBody.position, AttackKnockbackPower);
+                Player.TakeDamage(Damage, AttackKnockbackPower, _rigidBody.position);
+            }
+
+            if (CheckAttackRangeHitHope())
+            {
+                HopeAIScript.TakeDamage(Damage);
             }
         }
     }
@@ -140,6 +162,11 @@ public class EnemyAI : MonoBehaviour, IEnemy
         return Vector2.Distance(_rigidBody.position, PlayerTransform.position) <= AttackRangeDetection;
     }
 
+    protected bool CheckAttackRangeHitHope()
+    {
+        return Vector2.Distance(_rigidBody.position, HopeTransform.position) <= AttackRangeDetection;
+    }
+
     protected bool CheckAttackRangeHit()
     {
         return Vector2.Distance(_rigidBody.position, PlayerTransform.position) <= AttackRange;
@@ -147,8 +174,11 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     protected void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.gameObject.tag == "Player" || col.gameObject.tag == "Hope")
+        if (col.gameObject.tag == "Player" || col.gameObject.tag == "Hope")
         {
+            if (PlayerTransform == null)
+                LoadBasics();
+
             _followScript.SetTarget(PlayerTransform);
             _hasAggro = true;
             _enemyControl.Register(this);
@@ -183,8 +213,8 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     private void FaceDirection(Vector2 direction)
     {
-        var angle = MathUtility.FullAngle(Vector2.up, direction);
-        this.transform.rotation = Quaternion.Euler(0, 0, angle + _rotationOffset);
+        //var angle = MathUtility.FullAngle(Vector2.up, direction);
+        //this.transform.rotation = Quaternion.Euler(0, 0, angle + _rotationOffset);
     }
 
     public bool TakeDamage(float damage)
@@ -210,6 +240,9 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     public void FireAoeFromAnimation()
     {
+        if (_isDead)
+            return;
+
         var step = 360.0f / SpikesCount;
         var offSet = UnityEngine.Random.Range(0, step);
 
@@ -240,13 +273,14 @@ public class EnemyAI : MonoBehaviour, IEnemy
     {
         _rigidBody.velocity = Vector2.zero;
         MainSprite.enabled = false;
-        Sword.enabled = false;
+        _isDead = true;
         effect.SetActive(true);
         Collider2D[] cols = GetComponents<Collider2D>();
         foreach (Collider2D x in cols)
         {
             x.enabled = false;
         }
+
         GetComponent<Seeker>().enabled = false;
         GetComponent<DynamicGridObstacle>().enabled = false;
         GetComponent<ShadowCaster2D>().enabled = false;

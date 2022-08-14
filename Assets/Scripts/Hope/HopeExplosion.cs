@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.Scripts.Hope
@@ -14,9 +15,10 @@ namespace Assets.Scripts.Hope
         //System
         [SerializeField] private Animator HopesAnimator;
         [SerializeField] private float Cooldown;
+        [SerializeField] private float AnimationLockLength = 1.5f;
         [SerializeField] private float ExplosionRadius = 10;
         [SerializeField] private float ExplosionDamage = 15;
-        [SerializeField] private float AnimationLockLength = 1.5f;
+        [SerializeField] private TMP_Text CooldownText;
 
         //GD
         [SerializeField] private float Cost;
@@ -42,6 +44,21 @@ namespace Assets.Scripts.Hope
                     _isExploding = false;
                 }
             }
+
+            AdjustCooldownText();
+        }
+
+        private void AdjustCooldownText()
+        {
+            if (Time.time < _lastUsedTime + Cooldown)
+            {
+                var time = Math.Round(Time.time - (_lastUsedTime + Cooldown));
+                CooldownText.text = Convert.ToString(time);
+            }
+            else
+            {
+                CooldownText.text = "";
+            }
         }
 
         public bool Activate()
@@ -65,9 +82,17 @@ namespace Assets.Scripts.Hope
             {
                 if (item.gameObject.tag == "EnemyHitCollider")
                 {
-                    IEnemy iEnemy = item.GetComponent<IEnemy>();
+                    IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
                     if (iEnemy == null)
-                        iEnemy = item.GetComponentInParent<IEnemy>();
+                    {
+                        iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
+                    }
+
+                    if (iEnemy == null)
+                    {
+                        iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
+                    }
+
                     iEnemy.TakeDamage(ExplosionDamage);
                 }
             }

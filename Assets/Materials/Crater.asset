@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7181f404f1447c0a7a17b3070b952b, type: 3}
+  m_Name: Crater
+  m_EditorClassIdentifier: 
+  m_Angles:
+  - m_Start: -50
+    m_End: 54
+    m_Order: 0
+    m_Sprites: []
+  - m_Start: 54
+    m_End: 117
+    m_Order: 0
+    m_Sprites: []
+  - m_Start: -243
+    m_End: -132
+    m_Order: 0
+    m_Sprites: []
+  - m_Start: -132
+    m_End: -50
+    m_Order: 0
+    m_Sprites: []
+  m_FillTexture: {fileID: 2800000, guid: 8f57b7ff87125b44f997056a9d9b70be, type: 3}
+  m_CornerSprites:
+  - m_CornerType: 0
+    m_Sprites:
+    - {fileID: 21300000, guid: 95bb642e52b01fd4a94805b7c27b61cf, type: 3}
+  - m_CornerType: 1
+    m_Sprites:
+    - {fileID: 21300000, guid: 01dbaf13b23a2244e9b56d27d60be960, type: 3}
+  - m_CornerType: 2
+    m_Sprites:
+    - {fileID: 21300000, guid: 01dbaf13b23a2244e9b56d27d60be960, type: 3}
+  - m_CornerType: 3
+    m_Sprites:
+    - {fileID: 21300000, guid: 19a42f3dceb6bb94f89f0f4e34bd22f2, type: 3}
+  - m_CornerType: 4
+    m_Sprites:
+    - {fileID: 21300000, guid: a1eee899bd0ff4044887519133a1a16b, type: 3}
+  - m_CornerType: 5
+    m_Sprites:
+    - {fileID: 21300000, guid: 19a42f3dceb6bb94f89f0f4e34bd22f2, type: 3}
+  - m_CornerType: 6
+    m_Sprites:
+    - {fileID: 21300000, guid: 19a42f3dceb6bb94f89f0f4e34bd22f2, type: 3}
+  - m_CornerType: 7
+    m_Sprites:
+    - {fileID: 21300000, guid: 19a42f3dceb6bb94f89f0f4e34bd22f2, type: 3}
+  m_FillOffset: 0
+  m_UseSpriteBorders: 0

@@ -133,15 +133,17 @@ public class BasicFollow : MonoBehaviour, IFollow
     {
         List<RaycastHit2D> outCollisions = new List<RaycastHit2D>();
 
-        Physics2D.queriesHitTriggers = false;
-        _rigidBody2D.Cast(direction,
-                    CollisionsFilter,
-                    outCollisions,
-                    GetMoveDistance() + CollisionOffset
-                  );
+        //Physics2D.queriesHitTriggers = false;
+        //_rigidBody2D.Cast(direction,
+        //            CollisionsFilter,
+        //            outCollisions,
+        //            GetMoveDistance() + CollisionOffset
+        //          );
 
-        Physics2D.queriesHitTriggers = true;
-        return SoftUnstuck(direction, outCollisions);
+        //Physics2D.queriesHitTriggers = true;
+        //return outCollisions;
+        //return SoftUnstuck(direction, outCollisions);
+        return outCollisions;
     }
 
     private List<RaycastHit2D> SoftUnstuck(Vector2 direction, List<RaycastHit2D> collisions)
