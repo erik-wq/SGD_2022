@@ -253,5 +253,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToStopFalling: 0.55
-  speedToHope: 1.75
+  speedToHope: 3.5
   distanceToHope: 0.35

@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using Assets.Scripts.Utils;
 using Assets.TestingAssets;
 using Pathfinding;
@@ -6,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour, IEnemy
 {
@@ -14,6 +16,9 @@ public class PlayerController : MonoBehaviour, IEnemy
     [SerializeField] private float MovementSpeedForwardSideway = 8f;
     [SerializeField] private float MovementSpeedBackwards = 4f;
     [SerializeField] private float MovementSpeedBackwardsSideway = 3f;
+    [SerializeField] private float MaxHP = 100;
+    [SerializeField] private Image HealthBar;
+    [SerializeField] private float HPRegen = 1.5f;
 
     [SerializeField] private float CollisionOffset = 0.05f;
 
@@ -21,16 +26,11 @@ public class PlayerController : MonoBehaviour, IEnemy
     [SerializeField] private AstarPath Pathfinder;
     [SerializeField] private BasicFollow HopesFollow;
     [SerializeField] private HopeAI HopeAI;
-    [SerializeField] private Transform MouseIndicatorTransform;
     [SerializeField] private Camera MainCamera;
     [SerializeField] private CameraManagement CameraManagement;
 
-    [SerializeField] private DebugControl DebugScreenControl;
-
     //Sword
-    [SerializeField] private SpriteRenderer SwordIndicator;
     [SerializeField] private SpriteRenderer MainSprite;
-    [SerializeField] private Transform SwordIndicatorTransform;
     [SerializeField] private float SwordSlashZonesCount = 6;
     [SerializeField] private float SwordAnimationLength = 2;
     [SerializeField] private float SwordAttackCooldown = 3;
@@ -59,13 +59,13 @@ public class PlayerController : MonoBehaviour, IEnemy
     #region Private
     private Vector2 _movementInput = Vector2.zero;
     private Rigidbody2D _rigidBody2D;
-    private float _mouseIndicatorOffset = 2;
     private bool _isSwordSlashInProgress = false;
     private float _lastSlashTime = 0;
     private float _currentEnergy = 0;
 
     private List<Collider2D> _swordSlashZones = new List<Collider2D>();
     private Animator _animator;
+    private float _currentHP;
 
     //Sprint
     private float _sprintStart;
@@ -73,33 +73,52 @@ public class PlayerController : MonoBehaviour, IEnemy
     private float _sprintRegargeCounter = 0;
     private bool _isHeavyAttacking = false;
     private bool _isAttackDirectionRight = false;
-    private Vector2 _lastStateMovement = Vector2.zero;
+
+    private Vector2 _dashDirection;
+    private bool dashing = false;
+    private bool canDash = true;
+    private Vector3 effectOfset;
     #endregion
 
     #region Public
     public bool IsMovementLocked { get; set; }
     public bool ActionLocked { get; set; }
+
+    public float dashTime = 0.25f;
+    public float dashSpeedModifier = 5;
+    public float dashCooldown = 1.25f;
+    public ParticleSystem dashEffect;
     #endregion
+
+    private void Awake()
+    {
+        effectOfset = dashEffect.transform.position - transform.position;
+    }
 
     // Start is called before the first frame update
     private void Start()
     {
+        _currentHP = MaxHP;
         _rigidBody2D = GetComponent<Rigidbody2D>();
         IsMovementLocked = false;
         _animator = GetComponentInChildren<Animator>();
+
+        Global.Instance.PlayerTransform = this.transform;
+        Global.Instance.PlayerScript = this;
         GenerateSlashZones();
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-
     }
 
     private void FixedUpdate()
     {
+        if (dashing)
+        {
+            //_rigidBody2D.velocity = _dashDirection * dashSpeedModifier * MovementSpeedForward * Time.fixedDeltaTime;
+            _rigidBody2D.MovePosition(_rigidBody2D.position + _dashDirection * MovementSpeedForward * dashSpeedModifier *Time.fixedDeltaTime);
+            return;
+        }
         CheckSwordAnimation();
-        HandleSprint();
+        HandleDash();
+        //HandleSprint();
         if (_movementInput != Vector2.zero && !IsMovementLocked)
         {
             Move(_movementInput);
@@ -109,12 +128,25 @@ public class PlayerController : MonoBehaviour, IEnemy
         else
         {
             CameraManagement.SetMoving(false);
-            DebugScreenControl.SetHeroSpeed(0);
             _animator.SetBool("IsRunning", false);
         }
 
-        MoveIndicator();
-        DebugScreenControl.SetEnergy(_currentEnergy);
+        RunHpRegen();
+    }
+    private void LateUpdate()
+    {
+        if (dashing)
+        {
+            dashEffect.transform.position = transform.position + effectOfset;
+        }
+    }
+
+    private void RunHpRegen()
+    {
+        _currentHP += Time.fixedDeltaTime * HPRegen;
+        if (_currentHP > MaxHP)
+            _currentHP = MaxHP;
+        AdjustHealthBar();
     }
 
     public void OnAttackFinished()
@@ -132,9 +164,12 @@ public class PlayerController : MonoBehaviour, IEnemy
             var points = new List<Vector2>();
             points.Add(Vector2.zero);
             points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), i * step));
-            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + (step / 3)));
-            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + ((step / 3) * 2)));
-            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + step));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + (step / 6)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + ((step / 6) * 2)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + ((step / 6) * 3)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + ((step / 6) * 4)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + ((step / 6) * 5)));
+            points.Add(MathUtility.RotateVector(new Vector2(0, SwordSlashRadius), (i * step) + ((step / 6) * 6)));
             polygon.points = points.ToArray();
             _swordSlashZones.Add(polygon);
         }
@@ -147,15 +182,13 @@ public class PlayerController : MonoBehaviour, IEnemy
         if (_isHeavyAttacking)
             return;
 
-        if(direction.x >= 0)
+        if (direction.x >= 0)
         {
-            //transform.rotation = Quaternion.Euler(0, 0, 0);
             MainSprite.flipX = false;
         }
         else
         {
             MainSprite.flipX = true;
-            //transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
 
@@ -239,11 +272,15 @@ public class PlayerController : MonoBehaviour, IEnemy
         _sprintRegargeCounter = 0;
     }
 
+    private void AdjustHealthBar()
+    {
+        HealthBar.fillAmount = _currentHP / MaxHP;
+    }
+
     private void CheckSwordAnimation()
     {
         if (Time.time > _lastSlashTime + SwordAnimationLength)
         {
-            SwordIndicator.enabled = false;
             _isSwordSlashInProgress = false;
         }
     }
@@ -257,12 +294,6 @@ public class PlayerController : MonoBehaviour, IEnemy
             _animator.SetBool("IsSprinting", true);
             _sprintRegargeCounter = 0;
         }
-    }
-
-    private void MoveIndicator()
-    {
-        Vector2 newPossition = (Vector2)this.transform.position + (_mouseIndicatorOffset * GetFaceDirection());
-        MouseIndicatorTransform.position = new Vector3(newPossition.x, newPossition.y, MouseIndicatorTransform.position.z);
     }
 
     private Vector2 GetFaceDirection()
@@ -296,7 +327,7 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     private float GetHeavyAttackMovementSpeed(Vector2 input)
     {
-        if(_isAttackDirectionRight && input.x > 0)
+        if (_isAttackDirectionRight && input.x > 0)
         {
             return AttackMovementspeedForward;
         }
@@ -345,19 +376,63 @@ public class PlayerController : MonoBehaviour, IEnemy
                     iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
                 }
 
+                if(iEnemy == null)
+                {
+                    iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
+                }
+
                 iEnemy.TakeDamage(SwordDamage, SwordForce, this.transform.position);
             }
         }
         TurnOffSlashZones();
     }
-
-    #region Public Functions
-    public void TakeHit(int damage, Vector2 position, float attackKnockbackPower)
+    private void HandleDash()
     {
-        Vector2 normal = (_rigidBody2D.position - position).normalized;
-        _rigidBody2D.AddForce(normal * attackKnockbackPower);
+        if(_movementInput == Vector2.zero)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (canDash)
+            {
+                dashEffect.transform.position = transform.position + effectOfset;
+                _dashDirection = _movementInput;
+                canDash = false;
+
+                dashing = true;
+                StartCoroutine(Dash());
+            }
+        }
     }
-    #endregion
+
+    private IEnumerator Dash()
+    {
+        ParticleSystemRenderer renderer;
+        dashEffect.TryGetComponent<ParticleSystemRenderer>(out renderer);
+        if(renderer != null)
+        {
+            renderer.flip = DashVector();
+        }
+        dashEffect.Play();
+        Debug.Log(dashEffect.isPlaying);
+        yield return new WaitForSeconds(dashTime);
+        dashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+    }
+    private Vector3 DashVector()
+    {
+        if(_dashDirection.x > 0)
+        {
+            return Vector3.zero;
+        }
+        if(_dashDirection.x == 0)
+        {
+            return Vector3.zero;
+        }
+        return new Vector3(1,0,0);
+    }
 
     #region Inputs registering
     private void OnMove(InputValue input)
@@ -391,14 +466,57 @@ public class PlayerController : MonoBehaviour, IEnemy
         }
 
         CameraManagement.SetPlayersSpeed(movementSpeed);
-        DebugScreenControl.SetHeroSpeed(movementSpeed);
+
+        //if (TryMove(input, movementSpeed).Count == 0)
+        //{
         _rigidBody2D.MovePosition(_rigidBody2D.position + input * movementSpeed * Time.fixedDeltaTime);
+        //}
+    }
+
+    private List<RaycastHit2D> TryMove(Vector2 direction, float movementSpeed)
+    {
+        List<RaycastHit2D> outCollisions = new List<RaycastHit2D>();
+
+        Physics2D.queriesHitTriggers = false;
+        _rigidBody2D.Cast(direction,
+                    CollisionsFilter,
+                    outCollisions,
+                    GetMoveDistance(movementSpeed) + CollisionOffset
+                  );
+
+        Physics2D.queriesHitTriggers = true;
+        return SoftUnstuck(direction, outCollisions);
+    }
+
+    private float GetMoveDistance(float movementSpeed)
+    {
+        return movementSpeed * Time.fixedDeltaTime;
+    }
+
+    private List<RaycastHit2D> SoftUnstuck(Vector2 direction, List<RaycastHit2D> collisions)
+    {
+        List<RaycastHit2D> relevantCollisions = new List<RaycastHit2D>();
+        foreach (var item in collisions)
+        {
+            var toObject = ((Vector2)item.transform.position - (Vector2)_rigidBody2D.transform.position).normalized;
+            if (Vector2.Dot(toObject, direction) > 0)
+            {
+                relevantCollisions.Add(item);
+            }
+        }
+
+        return relevantCollisions;
+    }
+
+    private void Die()
+    {
+
     }
 
     private void AdjustAttackDirection()
     {
         var facingDirection = GetFaceDirection();
-        if(facingDirection.x > 0)
+        if (facingDirection.x > 0)
         {
             _isAttackDirectionRight = true;
             MainSprite.flipX = false;
@@ -455,7 +573,10 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     public bool TakeDamage(float damage, float force, Vector2 origin)
     {
-        //Implement damage
+        _currentHP -= damage;
+        if (_currentHP <= 0)
+            Die();
+        AdjustHealthBar();
         return false;
     }
 

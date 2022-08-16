@@ -110,7 +110,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2871873445312340779}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.05, y: -0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -163,7 +163,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.9525, y: 2.9525}
+  m_Size: {x: 11.81, y: 11.81}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -703,7 +703,6 @@ GameObject:
   - component: {fileID: 1294598057}
   - component: {fileID: 1294598064}
   - component: {fileID: 1294598070}
-  - component: {fileID: 3723933122123586820}
   - component: {fileID: 1294598066}
   m_Layer: 6
   m_Name: Hope
@@ -792,7 +791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  uniqueID: 38660965332106691
+  uniqueID: 137943699280376255
   updateError: 0.2
   checkTime: 0.1
 --- !u!70 &7311925748371843262
@@ -808,8 +807,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.3218379}
-  m_Size: {x: 0.7, y: 1.0995228}
+  m_Offset: {x: 0, y: -0.32739568}
+  m_Size: {x: 0.7, y: 0.7994027}
   m_Direction: 0
 --- !u!114 &173468497
 MonoBehaviour:
@@ -876,6 +875,7 @@ MonoBehaviour:
   RotationSpeed: 30
   DamagePerSecond: 25
   Cooldown: 10
+  CooldownText: {fileID: 0}
 --- !u!114 &1294598057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,6 +901,8 @@ MonoBehaviour:
   MaxGrabRange: 15
   MaxShootRange: 25
   ProjectileSpeed: 15
+  Cooldown: 10
+  CooldownText: {fileID: 0}
 --- !u!114 &1294598064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -949,31 +951,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 921dcc479f1fae2439b8bd228710ee02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3723933122123586820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7311925748371843252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2177466fbe29a8445bb39a5ab9e54b53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HopesTransform: {fileID: 7311925748371843255}
-  PlayersTransform: {fileID: 0}
-  HopesSprite: {fileID: 0}
-  HopeAimSprite: {fileID: 0}
-  MainCamera: {fileID: 0}
-  IndicatorSprite: {fileID: 0}
-  IndicatorTransform: {fileID: 0}
-  PlayerControllerScript: {fileID: 0}
-  HopeScript: {fileID: 1294598064}
-  EnergyCost: 5
-  MaxGrabRange: 15
-  MaxShootRange: 25
-  ProjectileSpeed: 15
 --- !u!114 &1294598066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -988,7 +965,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HopesAnimator: {fileID: 7468614994557167827}
   Cooldown: 0
+  AnimationLockLength: 1
   ExplosionRadius: 10
   ExplosionDamage: 15
-  AnimationLockLength: 1
+  CooldownText: {fileID: 0}
   Cost: 10

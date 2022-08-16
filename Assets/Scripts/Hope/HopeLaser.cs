@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.TestingAssets.TestScripts.Hope
@@ -31,6 +32,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
         [SerializeField] private float RotationSpeed = 15;
         [SerializeField] private float DamagePerSecond = 5;
         [SerializeField] private float Cooldown = 10;
+        [SerializeField] private TMP_Text CooldownText;
         //[SerializeField] private bool Knockback = false;
         //[SerializeField] private float KnockbackForce = 100;
         #endregion
@@ -39,6 +41,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
         private float _startTime = 0;
         private bool _isActive = false;
         private event Action _onTurnedOff;
+        private float _lastUsed = 0;
         private float _angle = 0;
         #endregion
 
@@ -73,6 +76,21 @@ namespace Assets.TestingAssets.TestScripts.Hope
 
                     DoDamage();
                 }
+            }
+
+            AdjustCooldownText();
+        }
+
+        private void AdjustCooldownText()
+        {
+            if (Time.time < _lastUsed + Cooldown)
+            {
+                var time = Math.Round(Time.time - (_lastUsed + Cooldown));
+                CooldownText.text = Convert.ToString(time);
+            }
+            else
+            {
+                CooldownText.text = "";
             }
         }
 
@@ -116,9 +134,16 @@ namespace Assets.TestingAssets.TestScripts.Hope
             {
                 if (item.gameObject.tag == "EnemyHitCollider")
                 {
-                    IEnemy iEnemy = item.GetComponent<IEnemy>();
+                    IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
                     if (iEnemy == null)
-                        iEnemy = item.GetComponentInParent<IEnemy>();
+                    {
+                        iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
+                    }
+
+                    if (iEnemy == null)
+                    {
+                        iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
+                    }
                     iEnemy.TakeDamage(DamagePerSecond * Time.deltaTime);
                 }
             }
@@ -133,16 +158,21 @@ namespace Assets.TestingAssets.TestScripts.Hope
 
         public bool Activate()
         {
-            _startTime = Time.time;
-            HopeScript.IsAbilityLocked = true;
-            _isActive = true;
-            _angle = MathUtility.FullAngle(Vector2.up, CustomUtilities.GetMouseDirection(MainCamera, PlayersTransform));
-            ShowEffect();
+            if (Time.time > _lastUsed + Cooldown)
+            {
+                _lastUsed = Time.time;
+                _startTime = Time.time;
+                HopeScript.IsAbilityLocked = true;
+                _isActive = true;
+                _angle = MathUtility.FullAngle(Vector2.up, CustomUtilities.GetMouseDirection(MainCamera, PlayersTransform));
+                ShowEffect();
 
-            if (MovementLocked)
-                PlayerController.IsMovementLocked = true;
+                if (MovementLocked)
+                    PlayerController.IsMovementLocked = true;
 
-            return true;
+                return true;
+            }
+            return false;
         }
 
         public float GetCost()

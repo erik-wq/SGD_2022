@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.Scripts.Hope
@@ -24,16 +25,19 @@ namespace Assets.Scripts.Hope
         [SerializeField] private HopeAI HopeScript;
 
         //Settings
-        [SerializeField] private float EnergyCost;
+        [SerializeField] private float EnergyCost = 25;
         [SerializeField] private float MaxGrabRange = 15;
         [SerializeField] private float MaxShootRange = 25;
         [SerializeField] private float ProjectileSpeed = 50;
+        [SerializeField] private float Cooldown = 10;
+        [SerializeField] private TMP_Text CooldownText;
         #endregion
 
         #region Private
         private bool _isAiming = false;
         private bool _isFireing = false;
         private Vector2 _target;
+        private float _lastUsed = 0;
         #endregion
 
         public void Start()
@@ -43,18 +47,33 @@ namespace Assets.Scripts.Hope
 
         public void FixedUpdate()
         {
-            if(_isAiming)
+            if (_isAiming)
             {
                 UpdateIndicator();
                 DrawHopeToPlayer();
             }
 
-            if(_isFireing)
+            if (_isFireing)
             {
-                if(MoveHopeToTarget())
+                if (MoveHopeToTarget())
                 {
                     UnlockHope();
                 }
+            }
+
+            AdjustCooldownText();
+        }
+
+        private void AdjustCooldownText()
+        {
+            if (Time.time < _lastUsed + Cooldown)
+            {
+                var time = Math.Round(Time.time - (_lastUsed + Cooldown));
+                CooldownText.text = Convert.ToString(time);
+            }
+            else
+            {
+                CooldownText.text = "";
             }
         }
 
@@ -93,16 +112,16 @@ namespace Assets.Scripts.Hope
 
         private void DrawHopeToPlayer()
         {
-            if(_isAiming)
+            if (_isAiming)
             {
-                if(HopesTransform.position != PlayersTransform.position)
+                if (HopesTransform.position != PlayersTransform.position)
                 {
                     var direction = ((Vector2)PlayersTransform.position - (Vector2)HopesTransform.position).normalized;
                     var distance = Vector2.Distance((Vector2)PlayersTransform.position, (Vector2)HopesTransform.position);
 
                     var move = direction * ProjectileSpeed * Time.deltaTime;
 
-                    if(move.magnitude < distance)
+                    if (move.magnitude < distance)
                     {
                         var nextPossition = (Vector2)HopesTransform.position + move;
                         HopesTransform.position = new Vector3(nextPossition.x, nextPossition.y, HopesTransform.position.z);
@@ -152,12 +171,16 @@ namespace Assets.Scripts.Hope
 
         private void StartAiming()
         {
-            _isAiming = true;
-            IndicatorSprite.enabled = true;
-            HopesSprite.enabled = false;
-            HopeAimSprite.enabled = true;
-            PlayerControllerScript.ActionLocked = true;
-            HopeScript.IsMovementLocked = true;
+            if (Time.time > _lastUsed + Cooldown)
+            {
+                _lastUsed = Time.time;
+                _isAiming = true;
+                IndicatorSprite.enabled = true;
+                HopesSprite.enabled = false;
+                HopeAimSprite.enabled = true;
+                PlayerControllerScript.ActionLocked = true;
+                HopeScript.IsMovementLocked = true;
+            }
         }
 
         public void MouseClick()
@@ -168,7 +191,7 @@ namespace Assets.Scripts.Hope
 
         public bool Activate()
         {
-            if(!_isAiming)
+            if (!_isAiming)
             {
                 if (CheckHopesDistance())
                 {

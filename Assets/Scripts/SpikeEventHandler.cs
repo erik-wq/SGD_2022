@@ -21,4 +21,9 @@ public class SpikeEventHandler : MonoBehaviour
     {
         _mainScript.FireAoeFromAnimation();
     }
+
+    public void OnMeleeDamge()
+    {
+        _mainScript.DoMeleeDamageFromAnimation();
+    }
 }

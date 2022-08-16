@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using Assets.Scripts.Hope;
 using Assets.TestingAssets;
 using Assets.TestingAssets.TestScripts;
@@ -27,7 +28,7 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     #region Private
     private bool _isFighting = false;
-    private IFollow _followScript;
+    private BasicFollow _followScript;
     private List<IShadowEnemy> _attackingEnemies = new List<IShadowEnemy>();
     private int _maxEnemies = 1;
     [SerializeField]private float _hp;
@@ -105,9 +106,15 @@ public class HopeAI : MonoBehaviour, IEnemy
             return LowEnergyState;
         }
     }
+    public BasicFollow follow
+    {
+        get
+        {
+            return _followScript;
+        }
+    }
 
     [Header("PathFinding")]
-    public BasicFollow folow;
     public Transform target;
 
     [Header("Idle parameters")]
@@ -120,7 +127,6 @@ public class HopeAI : MonoBehaviour, IEnemy
     private HopeStateMachine _machine;
     #endregion
 
-
     void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
@@ -131,14 +137,17 @@ public class HopeAI : MonoBehaviour, IEnemy
         _hp = MaxHP;
         _animator.SetFloat("Energy", _hp);
 
+        Global.Instance.HopeTransform = this.transform;
+        Global.Instance.HopeScript = this;
+
         (_followScript as BasicFollow).BindOnMove(OnMove);
         (_followScript as BasicFollow).BindOnStopMoving(OnStopedMoving);
     }
     private void Start()
     {
-        folow.SetTarget(target);
-        (folow as BasicFollow).BindOnMove(OnMove);
-        (folow as BasicFollow).BindOnStopMoving(OnStopedMoving);
+        _followScript.SetTarget(target);
+        (_followScript as BasicFollow).BindOnMove(OnMove);
+        (_followScript as BasicFollow).BindOnStopMoving(OnStopedMoving);
         _machine = new HopeStateMachine(this);
         _animator = GetComponentInChildren<Animator>();
         _animator.SetFloat("Energy", _hp);
@@ -165,22 +174,7 @@ public class HopeAI : MonoBehaviour, IEnemy
         }
 
         _machine.state.FixedUpdate();
-
-        //CheckStopedMoving();
     }
-
-    //private void CheckStopedMoving()
-    //{
-    //    if(Time.time > _lastTimeChecked + 0.5)
-    //    {
-    //        if(_lastPossition == (Vector2)this.transform.position)
-    //        {
-    //            _animator.SetBool("IsRunning", false);
-    //        }
-    //    }
-
-    //    _lastPossition = this.transform.position;
-    //}
 
     public void Collect()
     {
@@ -206,9 +200,9 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     private void AdjustColor()
     {
-        float percentageHP = _hp / MaxHP;
-        float colorFactor = _maxColor * percentageHP;
-        MainSprite.color = new Color(colorFactor, colorFactor, colorFactor, MainSprite.color.a);
+        //float percentageHP = _hp / MaxHP;
+        //float colorFactor = _maxColor * percentageHP;
+        //MainSprite.color = new Color(colorFactor, colorFactor, colorFactor, MainSprite.color.a);
     }
 
     public bool GetAttacked(IShadowEnemy enemy)
@@ -316,24 +310,4 @@ public class HopeAI : MonoBehaviour, IEnemy
         return this.TakeDamage(damage);
     }
     #endregion
-    //private void HandleAttack()
-    //{
-    //    List<IShadowEnemy> toBeRemoved = new List<IShadowEnemy>();
-
-    //    foreach (var item in _attackingEnemies)
-    //    {
-    //        if (item.TakeDamage(Damage * Time.fixedDeltaTime, 0, this.transform.position))
-    //        {
-    //            toBeRemoved.Add(item);
-    //        }
-    //    }
-
-    //    _attackingEnemies = _attackingEnemies.Where(a => !toBeRemoved.Contains(a)).ToList();
-
-    //    if (_attackingEnemies.Count == 0)
-    //    {
-    //        _isFighting = false;
-    //        _followScript.Paused = false;
-    //    }
-    //}
 }

@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class HopeIdle : BaseState
     }
     public override void Start()
     {
-        _machine.AI.folow.SetTarget(_machine.AI.target);
+        _machine.AI.follow.SetTarget(_machine.AI.target);
         _machine.AI.target.position = RandomPos();
     }
     public override void FixedUpdate()
@@ -31,17 +32,17 @@ public class HopeIdle : BaseState
             Vector2 dest = RandomPos();
             if (dest == Vector2.zero)
             {
-                _machine.AI.folow.SetTarget(null);
+                _machine.AI.follow.SetTarget(null);
             }
             else
             {
                 _machine.AI.target.position = dest;
-                _machine.AI.folow.SetTarget(_machine.AI.target);
+                _machine.AI.follow.SetTarget(_machine.AI.target);
             }
         }
-        if (_machine.AI.folow.path == null) return;
-        List<Vector3> path = _machine.AI.folow.path.vectorPath;
-        if (Vector2.Distance(_machine.AI.transform.position, path[path.Count - 1]) < 1.3f)
+        if (_machine.AI.follow.path == null) return;
+        List<Vector3> path = _machine.AI.follow.path.vectorPath;
+        if (Vector2.Distance(_machine.AI.transform.position, path[path.Count - 1]) < 1.4f)
         {
             Count();
         }
