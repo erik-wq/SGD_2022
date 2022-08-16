@@ -25,7 +25,7 @@ namespace Assets.Scripts.Environment
         {
             //_sprite.sprite = OpenedSprite;
             _isActive = true;
-            _collider.enabled = false;
+            //_collider.enabled = false;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

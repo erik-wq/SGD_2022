@@ -56,7 +56,7 @@ public class ProjectileLogic : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Hope" || collision.tag == "Player")
+       if (collision.tag == "Hope" || collision.tag == "Player")
         {
             IEnemy iEnemy = collision.gameObject.GetComponent<IEnemy>();
             if (iEnemy == null)

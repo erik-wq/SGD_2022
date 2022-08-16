@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 6452695159285947723}
   - component: {fileID: 6247525955172983352}
   - component: {fileID: 1721549948}
-  - component: {fileID: 1139378885}
+  - component: {fileID: 4711522507338237353}
   m_Layer: 11
   m_Name: FlyingGhost
   m_TagString: Enemy
@@ -329,6 +329,7 @@ MonoBehaviour:
   MovementSpeed: 14
   _mainSprite: {fileID: 2565003936322571078}
   MainAnimator: {fileID: 1215315171}
+  Damage: 20
   CrossingCooldown: 5
   CrossingChance: 5
   CrossingSpeed: 30
@@ -389,7 +390,7 @@ MonoBehaviour:
   CollisionRadius: 1
   DebugTransform: {fileID: 0}
   AttackAnimationTransform: {fileID: 1215315170}
---- !u!50 &1139378885
+--- !u!50 &4711522507338237353
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -397,14 +398,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2565003934881450017}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.0001
+  m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1

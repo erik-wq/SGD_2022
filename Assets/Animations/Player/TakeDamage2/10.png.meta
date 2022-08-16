@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b3aff9be50bfae449b2641da94715cf3
+guid: 73a97aa54b1c71e48ac1620c1d6efb72
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,12 +43,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 400
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -104,70 +104,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: imgonline-com-ua-Transparent-background-z5SUsqfOSI_0
-      rect:
-        serializedVersion: 2
-        x: 154
-        y: 474
-        width: 433
-        height: 782
-      alignment: 9
-      pivot: {x: 0.52138585, y: 0.12896346}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 541dc926bb0f5d042a9b14e805592ea6
-      internalID: -996091200
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: imgonline-com-ua-Transparent-background-z5SUsqfOSI_1
-      rect:
-        serializedVersion: 2
-        x: 697
-        y: 474
-        width: 985
-        height: 1284
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8436492e26341364bb759ccb59367c8a
-      internalID: 517339312
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: imgonline-com-ua-Transparent-background-z5SUsqfOSI_2
-      rect:
-        serializedVersion: 2
-        x: 1630
-        y: 321
-        width: 1606
-        height: 1792
-      alignment: 9
-      pivot: {x: 0.5211416, y: 0.14861134}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bd72c9de15002e44ca2c57297b0c49fa
-      internalID: 964631973
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -178,10 +115,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      imgonline-com-ua-Transparent-background-z5SUsqfOSI_0: -996091200
-      imgonline-com-ua-Transparent-background-z5SUsqfOSI_1: 517339312
-      imgonline-com-ua-Transparent-background-z5SUsqfOSI_2: 964631973
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 

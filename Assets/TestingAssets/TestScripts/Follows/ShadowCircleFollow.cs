@@ -1,4 +1,5 @@
 using Assets.Scripts.Utils;
+using Assets.TestingAssets;
 using Assets.TestingAssets.TestScripts;
 using Assets.TestingAssets.TestScripts.AI;
 using Pathfinding;
@@ -21,6 +22,7 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     [SerializeField] private SpriteRenderer _mainSprite;
     [SerializeField] private Animator MainAnimator;
 
+    [SerializeField] private float Damage = 20;
     [SerializeField] private float CrossingCooldown = 5f;
     [SerializeField] private float CrossingChance = 0.6f;
 
@@ -59,6 +61,8 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     private Func<float, float> _setRotation;
     private float _animationRotationOffset = -90;
     private bool _isAnimationLocked = false;
+    private bool _hitPlayer = false;
+    private bool _hitHope = false;
     #endregion
 
     #region Public
@@ -250,6 +254,9 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
         if (_isCrossing)
             return false;
 
+        _hitPlayer = false;
+        _hitHope = false;
+
         _isAnimationLocked = false;
         _isCrossing = true;
         _crossStartTime = Time.time;
@@ -311,14 +318,41 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Hope")
         {
+            if (collision.gameObject.tag == "Player" && _hitPlayer)
+            {
+                return;
+            }
+            else
+            {
+                _hitPlayer = true;
+            }
 
+            if (collision.gameObject.tag == "Hope" && _hitHope)
+            {
+                return;
+            }
+            else
+            {
+                _hitHope = true;
+            }
+
+            IEnemy iEnemy = collision.gameObject.GetComponent<IEnemy>();
+            if (iEnemy == null)
+            {
+                iEnemy = collision.gameObject.GetComponentInParent<IEnemy>();
+            }
+
+            if (iEnemy == null)
+            {
+                iEnemy = collision.transform.parent.GetComponentInChildren<IEnemy>();
+            }
+
+            iEnemy.TakeDamage(Damage);
         }
     }
 
     private void PlayAttackAnimation()
     {
-        //var angle = MathUtility.FullAngle(Vector2.up, GetDirectionToTarget());
-        //AttackAnimationTransform.rotation = Quaternion.Euler(0, 0, _animationRotationOffset + angle);
         MainAnimator.Play("GhostAttack");
     }
 }

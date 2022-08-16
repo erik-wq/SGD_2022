@@ -13,7 +13,7 @@ namespace Assets.Scripts
 
         #region Settings
         private const int MAX_FIRE_AT_ONCE = 1;
-        private const float FIRE_DELAY = 3.5f;
+        private const float FIRE_DELAY = 2.5f;
         #endregion
 
         #region Private
@@ -21,6 +21,11 @@ namespace Assets.Scripts
         private List<float> _lastFires = new List<float>();
         #endregion
         private EnemyControllerSingleton()
+        {
+
+        }
+
+        public void Init()
         {
             for (int i = 0; i < MAX_FIRE_AT_ONCE; i++)
             {

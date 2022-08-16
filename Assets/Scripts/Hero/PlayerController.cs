@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     private void Awake()
     {
         effectOfset = dashEffect.transform.position - transform.position;
+        EnemyControllerSingleton.GetInstance().Init();
     }
 
     // Start is called before the first frame update
@@ -415,7 +416,7 @@ public class PlayerController : MonoBehaviour, IEnemy
             renderer.flip = DashVector();
         }
         dashEffect.Play();
-        Debug.Log(dashEffect.isPlaying);
+        
         yield return new WaitForSeconds(dashTime);
         dashing = false;
         yield return new WaitForSeconds(dashCooldown);
@@ -574,6 +575,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     public bool TakeDamage(float damage, float force, Vector2 origin)
     {
         _currentHP -= damage;
+        _animator.Play("PlayerTakeDamage");
         if (_currentHP <= 0)
             Die();
         AdjustHealthBar();
