@@ -28,7 +28,7 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     #region Private
     private bool _isFighting = false;
-    private IFollow _followScript;
+    private BasicFollow _followScript;
     private List<IShadowEnemy> _attackingEnemies = new List<IShadowEnemy>();
     private int _maxEnemies = 1;
     [SerializeField]private float _hp;
@@ -106,9 +106,15 @@ public class HopeAI : MonoBehaviour, IEnemy
             return LowEnergyState;
         }
     }
+    public BasicFollow follow
+    {
+        get
+        {
+            return _followScript;
+        }
+    }
 
     [Header("PathFinding")]
-    public BasicFollow folow;
     public Transform target;
 
     [Header("Idle parameters")]
@@ -139,9 +145,9 @@ public class HopeAI : MonoBehaviour, IEnemy
     }
     private void Start()
     {
-        folow.SetTarget(target);
-        (folow as BasicFollow).BindOnMove(OnMove);
-        (folow as BasicFollow).BindOnStopMoving(OnStopedMoving);
+        _followScript.SetTarget(target);
+        (_followScript as BasicFollow).BindOnMove(OnMove);
+        (_followScript as BasicFollow).BindOnStopMoving(OnStopedMoving);
         _machine = new HopeStateMachine(this);
         _animator = GetComponentInChildren<Animator>();
         _animator.SetFloat("Energy", _hp);
@@ -194,9 +200,9 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     private void AdjustColor()
     {
-        float percentageHP = _hp / MaxHP;
-        float colorFactor = _maxColor * percentageHP;
-        MainSprite.color = new Color(colorFactor, colorFactor, colorFactor, MainSprite.color.a);
+        //float percentageHP = _hp / MaxHP;
+        //float colorFactor = _maxColor * percentageHP;
+        //MainSprite.color = new Color(colorFactor, colorFactor, colorFactor, MainSprite.color.a);
     }
 
     public bool GetAttacked(IShadowEnemy enemy)

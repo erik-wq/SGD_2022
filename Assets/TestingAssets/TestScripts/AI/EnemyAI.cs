@@ -283,7 +283,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
         GetComponent<Seeker>().enabled = false;
         GetComponent<DynamicGridObstacle>().enabled = false;
-        GetComponent<ShadowCaster2D>().enabled = false;
+        //GetComponent<ShadowCaster2D>().enabled = false;
         GetComponent<BasicFollow>().enabled = false;
         _enemyControl.Unregister(this);
         this.enabled = false;

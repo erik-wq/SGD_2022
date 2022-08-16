@@ -13,20 +13,18 @@ public class HopeStateMachine
     }
     public bool CheckCharge()
     {
-        Collider2D[] cols = Physics2D.OverlapCircleAll(AI.transform.position, AI.collectRadius, LayerMask.GetMask("Charge"));
+        Collider2D[] cols = Physics2D.OverlapCircleAll(AI.player.transform.position, AI.collectRadius, LayerMask.GetMask("Charge"));
         if (cols.Length != 0)
         {
             Collider2D col = Closest(cols);
-
-            if (Vector2.Distance(col.transform.position, AI.transform.position) > 40)
+            if (Vector2.Distance(col.transform.position, AI.player.transform.position) > AI.collectRadius)
                 return false;
 
-            AI.folow.SetTarget(col.transform);
+            AI.follow.SetTarget(col.transform);
             if (CheckPath())
             {
                 return true;
             }
-            return false;
         }
         return false;
     }
@@ -91,7 +89,7 @@ public class HopeStateMachine
     }
     public bool CheckPath()
     {
-        List<Vector3> path = AI.folow.path.vectorPath;
+        List<Vector3> path = AI.follow.path.vectorPath;
         Physics2D.queriesHitTriggers = false;
         for (int i = 0; i < path.Count - 1; i++)
         {

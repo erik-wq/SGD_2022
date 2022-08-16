@@ -11,7 +11,7 @@ public class HopeLowEnergy : BaseState
     }
     public override void Start()
     {
-        _machine.AI.folow.SetTarget(_machine.AI.player);
+        _machine.AI.follow.SetTarget(_machine.AI.player);
     }
     public override void FixedUpdate()
     {
