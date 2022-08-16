@@ -73,12 +73,27 @@ public class PlayerController : MonoBehaviour, IEnemy
     private float _sprintRegargeCounter = 0;
     private bool _isHeavyAttacking = false;
     private bool _isAttackDirectionRight = false;
+
+    private Vector2 _dashDirection;
+    private bool dashing = false;
+    private bool canDash = true;
+    private Vector3 effectOfset;
     #endregion
 
     #region Public
     public bool IsMovementLocked { get; set; }
     public bool ActionLocked { get; set; }
+
+    public float dashTime = 0.25f;
+    public float dashSpeedModifier = 5;
+    public float dashCooldown = 1.25f;
+    public ParticleSystem dashEffect;
     #endregion
+
+    private void Awake()
+    {
+        effectOfset = dashEffect.transform.position - transform.position;
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -93,16 +108,17 @@ public class PlayerController : MonoBehaviour, IEnemy
         GenerateSlashZones();
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-
-    }
-
     private void FixedUpdate()
     {
+        if (dashing)
+        {
+            //_rigidBody2D.velocity = _dashDirection * dashSpeedModifier * MovementSpeedForward * Time.fixedDeltaTime;
+            _rigidBody2D.MovePosition(_rigidBody2D.position + _dashDirection * MovementSpeedForward * dashSpeedModifier *Time.fixedDeltaTime);
+            return;
+        }
         CheckSwordAnimation();
-        HandleSprint();
+        HandleDash();
+        //HandleSprint();
         if (_movementInput != Vector2.zero && !IsMovementLocked)
         {
             Move(_movementInput);
@@ -116,6 +132,13 @@ public class PlayerController : MonoBehaviour, IEnemy
         }
 
         RunHpRegen();
+    }
+    private void LateUpdate()
+    {
+        if (dashing)
+        {
+            dashEffect.transform.position = transform.position + effectOfset;
+        }
     }
 
     private void RunHpRegen()
@@ -161,13 +184,11 @@ public class PlayerController : MonoBehaviour, IEnemy
 
         if (direction.x >= 0)
         {
-            //transform.rotation = Quaternion.Euler(0, 0, 0);
             MainSprite.flipX = false;
         }
         else
         {
             MainSprite.flipX = true;
-            //transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
 
@@ -364,6 +385,53 @@ public class PlayerController : MonoBehaviour, IEnemy
             }
         }
         TurnOffSlashZones();
+    }
+    private void HandleDash()
+    {
+        if(_movementInput == Vector2.zero)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (canDash)
+            {
+                dashEffect.transform.position = transform.position + effectOfset;
+                _dashDirection = _movementInput;
+                canDash = false;
+
+                dashing = true;
+                StartCoroutine(Dash());
+            }
+        }
+    }
+
+    private IEnumerator Dash()
+    {
+        ParticleSystemRenderer renderer;
+        dashEffect.TryGetComponent<ParticleSystemRenderer>(out renderer);
+        if(renderer != null)
+        {
+            renderer.flip = DashVector();
+        }
+        dashEffect.Play();
+        Debug.Log(dashEffect.isPlaying);
+        yield return new WaitForSeconds(dashTime);
+        dashing = false;
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
+    }
+    private Vector3 DashVector()
+    {
+        if(_dashDirection.x > 0)
+        {
+            return Vector3.zero;
+        }
+        if(_dashDirection.x == 0)
+        {
+            return Vector3.zero;
+        }
+        return new Vector3(1,0,0);
     }
 
     #region Inputs registering
