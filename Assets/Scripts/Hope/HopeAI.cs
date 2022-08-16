@@ -22,7 +22,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     [SerializeField] private float MaxLightIntensity = 2.5f;
     [SerializeField] private float MinLightScale = 3f;
     [SerializeField] private float MinLightIntensity = 0.5f;
-    [SerializeField][Range(0,100)] private float LowEnergyState = 30;
+    [SerializeField] [Range(0, 100)] private float LowEnergyState = 30;
     [SerializeField] LayerMask ObjectMaks;
     #endregion
 
@@ -31,7 +31,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     private IFollow _followScript;
     private List<IShadowEnemy> _attackingEnemies = new List<IShadowEnemy>();
     private int _maxEnemies = 1;
-    [SerializeField]private float _hp;
+    [SerializeField] private float _hp;
     private float _maxColor = 1;
     private float _lastStunnedTime;
     private HopeLaser _hopeLaser;
@@ -46,7 +46,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     #endregion
 
     #region Public
-    public LayerMask objectMask 
+    public LayerMask objectMask
     {
         get
         {
@@ -92,12 +92,12 @@ public class HopeAI : MonoBehaviour, IEnemy
             _isHopeLocked = value;
         }
     }
-    public float hp 
-    { 
-        get 
-        { 
-            return _hp; 
-        } 
+    public float hp
+    {
+        get
+        {
+            return _hp;
+        }
     }
     public float LowEnergy
     {
@@ -152,6 +152,22 @@ public class HopeAI : MonoBehaviour, IEnemy
         if (direction != Vector2.zero)
         {
             _animator.SetBool("IsRunning", true);
+            AdjustFlip(direction);
+        }
+    }
+
+    private void AdjustFlip(Vector2 direction)
+    {
+        if (direction == Vector2.zero)
+            return;
+
+        if (direction.x > 0 && MainSprite.flipX == false)
+        {
+            MainSprite.flipX = true;
+        }
+        else if (direction.x < 0 && MainSprite.flipX == true)
+        {
+            MainSprite.flipX = false;
         }
     }
 
@@ -162,7 +178,7 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     private void FixedUpdate()
     {
-        if(_machine.state == null)
+        if (_machine.state == null)
         {
             return;
         }
@@ -186,6 +202,7 @@ public class HopeAI : MonoBehaviour, IEnemy
         _hp -= damage;
         _animator.SetFloat("Energy", _hp);
         AdjustColor();
+        AdjustLight();
 
         if (_hp > 0)
             return false;
@@ -194,9 +211,9 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     private void AdjustColor()
     {
-        float percentageHP = _hp / MaxHP;
-        float colorFactor = _maxColor * percentageHP;
-        MainSprite.color = new Color(colorFactor, colorFactor, colorFactor, MainSprite.color.a);
+        //float percentageHP = _hp / MaxHP;
+        //float colorFactor = _maxColor * percentageHP;
+        //MainSprite.color = new Color(colorFactor, colorFactor, colorFactor, MainSprite.color.a);
     }
 
     public bool GetAttacked(IShadowEnemy enemy)

@@ -83,7 +83,6 @@ public class BasicFollow : MonoBehaviour, IFollow
 
         Vector2 direction = GetDirection();
 
-
         if (!CheckNextDistance(direction))
         {
             if(_onStopMoving != null)
@@ -309,7 +308,14 @@ public class BasicFollow : MonoBehaviour, IFollow
         if (!p.error)
         {
             _path = p;
-            _currentWaypoint = 0;
+            if (p.vectorPath.Count > 1)
+            {
+                _currentWaypoint = 1;
+            }
+            else
+            {
+                _currentWaypoint = 0;
+            }
         }
     }
 

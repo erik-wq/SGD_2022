@@ -12,7 +12,6 @@ namespace Assets.Scripts
         public static Global Instance { get { return _instance; } private set { _instance = value; } }
 
         private static Global _instance = new Global();
-
         public Transform PlayerTransform { get; set; }
         public Transform HopeTransform { get; set; }
         public HopeAI HopeScript { get; set; }

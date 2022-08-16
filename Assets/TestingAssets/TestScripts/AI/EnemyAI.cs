@@ -57,6 +57,8 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected float _rotationOffset = -90;
     private bool _isDead = false;
     protected EnemyControllerSingleton _enemyControl = EnemyControllerSingleton.GetInstance();
+    protected float _preChangeTime = 0;
+    protected bool? _preChange;
 
     protected bool _hasAggro = false;
     #endregion
@@ -69,6 +71,9 @@ public class EnemyAI : MonoBehaviour, IEnemy
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
         _currentHP = MaxHP;
+
+        _followScript.BindOnMove(AdjustFlip);
+        _preChange = MainSprite.flipX;
 
         if (HopeTransform == null || PlayerTransform == null || Player == null || HopeAIScript == null)
         {
@@ -92,6 +97,21 @@ public class EnemyAI : MonoBehaviour, IEnemy
             CheckAttack();
             ClearKnockback();
             CheckAoe();
+        }
+    }
+
+    private void AdjustFlip(Vector2 direction)
+    {
+        if (direction == Vector2.zero)
+            return;
+
+        if (direction.x > 0 && MainSprite.flipX == false)
+        {
+            MainSprite.flipX = true;
+        }
+        else if(direction.x < 0 && MainSprite.flipX == true)
+        {
+            MainSprite.flipX = false;
         }
     }
 
@@ -159,7 +179,8 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     protected bool CheckAttackRange()
     {
-        return Vector2.Distance(_rigidBody.position, PlayerTransform.position) <= AttackRangeDetection;
+        return Vector2.Distance(_rigidBody.position, PlayerTransform.position) <= AttackRangeDetection ||
+                Vector2.Distance(_rigidBody.position, HopeTransform.position) <= AttackRangeDetection;
     }
 
     protected bool CheckAttackRangeHitHope()
@@ -283,7 +304,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
         GetComponent<Seeker>().enabled = false;
         GetComponent<DynamicGridObstacle>().enabled = false;
-        GetComponent<ShadowCaster2D>().enabled = false;
+        //GetComponent<ShadowCaster2D>().enabled = false;
         GetComponent<BasicFollow>().enabled = false;
         _enemyControl.Unregister(this);
         this.enabled = false;

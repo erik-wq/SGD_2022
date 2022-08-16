@@ -23,7 +23,7 @@ namespace Assets.Scripts.Environment
 
         public void Open()
         {
-            _sprite.sprite = OpenedSprite;
+            //_sprite.sprite = OpenedSprite;
             _isActive = true;
             _collider.enabled = false;
         }
@@ -32,11 +32,14 @@ namespace Assets.Scripts.Environment
         {
             if(collision.gameObject.tag == "Player")
             {
-                var playerTransform = Global.Instance.PlayerTransform;
-                var hopeTransform = Global.Instance.HopeTransform;
+                if (_isActive)
+                {
+                    var playerTransform = Global.Instance.PlayerTransform;
+                    var hopeTransform = Global.Instance.HopeTransform;
 
-                playerTransform.position = new Vector3(39, 199, 0);
-                hopeTransform.position = new Vector3(39, 198, 0);
+                    playerTransform.position = new Vector3(39, 199, 0);
+                    hopeTransform.position = new Vector3(39, 198, 0);
+                }
             }
         }
     }

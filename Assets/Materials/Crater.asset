@@ -16,7 +16,8 @@ MonoBehaviour:
   - m_Start: -50
     m_End: 54
     m_Order: 0
-    m_Sprites: []
+    m_Sprites:
+    - {fileID: 21300000, guid: 9cde9b34bd5e071498e952cc783bdac6, type: 3}
   - m_Start: 54
     m_End: 117
     m_Order: 0
@@ -33,7 +34,7 @@ MonoBehaviour:
   m_CornerSprites:
   - m_CornerType: 0
     m_Sprites:
-    - {fileID: 21300000, guid: 95bb642e52b01fd4a94805b7c27b61cf, type: 3}
+    - {fileID: 21300000, guid: 8f57b7ff87125b44f997056a9d9b70be, type: 3}
   - m_CornerType: 1
     m_Sprites:
     - {fileID: 21300000, guid: 01dbaf13b23a2244e9b56d27d60be960, type: 3}
@@ -45,7 +46,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 19a42f3dceb6bb94f89f0f4e34bd22f2, type: 3}
   - m_CornerType: 4
     m_Sprites:
-    - {fileID: 21300000, guid: a1eee899bd0ff4044887519133a1a16b, type: 3}
+    - {fileID: 21300000, guid: 8f57b7ff87125b44f997056a9d9b70be, type: 3}
   - m_CornerType: 5
     m_Sprites:
     - {fileID: 21300000, guid: 19a42f3dceb6bb94f89f0f4e34bd22f2, type: 3}

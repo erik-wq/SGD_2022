@@ -1,5 +1,6 @@
 using Assets.Scripts.Utils;
 using Assets.TestingAssets.TestScripts;
+using Assets.TestingAssets.TestScripts.AI;
 using Pathfinding;
 using System;
 using System.Collections;
@@ -17,9 +18,12 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     #region Serialized
     [SerializeField] private Seeker Seeker;
     [SerializeField] private float MovementSpeed = 5f;
+    [SerializeField] private SpriteRenderer _mainSprite;
+    [SerializeField] private Animator MainAnimator;
 
     [SerializeField] private float CrossingCooldown = 5f;
     [SerializeField] private float CrossingChance = 0.6f;
+
     [SerializeField] private float CrossingSpeed = 6;
     [SerializeField] private AnimationCurve CrossingCurve;
     [SerializeField] private float CrossingCurveTimeLength = 2;
@@ -53,8 +57,8 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     private float _crossStartTime = 0f;
     private Func<float> _getRotation;
     private Func<float, float> _setRotation;
-    private Animator _animator;
     private float _animationRotationOffset = -90;
+    private bool _isAnimationLocked = false;
     #endregion
 
     #region Public
@@ -71,11 +75,9 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
         }
     }
     #endregion
-    // Start is called before the first frame update
     private void Start()
     {
         InvokeRepeating("UpdatePath", 0f, 0.2f);
-        _animator = GetComponentInChildren<Animator>();
         _currentSpeed = MovementSpeed;
         Paused = true;
     }
@@ -102,7 +104,6 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
         }
     }
 
-
     // Update is called once per frame
     private void Update()
     {
@@ -111,7 +112,7 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
 
     private void FixedUpdate()
     {
-        if (Target == null || Paused)
+        if (Target == null || Paused || _isAnimationLocked)
         {
             return;
         }
@@ -248,12 +249,20 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     {
         if (_isCrossing)
             return false;
-        
+
+        _isAnimationLocked = false;
         _isCrossing = true;
         _crossStartTime = Time.time;
         _nextTarget = (Vector2)Target.position + GetDirectionToTarget() * _circleRadius;
         PlayAttackAnimation();
+
         return true;
+    }
+
+    private bool CreateCrossTransition()
+    {
+        GetComponentInChildren<SpriteRenderer>().enabled = false;
+        return false;
     }
 
     public void InitCircle()
@@ -279,12 +288,12 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
 
     public void TakeDamage(float damage)
     {
-        if(_isCrossing)
+        if (_isCrossing)
         {
             var toTarget = GetDirectionToTarget();
             var toPoint = GetDirectionToNextPoint();
 
-            if(Vector2.Dot(toTarget, toPoint) > 0.25f)
+            if (Vector2.Dot(toTarget, toPoint) > 0.25f)
             {
                 toPoint = toPoint * -1;
                 toPoint = MathUtility.RotateVector(toPoint, 15);
@@ -293,9 +302,14 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
         }
     }
 
+    public void OnAttackEnds()
+    {
+        _mainSprite.enabled = true;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "Hope")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Hope")
         {
 
         }
@@ -303,8 +317,8 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
 
     private void PlayAttackAnimation()
     {
-        var angle = MathUtility.FullAngle(Vector2.up, GetDirectionToTarget());
-        AttackAnimationTransform.rotation = Quaternion.Euler(0, 0, _animationRotationOffset + angle);
-        _animator.Play("GhostAttack");
+        //var angle = MathUtility.FullAngle(Vector2.up, GetDirectionToTarget());
+        //AttackAnimationTransform.rotation = Quaternion.Euler(0, 0, _animationRotationOffset + angle);
+        MainAnimator.Play("GhostAttack");
     }
 }

@@ -191,7 +191,7 @@ namespace Assets.Scripts.Hope
 
         public bool Activate()
         {
-            if (!_isAiming)
+            if (!_isAiming && Time.time > _lastUsed + Cooldown)
             {
                 if (CheckHopesDistance())
                 {

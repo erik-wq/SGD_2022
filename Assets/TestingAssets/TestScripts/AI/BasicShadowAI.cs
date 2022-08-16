@@ -36,6 +36,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     [SerializeField] private ContactFilter2D ContactFilter;
     [SerializeField] private Collider2D AggroColider;
     [SerializeField] private Transform GraphicsTransform;
+    [SerializeField] private Animator AttackAnimator;
 
     [SerializeField] private DebugControl DebugControlComponent;
 
@@ -59,7 +60,6 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     #region Private
     protected IShadowFollow _seekingFollow;
     protected ShadowCircleFollow _circleFollow;
-    protected Animator _animator;
     protected FollowState _followState;
     protected float _lastCrossing;
     protected bool _isLocked = false;
@@ -85,7 +85,6 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         this.Damage = 10;
         _seekingFollow = GetComponent<ShadowSeekerFollow>();
         _circleFollow = GetComponent<ShadowCircleFollow>();
-        _animator = GetComponentInChildren<Animator>();
 
         _circleFollow.Init(GetRotation, SetRotation);
 
@@ -356,7 +355,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     private float SetRotation(float rotation)
     {
         _rotation = rotation;
-        GraphicsTransform.rotation = Quaternion.Euler(0, 0, _startRotation + rotation);
+        //GraphicsTransform.rotation = Quaternion.Euler(0, 0, _startRotation + rotation);
+        this.transform.rotation = Quaternion.Euler(0, 0, _startRotation + rotation);
         return rotation;
     }
 
@@ -406,8 +406,13 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         if (!_isDead)
         {
             _isDead = true;
-            _animator.Play("GhostDeath");
+            AttackAnimator.Play("GhostDeath");
         }
+    }
+
+    public void OnFireTrigger()
+    {
+        //TODO
     }
 
     public void OnDeathFromAnimation()
