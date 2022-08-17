@@ -721,8 +721,16 @@ PrefabInstance:
       value: Light
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
+      propertyPath: energyAmmount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: timeToDespawn
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
+      propertyPath: numberOfParticles
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272943, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: m_RootOrder

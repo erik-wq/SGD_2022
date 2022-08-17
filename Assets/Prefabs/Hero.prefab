@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284245258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -650,7 +650,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1646232897703190111}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -741,6 +741,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a87ba2639a584c849a0a529eaf4fabde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SwordAudioSource: {fileID: 0}
+  SwordAudioClip: {fileID: 0}
+  HeavySwordAudioClip: {fileID: 0}
 --- !u!1 &1750945812520451839
 GameObject:
   m_ObjectHideFlags: 0
@@ -844,7 +847,7 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.04, y: -1.97}
+  m_Offset: {x: 0.04, y: 0.91}
   serializedVersion: 2
   m_Radius: 0.7060766
 --- !u!114 &2757483962049097912
@@ -908,6 +911,11 @@ MonoBehaviour:
     maxNormalAngle: 0
   SwordDamage: 35
   SwordForce: 1000
+  SwordHeavyPhaseDamage: 15
+  HeavyPhaseForce: 0
+  HeavyFinishedRadius: 5
+  HeavyFinisherDamage: 30
+  HeavyFinisherForce: 650
   AttackMovementspeedForward: 9
   AttackMovementspeedBackwards: 5
   SprintCurve:
@@ -978,7 +986,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.09195843, y: -1.4111319}
+  m_Offset: {x: 0.0919584, y: 1.4276371}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -989,5 +997,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.6815517, y: 2.454606}
+  m_Size: {x: 1.6815517, y: 2.6526594}
   m_EdgeRadius: 0

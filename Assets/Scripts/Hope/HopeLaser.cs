@@ -18,7 +18,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
         [SerializeField] private PlayerController PlayerController;
         [SerializeField] private SpriteRenderer HopesSprite;
         [SerializeField] private HopeAI HopeScript;
-        [SerializeField] private SpriteRenderer LaserSprite;
+        [SerializeField] private GameObject LaserObject;
         [SerializeField] private Transform LaserSpriteTransform;
         [SerializeField] private Camera MainCamera;
 
@@ -43,6 +43,8 @@ namespace Assets.TestingAssets.TestScripts.Hope
         private event Action _onTurnedOff;
         private float _lastUsed = 0;
         private float _angle = 0;
+        private float _angleOffset = 90;
+        private Vector2 _laserOffset = new Vector2(0, 0);
         #endregion
 
         void Start()
@@ -121,7 +123,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
 
         private void HideGraphics()
         {
-            LaserSprite.enabled = false;
+            LaserObject.SetActive(false);
         }
 
         private void DoDamage()
@@ -151,9 +153,11 @@ namespace Assets.TestingAssets.TestScripts.Hope
 
         private void ShowEffect()
         {
-            LaserSpriteTransform.rotation = Quaternion.Euler(new Vector3(0, 0, _angle));
-            LaserSpriteTransform.position = PlayersTransform.position;
-            LaserSprite.enabled = true;
+            LaserSpriteTransform.rotation = Quaternion.Euler(new Vector3(0, 0, _angle + _angleOffset));
+            
+            var direction = CustomUtilities.GetMouseDirection(MainCamera, PlayersTransform);
+            LaserSpriteTransform.position = (Vector2)PlayersTransform.position + direction * _laserOffset;
+            LaserObject.SetActive(true);
         }
 
         public bool Activate()

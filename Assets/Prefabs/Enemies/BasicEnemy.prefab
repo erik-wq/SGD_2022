@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  uniqueID: 8737287453114519793
+  uniqueID: 275666087039770206
   updateError: 0.2
   checkTime: 0.1
 --- !u!114 &8758012709743335924
@@ -463,6 +463,10 @@ PrefabInstance:
     - target: {fileID: 778218715066272936, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: m_Name
       value: efect
+      objectReference: {fileID: 0}
+    - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
+      propertyPath: energyAmmount
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: timeToDespawn

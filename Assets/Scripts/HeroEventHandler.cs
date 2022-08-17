@@ -6,7 +6,8 @@ public class HeroEventHandler : MonoBehaviour
 {
     [SerializeField] private AudioSource SwordAudioSource;
     [SerializeField] private AudioClip SwordAudioClip;
-    
+    [SerializeField] private AudioClip HeavySwordAudioClip;
+
     private PlayerController _mainScript;
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,11 @@ public class HeroEventHandler : MonoBehaviour
     public void OnSlashPlayMusic()
     {
         SwordAudioSource.PlayOneShot(SwordAudioClip);
+    }
+
+    public void OnHeavySlashAudio()
+    {
+        SwordAudioSource.PlayOneShot(HeavySwordAudioClip);
     }
 
     public void HeavyAttackPhaseOne()
