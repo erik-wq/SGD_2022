@@ -70,6 +70,7 @@ public class LIghtningArea : MonoBehaviour
     public void CheckDamage(Vector2 pos)
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(pos, damageRadius, mask);
+        Debug.Log(cols.Length);
         if(cols.Length != 0)
         {
             foreach(var x in cols)

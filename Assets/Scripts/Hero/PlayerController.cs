@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour, IEnemy
             return;
         }
         CheckSwordAnimation();
-        HandleDash();
+        //HandleDash();
         //HandleSprint();
         if (_movementInput != Vector2.zero && !IsMovementLocked)
         {

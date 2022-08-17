@@ -20,6 +20,7 @@ public class Thunder : MonoBehaviour
     }
     private void OnThunder()
     {
+        Debug.Log(LA);
         if(LA != null)
         {
             LA.CheckDamage(transform.position);
