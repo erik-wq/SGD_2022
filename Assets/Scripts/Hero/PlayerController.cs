@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviour, IEnemy
         TurnOffSlashZones();
     }
 
-    private void AdjustFlip(Vector2 direction)
+    public void AdjustFlip(Vector2 direction)
     {
         if (_isAttacking)
             return;

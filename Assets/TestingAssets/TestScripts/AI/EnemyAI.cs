@@ -84,7 +84,10 @@ public class EnemyAI : MonoBehaviour, IEnemy
     // Update is called once per frame
     protected void Update()
     {
-
+        if (HopeTransform == null || PlayerTransform == null || Player == null || HopeAIScript == null)
+        {
+            LoadBasics();
+        }
     }
 
     /// <summary>

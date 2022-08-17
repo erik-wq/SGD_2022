@@ -107,7 +107,7 @@ TrailRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 0, g: 0, b: 0, a: 1}
+      key1: {r: 0, g: 0, b: 0, a: 0.6901961}
       key2: {r: 0, g: 0, b: 0, a: 0.24313726}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1553,9 +1553,10 @@ MonoBehaviour:
   PlayerController: {fileID: 0}
   HopesSprite: {fileID: 0}
   HopeScript: {fileID: 1294598064}
-  LaserSprite: {fileID: 0}
+  LaserObject: {fileID: 0}
   LaserSpriteTransform: {fileID: 0}
   MainCamera: {fileID: 0}
+  PlayerAnimator: {fileID: 0}
   Length: 2.1
   EnergyCost: 15
   Range: 50
@@ -1566,6 +1567,8 @@ MonoBehaviour:
   DamagePerSecond: 50
   Cooldown: 10
   CooldownText: {fileID: 0}
+  ProjectileSpeed: 20
+  AimObject: {fileID: 0}
 --- !u!114 &1294598057
 MonoBehaviour:
   m_ObjectHideFlags: 0
