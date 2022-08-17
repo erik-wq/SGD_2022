@@ -52,7 +52,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected bool _knockbackCleared = true;
     protected float _maxOpacity = 1.0f;
     protected bool _circleClockwise = false;
-    protected float _lastAoeFiret = 0;
+    protected float _lastAoeFired = 0;
     protected Animator _animator;
     protected float _rotationOffset = -90;
     private bool _isDead = false;
@@ -109,7 +109,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
         {
             MainSprite.flipX = true;
         }
-        else if(direction.x < 0 && MainSprite.flipX == true)
+        else if (direction.x < 0 && MainSprite.flipX == true)
         {
             MainSprite.flipX = false;
         }
@@ -126,7 +126,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     protected void CheckAoe()
     {
-        if (Time.time > _lastAoeFiret + SpikesCooldown)
+        if (Time.time > _lastAoeFired + SpikesCooldown)
         {
             if (_enemyControl.AskToFire())
             {
@@ -264,6 +264,10 @@ public class EnemyAI : MonoBehaviour, IEnemy
         if (_isDead)
             return;
 
+        if (Time.time < _lastAoeFired + SpikesCooldown)
+            return;
+        _lastAoeFired = Time.time;
+
         var step = 360.0f / SpikesCount;
         var offSet = UnityEngine.Random.Range(0, step);
 
@@ -278,8 +282,6 @@ public class EnemyAI : MonoBehaviour, IEnemy
             projectileLogic.ProjectileSpeed = SpikesSpeed;
             projectileLogic.SetDirection(direction);
         }
-
-        _lastAoeFiret = Time.time;
     }
 
     private void AdjustOpacity()

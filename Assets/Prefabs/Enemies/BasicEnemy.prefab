@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 50e7aac2a5f35d245b53ab363cffd0b0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26ecc6f630aeaad49b6edb73e9b5fcab, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -184,9 +184,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2148948028171185597}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.35, y: -0.15, z: 0.33126247}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2900693511232905238}
@@ -205,7 +205,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.033844322, y: 0.38360047}
+  m_Offset: {x: -0.30254292, y: 0.36210465}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -216,7 +216,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.7378395, y: 2.3504877}
+  m_Size: {x: 3.4360137, y: 4.972985}
   m_EdgeRadius: 0
 --- !u!1 &2900693511232905233
 GameObject:
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  uniqueID: 8920274276938856060
+  uniqueID: 8737287453114519793
   updateError: 0.2
   checkTime: 0.1
 --- !u!114 &8758012709743335924
@@ -354,7 +354,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerTransform: {fileID: 0}
+  HopeTransform: {fileID: 0}
   Player: {fileID: 0}
+  HopeAIScript: {fileID: 0}
   MaxHP: 100
   Damage: 5
   AttackKnockbackPower: 500
@@ -375,7 +377,6 @@ MonoBehaviour:
   SpikesCooldown: 10
   SpikesRange: 100
   SpikeSpawnRange: 4
-  Sword: {fileID: 0}
   effect: {fileID: 1676690136709552952}
 --- !u!114 &8310987228924284045
 MonoBehaviour:

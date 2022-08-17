@@ -17,7 +17,7 @@ namespace Assets.Scripts.Hope
         [SerializeField] private Transform HopesTransform;
         [SerializeField] private Transform PlayersTransform;
         [SerializeField] private SpriteRenderer HopesSprite;
-        [SerializeField] private SpriteRenderer HopeAimSprite;
+        [SerializeField] private GameObject AimObject;
         [SerializeField] private Camera MainCamera;
         [SerializeField] private SpriteRenderer IndicatorSprite;
         [SerializeField] private Transform IndicatorTransform;
@@ -82,7 +82,7 @@ namespace Assets.Scripts.Hope
             HopeScript.IsMovementLocked = false;
             HopeScript.IsHopeLocked = false;
             HopesSprite.enabled = true;
-            HopeAimSprite.enabled = false;
+            AimObject.SetActive(false);
             _isFireing = false;
         }
 
@@ -177,7 +177,7 @@ namespace Assets.Scripts.Hope
                 _isAiming = true;
                 IndicatorSprite.enabled = true;
                 HopesSprite.enabled = false;
-                HopeAimSprite.enabled = true;
+                AimObject.SetActive(true);
                 PlayerControllerScript.ActionLocked = true;
                 HopeScript.IsMovementLocked = true;
             }

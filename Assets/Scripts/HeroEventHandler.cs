@@ -34,4 +34,29 @@ public class HeroEventHandler : MonoBehaviour
     {
         SwordAudioSource.PlayOneShot(SwordAudioClip);
     }
+
+    public void HeavyAttackPhaseOne()
+    {
+        _mainScript.HeavyAttackPhaseOne();
+    }
+
+    public void HeavyAttackPhaseTwo()
+    {
+        _mainScript.HeavyAttackPhaseTwo();
+    }
+
+    public void HeavyAttackPhaseThree()
+    {
+        _mainScript.HeavyAttackPhaseThree();
+    }
+
+    public void HeavyAttackEnds()
+    {
+        _mainScript.HeavyAttackEnds();
+    }
+
+    public void PlayerTakesDamageEnd()
+    {
+        _mainScript.PlayerTakesDamageEnd();
+    }
 }
