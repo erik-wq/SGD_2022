@@ -21,6 +21,10 @@ public class HopeIdle : BaseState
     }
     public override void FixedUpdate()
     {
+        if (_machine.AI.IsAbilityLocked)
+        {
+            return;
+        }
         _machine.CheckEnergy();
         if (_machine.CheckCharge())
         {
