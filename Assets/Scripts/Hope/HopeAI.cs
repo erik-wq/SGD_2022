@@ -256,6 +256,7 @@ public class HopeAI : MonoBehaviour, IEnemy
                 if (_hopeThrow.Activate())
                 {
                     SetHP(_hp - _hopeThrow.GetCost());
+                    CheckState();
                 }
             }
         }
@@ -275,6 +276,7 @@ public class HopeAI : MonoBehaviour, IEnemy
                 if (_hopeLaser.Activate())
                 {
                     SetHP(_hp - _hopeLaser.GetCost());
+                    CheckState();
                 }
             }
         }
@@ -325,6 +327,14 @@ public class HopeAI : MonoBehaviour, IEnemy
     public bool TakeDamage(float damage, float force, Vector2 origin)
     {
         return this.TakeDamage(damage);
+    }
+    private void CheckState()
+    {
+        if(_machine.state.GetType() == typeof(HopeColect) || _machine.state.GetType() == typeof(HopeLowEnergy))
+        {
+            follow.SetTarget(null);
+            _machine.state.Exit();
+        }
     }
     #endregion
 }

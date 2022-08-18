@@ -16,6 +16,7 @@ public class LIghtningArea : MonoBehaviour
     public float minDistance = 0.5f;
     public Thunder thunder;
     public float damageRadius = 1.5f;
+    public float nockback = 20;
     public LayerMask mask;
 
     private void Awake()
@@ -60,7 +61,7 @@ public class LIghtningArea : MonoBehaviour
         }
         return false;
     }
-    private void SpawnThunder(Vector2 pos)
+    public void SpawnThunder(Vector2 pos)
     {
         var obj = Instantiate(thunder);
         obj.transform.parent = this.transform;
@@ -75,7 +76,8 @@ public class LIghtningArea : MonoBehaviour
         {
             foreach(var x in cols)
             {
-                x.GetComponent<IEnemy>().TakeDamage(damage);
+                Vector2 nockbackVector = x.transform.position - transform.position.normalized;
+                x.GetComponent<IEnemy>().TakeDamage(damage,nockback ,nockbackVector);
             }
         }
         active = true;

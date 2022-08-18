@@ -62,6 +62,8 @@ public class PlayerController : MonoBehaviour, IEnemy
     [SerializeField] private float EnergyRechargeRateWhileRunning = 15;
     [SerializeField] private float EnergyRechardDelayWhileStaying = 0.4f;
     [SerializeField] private float EnergyRechardDelayWhileRunning = 0.8f;
+    [SerializeField] private float dashRechargePerSecond = 0.1f;
+
     #endregion
 
     #region Private
@@ -98,6 +100,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     public float dashSpeedModifier = 5;
     public float dashCooldown = 1.25f;
     public ParticleSystem dashEffect;
+    public Image dashSlider;
     #endregion
 
     private void Awake()
@@ -125,9 +128,13 @@ public class PlayerController : MonoBehaviour, IEnemy
             _rigidBody2D.MovePosition(_rigidBody2D.position + _dashDirection * MovementSpeedForward * dashSpeedModifier * Time.fixedDeltaTime);
             return;
         }
-        CheckSwordAnimation();
-        //HandleDash();
-        //HandleSprint();
+
+        if(dashSlider.fillAmount < 1)
+        {
+            float value = dashSlider.fillAmount + dashRechargePerSecond * Time.fixedDeltaTime;
+            value = Math.Clamp(value, 0, 1);
+            dashSlider.fillAmount = value;
+        }
 
         HandleDash();
         
@@ -484,6 +491,10 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     private void HandleDash()
     {
+        if(dashSlider.fillAmount < 0.5f)
+        {
+            return;
+        }
         if(_movementInput == Vector2.zero)
         {
             return;
@@ -492,9 +503,9 @@ public class PlayerController : MonoBehaviour, IEnemy
         {
             if (canDash)
             {
+                dashSlider.fillAmount -= 0.5f;
                 dashEffect.transform.position = transform.position + effectOfset;
                 _dashDirection = _movementInput;
-                canDash = false;
 
                 _isDashing = true;
                 StartCoroutine(Dash());
@@ -514,8 +525,6 @@ public class PlayerController : MonoBehaviour, IEnemy
         
         yield return new WaitForSeconds(dashTime);
         _isDashing = false;
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
     }
     private Vector3 DashVector()
     {
@@ -705,4 +714,12 @@ public class PlayerController : MonoBehaviour, IEnemy
         return this.TakeDamage(damage, 0, Vector2.zero);
     }
     #endregion
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy") return;
+        if (_isDashing)
+        {
+            _isDashing = false;
+        }
+    }
 }
