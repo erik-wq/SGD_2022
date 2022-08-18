@@ -76,6 +76,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     protected float _circleRadius;
     protected float _circleRadiusLostDistance;
     protected bool _isDead = false;
+    protected event Action _onDeath;
+
     #endregion
 
     // Start is called before the first frame update
@@ -116,6 +118,11 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
         CheckTargets();
         CheckDistance();
+    }
+
+    public void RegisterOnDeath(Action action)
+    {
+        _onDeath += action;
     }
 
     private void CheckDistance()
@@ -407,6 +414,11 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         {
             _isDead = true;
             AttackAnimator.Play("GhostDeath");
+            _circleFollow.enabled = false;
+            _seekingFollow.Paused = true;
+
+            if (_onDeath != null)
+                _onDeath();
         }
     }
 

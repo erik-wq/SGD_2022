@@ -358,7 +358,7 @@ MonoBehaviour:
   Player: {fileID: 0}
   HopeAIScript: {fileID: 0}
   MaxHP: 100
-  Damage: 5
+  Damage: 25
   AttackKnockbackPower: 500
   AttackSpeed: 1
   AttackRadius: 60
@@ -374,7 +374,7 @@ MonoBehaviour:
   SpikesDamage: 15
   SpikesWaves: 2
   SpikesWaveDelay: 0.5
-  SpikesCooldown: 10
+  SpikesCooldown: 5
   SpikesRange: 100
   SpikeSpawnRange: 4
   effect: {fileID: 1676690136709552952}
@@ -466,11 +466,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: energyAmmount
-      value: 5
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: timeToDespawn
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
+      propertyPath: numberOfParticles
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272943, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: m_RootOrder

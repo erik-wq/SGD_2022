@@ -13,7 +13,7 @@ namespace Assets.Scripts
 
         #region Settings
         private const int MAX_FIRE_AT_ONCE = 1;
-        private const float FIRE_DELAY = 2.5f;
+        private const float FIRE_DELAY = 3f;
         #endregion
 
         #region Private

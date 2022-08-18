@@ -33,6 +33,9 @@ namespace Assets.Scripts.Totems
         [SerializeField] private string Name;
         [SerializeField] private TMP_Text NameText;
         [SerializeField] private Image HealImage;
+
+        [SerializeField] private int MaxMelee = 10;
+        [SerializeField] private int MaxGhosts = 3;
         #endregion
 
         #region Private
@@ -43,6 +46,8 @@ namespace Assets.Scripts.Totems
         private bool _isRunning = false;
         private bool _hasBeenDestroyed = false;
         private event Action _onDestroyed;
+        private int _meleeCount = 0;
+        private int _shadowCount = 0;
         #endregion
 
         private void Start()
@@ -93,11 +98,15 @@ namespace Assets.Scripts.Totems
 
             for (int i = 0; i < meleeCount; i++)
             {
+                if (_meleeCount >= MaxMelee)
+                    break;
                 SpawnMelee(FindFreePoint());
             }
 
             for (int i = 0; i < ghostCount; i++)
             {
+                if (_shadowCount >= MaxGhosts)
+                    break;
                 SpawnGhost(FindAnyPoint());
             }
 
@@ -106,12 +115,27 @@ namespace Assets.Scripts.Totems
 
         private void SpawnMelee(Vector2 possition)
         {
-            Instantiate(MeleePrefab, possition, Quaternion.identity);
+            var obj = Instantiate(MeleePrefab, possition, Quaternion.identity);
+            obj.GetComponent<EnemyAI>().RegisterOnDeath(OnDeathMelee);
+            _meleeCount++;
+
         }
 
         private void SpawnGhost(Vector2 possition)
         {
-            Instantiate(GhostPrefab, possition, Quaternion.identity);
+            var obj = Instantiate(GhostPrefab, possition, Quaternion.identity);
+            obj.GetComponent<BasicShadowAI>().RegisterOnDeath(OnDeathGhost);
+            _shadowCount++;
+        }
+
+        private void OnDeathMelee()
+        {
+            _meleeCount--;
+        }
+
+        private void OnDeathGhost()
+        {
+            _shadowCount--;
         }
 
         private Vector2 FindFreePoint()

@@ -7,6 +7,7 @@ using Pathfinding;
 using UnityEngine.Rendering.Universal;
 using Assets.Scripts.Utils;
 using Assets.Scripts;
+using System;
 
 public class EnemyAI : MonoBehaviour, IEnemy
 {
@@ -61,6 +62,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected bool? _preChange;
 
     protected bool _hasAggro = false;
+    protected event Action _onDeath;
     #endregion
     public GameObject effect;
     // Start is called before the first frame update
@@ -116,6 +118,11 @@ public class EnemyAI : MonoBehaviour, IEnemy
         {
             MainSprite.flipX = false;
         }
+    }
+
+    public void RegisterOnDeath(Action action)
+    {
+        _onDeath += action;
     }
 
     private void LoadBasics()
@@ -305,6 +312,11 @@ public class EnemyAI : MonoBehaviour, IEnemy
         foreach (Collider2D x in cols)
         {
             x.enabled = false;
+        }
+
+        if(_onDeath != null)
+        {
+            _onDeath();
         }
 
         GetComponent<Seeker>().enabled = false;

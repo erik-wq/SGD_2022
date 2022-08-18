@@ -256,7 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   CollisionGraphMaskName: Shadows
-  MovementSpeed: 15
+  MovementSpeed: 25
   CollisionOffset: 1
   NextWaypointDistance: 0.5
   MaximumRotationSpeed: 50
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e354ad5f46483e4380894d0a726bda1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CrossingCooldown: 5
+  CrossingCooldown: 6
   DistanceCheck: 2
   MaxHP: 30
   MinimalAlpha: 0.5
@@ -308,7 +308,7 @@ MonoBehaviour:
   HopePullRadius: 15
   HopeLooseAggroRadius: 30
   HopeLooseAgrroDelay: 4
-  PlayerPullRadius: 20
+  PlayerPullRadius: 25
   PlayerPullDelay: 5
   PlayerLooseAggroRadius: 25
   PlayerLooseAggroDelay: 6
@@ -326,13 +326,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Seeker: {fileID: 2565003934881450046}
-  MovementSpeed: 14
+  MovementSpeed: 20
   _mainSprite: {fileID: 2565003936322571078}
   MainAnimator: {fileID: 1215315171}
   Damage: 20
   CrossingCooldown: 5
   CrossingChance: 5
-  CrossingSpeed: 30
+  CrossingSpeed: 35
   CrossingCurve:
     serializedVersion: 2
     m_Curve:
@@ -388,6 +388,7 @@ MonoBehaviour:
   AroundCircleReachTolerance: 0.5
   CrossingReachTolerance: 0.1
   CollisionRadius: 1
+  TakenDamageRecoveryDelay: 3
   DebugTransform: {fileID: 0}
   AttackAnimationTransform: {fileID: 1215315170}
 --- !u!50 &4711522507338237353
@@ -722,7 +723,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: energyAmmount
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: timeToDespawn
@@ -730,7 +731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272940, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: numberOfParticles
-      value: 6
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 778218715066272943, guid: d7db636745b92a146a5f866c924418fe, type: 3}
       propertyPath: m_RootOrder
