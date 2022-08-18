@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Thunder : MonoBehaviour
 {
-    private LIghtningArea LA;
+    private LightningArea LA;
     private Animator anim;
     public GameObject indic;
     public float waitTime;
@@ -14,7 +14,7 @@ public class Thunder : MonoBehaviour
         anim.enabled = false;
         StartCoroutine(StrikeWait());
     }
-    public void Init(LIghtningArea area)
+    public void Init(LightningArea area)
     {
         this.LA = area;
     }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Interfaces;
 using Assets.TestingAssets;
+using System;
 
-public class LIghtningArea : MonoBehaviour
+public class LightningArea : MonoBehaviour
 {
     private CircleCollider2D area;
     private bool active;
@@ -18,12 +19,18 @@ public class LIghtningArea : MonoBehaviour
     public float damageRadius = 1.5f;
     public float nockback = 20;
     public LayerMask mask;
+    public bool Oneshot = false;
+
+    private event Action _onDamageFinished;
 
     private void Awake()
     {
         active = true;
         area = GetComponent<CircleCollider2D>();
-        StartCoroutine(Striking());
+        if (!Oneshot)
+        {
+            StartCoroutine(Striking());
+        }
     }
 
     IEnumerator Striking()
@@ -49,9 +56,9 @@ public class LIghtningArea : MonoBehaviour
     }
     private Vector2 Position()
     {
-        float x = transform.position.x + Random.Range(-area.radius, area.radius);
-        float y = transform.position.y + Random.Range(-area.radius, area.radius);
-    return new Vector2(x,y);
+        float x = transform.position.x + UnityEngine.Random.Range(-area.radius, area.radius);
+        float y = transform.position.y + UnityEngine.Random.Range(-area.radius, area.radius);
+        return new Vector2(x, y);
     }
     private bool CheckPosition(Vector2 pos)
     {
@@ -61,6 +68,7 @@ public class LIghtningArea : MonoBehaviour
         }
         return false;
     }
+
     public void SpawnThunder(Vector2 pos)
     {
         var obj = Instantiate(thunder);
@@ -68,18 +76,29 @@ public class LIghtningArea : MonoBehaviour
         obj.Init(this);
         obj.transform.position = pos;
     }
+
     public void CheckDamage(Vector2 pos)
     {
         Collider2D[] cols = Physics2D.OverlapCircleAll(pos, damageRadius, mask);
         Debug.Log(cols.Length);
-        if(cols.Length != 0)
+        if (cols.Length != 0)
         {
-            foreach(var x in cols)
+            foreach (var x in cols)
             {
                 Vector2 nockbackVector = x.transform.position - transform.position.normalized;
-                x.GetComponent<IEnemy>().TakeDamage(damage,nockback ,nockbackVector);
+                x.GetComponent<IEnemy>().TakeDamage(damage, nockback, nockbackVector);
             }
         }
         active = true;
+
+        if(_onDamageFinished != null)
+        {
+            _onDamageFinished();
+        }
+    }
+
+    public void RegisterOnDamageFinished(Action action)
+    {
+        _onDamageFinished += action;
     }
 }
