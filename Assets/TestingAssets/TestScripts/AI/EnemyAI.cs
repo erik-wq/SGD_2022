@@ -52,11 +52,13 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected bool _knockbackCleared = true;
     protected float _maxOpacity = 1.0f;
     protected bool _circleClockwise = false;
-    protected float _lastAoeFiret = 0;
+    protected float _lastAoeFired = 0;
     protected Animator _animator;
     protected float _rotationOffset = -90;
     private bool _isDead = false;
     protected EnemyControllerSingleton _enemyControl = EnemyControllerSingleton.GetInstance();
+    protected float _preChangeTime = 0;
+    protected bool? _preChange;
 
     protected bool _hasAggro = false;
     #endregion
@@ -70,6 +72,9 @@ public class EnemyAI : MonoBehaviour, IEnemy
         _animator = GetComponentInChildren<Animator>();
         _currentHP = MaxHP;
 
+        _followScript.BindOnMove(AdjustFlip);
+        _preChange = MainSprite.flipX;
+
         if (HopeTransform == null || PlayerTransform == null || Player == null || HopeAIScript == null)
         {
             LoadBasics();
@@ -79,7 +84,10 @@ public class EnemyAI : MonoBehaviour, IEnemy
     // Update is called once per frame
     protected void Update()
     {
-
+        if (HopeTransform == null || PlayerTransform == null || Player == null || HopeAIScript == null)
+        {
+            LoadBasics();
+        }
     }
 
     /// <summary>
@@ -95,6 +103,21 @@ public class EnemyAI : MonoBehaviour, IEnemy
         }
     }
 
+    private void AdjustFlip(Vector2 direction)
+    {
+        if (direction == Vector2.zero)
+            return;
+
+        if (direction.x > 0 && MainSprite.flipX == false)
+        {
+            MainSprite.flipX = true;
+        }
+        else if (direction.x < 0 && MainSprite.flipX == true)
+        {
+            MainSprite.flipX = false;
+        }
+    }
+
     private void LoadBasics()
     {
         HopeAIScript = Global.Instance.HopeScript;
@@ -106,7 +129,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     protected void CheckAoe()
     {
-        if (Time.time > _lastAoeFiret + SpikesCooldown)
+        if (Time.time > _lastAoeFired + SpikesCooldown)
         {
             if (_enemyControl.AskToFire())
             {
@@ -159,7 +182,8 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     protected bool CheckAttackRange()
     {
-        return Vector2.Distance(_rigidBody.position, PlayerTransform.position) <= AttackRangeDetection;
+        return Vector2.Distance(_rigidBody.position, PlayerTransform.position) <= AttackRangeDetection ||
+                Vector2.Distance(_rigidBody.position, HopeTransform.position) <= AttackRangeDetection;
     }
 
     protected bool CheckAttackRangeHitHope()
@@ -243,6 +267,10 @@ public class EnemyAI : MonoBehaviour, IEnemy
         if (_isDead)
             return;
 
+        if (Time.time < _lastAoeFired + SpikesCooldown)
+            return;
+        _lastAoeFired = Time.time;
+
         var step = 360.0f / SpikesCount;
         var offSet = UnityEngine.Random.Range(0, step);
 
@@ -257,8 +285,6 @@ public class EnemyAI : MonoBehaviour, IEnemy
             projectileLogic.ProjectileSpeed = SpikesSpeed;
             projectileLogic.SetDirection(direction);
         }
-
-        _lastAoeFiret = Time.time;
     }
 
     private void AdjustOpacity()

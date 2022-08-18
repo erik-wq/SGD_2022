@@ -56,12 +56,21 @@ public class ProjectileLogic : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Hope" || collision.tag == "Player")
+       if (collision.tag == "Hope" || collision.tag == "Player")
         {
-            IEnemy enemy = collision.gameObject.GetComponent<IEnemy>();
-            if (enemy == null)
-                enemy = collision.gameObject.GetComponentInParent<IEnemy>();
-            enemy.TakeDamage(ProjectileDamage);
+            IEnemy iEnemy = collision.gameObject.GetComponent<IEnemy>();
+            if (iEnemy == null)
+            {
+                iEnemy = collision.gameObject.GetComponentInParent<IEnemy>();
+            }
+
+            if (iEnemy == null)
+            {
+                iEnemy = collision.transform.parent.GetComponentInChildren<IEnemy>();
+            }
+
+            iEnemy.TakeDamage(ProjectileDamage);
+            Destroy(this.gameObject);
         }
     }
 }

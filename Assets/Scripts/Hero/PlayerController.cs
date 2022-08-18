@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     [SerializeField] private ContactFilter2D CollisionsFilter;
     [SerializeField] private AstarPath Pathfinder;
+
     [SerializeField] private BasicFollow HopesFollow;
     [SerializeField] private HopeAI HopeAI;
     [SerializeField] private Camera MainCamera;
@@ -31,14 +32,21 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     //Sword
     [SerializeField] private SpriteRenderer MainSprite;
+
     [SerializeField] private float SwordSlashZonesCount = 6;
+
     [SerializeField] private float SwordAnimationLength = 2;
     [SerializeField] private float SwordAttackCooldown = 3;
     [SerializeField] private float SwordAnimationDistance = 4;
     [SerializeField] private float SwordSlashRadius = 4;
     [SerializeField] private ContactFilter2D EnemyFilter;
-    [SerializeField] private float SwordDamage = 4;
+    [SerializeField] private float SwordDamage = 25;
     [SerializeField] private float SwordForce = 500;
+    [SerializeField] private float SwordHeavyPhaseDamage = 15;
+    [SerializeField] private float HeavyPhaseForce = 0;
+    [SerializeField] private float HeavyFinishedRadius = 5;
+    [SerializeField] private float HeavyFinisherDamage = 30;
+    [SerializeField] private float HeavyFinisherForce = 650;
 
     [SerializeField] private float AttackMovementspeedForward = 10;
     [SerializeField] private float AttackMovementspeedBackwards = 10;
@@ -71,13 +79,15 @@ public class PlayerController : MonoBehaviour, IEnemy
     private float _sprintStart;
     private bool _sprintInProgress = false;
     private float _sprintRegargeCounter = 0;
+    private bool _isAttacking = false;
     private bool _isHeavyAttacking = false;
     private bool _isAttackDirectionRight = false;
 
     private Vector2 _dashDirection;
-    private bool dashing = false;
+    private bool _isDashing = false;
     private bool canDash = true;
     private Vector3 effectOfset;
+    private bool _isStunned = false;
     #endregion
 
     #region Public
@@ -110,15 +120,17 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     private void FixedUpdate()
     {
-        if (dashing)
+        if (_isDashing)
         {
-            //_rigidBody2D.velocity = _dashDirection * dashSpeedModifier * MovementSpeedForward * Time.fixedDeltaTime;
-            _rigidBody2D.MovePosition(_rigidBody2D.position + _dashDirection * MovementSpeedForward * dashSpeedModifier *Time.fixedDeltaTime);
+            _rigidBody2D.MovePosition(_rigidBody2D.position + _dashDirection * MovementSpeedForward * dashSpeedModifier * Time.fixedDeltaTime);
             return;
         }
         CheckSwordAnimation();
         //HandleDash();
         //HandleSprint();
+
+        HandleDash();
+        
         if (_movementInput != Vector2.zero && !IsMovementLocked)
         {
             Move(_movementInput);
@@ -135,7 +147,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     }
     private void LateUpdate()
     {
-        if (dashing)
+        if (_isDashing)
         {
             dashEffect.transform.position = transform.position + effectOfset;
         }
@@ -151,7 +163,19 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     public void OnAttackFinished()
     {
+        AttacksEnd();
+    }
+
+    public void HeavyAttackEnds()
+    {
+        AttacksEnd();
+    }
+
+    private void AttacksEnd()
+    {
+        _isAttacking = false;
         _isHeavyAttacking = false;
+        _isSwordSlashInProgress = false;
     }
 
     private void GenerateSlashZones()
@@ -177,9 +201,9 @@ public class PlayerController : MonoBehaviour, IEnemy
         TurnOffSlashZones();
     }
 
-    private void AdjustFlip(Vector2 direction)
+    public void AdjustFlip(Vector2 direction)
     {
-        if (_isHeavyAttacking)
+        if (_isAttacking)
             return;
 
         if (direction.x >= 0)
@@ -277,14 +301,6 @@ public class PlayerController : MonoBehaviour, IEnemy
         HealthBar.fillAmount = _currentHP / MaxHP;
     }
 
-    private void CheckSwordAnimation()
-    {
-        if (Time.time > _lastSlashTime + SwordAnimationLength)
-        {
-            _isSwordSlashInProgress = false;
-        }
-    }
-
     private void StartSprint()
     {
         if (_currentEnergy > MinimalEnergyToStartSprint)
@@ -352,6 +368,58 @@ public class PlayerController : MonoBehaviour, IEnemy
         return basicSpeed + value * SprintSpeed;
     }
 
+    public void HeavyAttackPhaseOne()
+    {
+        var direction = GetFaceDirection();
+        DamageEnemiesHeavyAttackPhases(-direction);
+    }
+
+    public void HeavyAttackPhaseTwo()
+    {
+        var direction = GetFaceDirection();
+        DamageEnemiesHeavyAttackPhases(direction);
+    }
+
+    public void HeavyAttackPhaseThree()
+    {
+        DamageEnemiesHeavyFinisher();
+    }
+
+    private void DamageEnemiesHeavyAttackPhases(Vector2 direction)
+    {
+        if (_swordSlashZones.Count == 0)
+            return;
+
+        TurnOnSlashZones();
+        var angle = MathUtility.FullAngle(Vector2.up, direction);
+        var step = 360.0f / SwordSlashZonesCount;
+
+        var zone = Convert.ToInt32(Math.Floor(angle / step));
+
+        var enemies = new List<Collider2D>();
+        _swordSlashZones[zone].OverlapCollider(EnemyFilter, enemies);
+
+        foreach (var item in enemies)
+        {
+            if (item.gameObject.tag == "EnemyHitCollider")
+            {
+                IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
+                if (iEnemy == null)
+                {
+                    iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
+                }
+
+                if (iEnemy == null)
+                {
+                    iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
+                }
+
+                iEnemy.TakeDamage(SwordHeavyPhaseDamage, HeavyPhaseForce, this.transform.position);
+            }
+        }
+        TurnOffSlashZones();
+    }
+
     private void DamageEnemies(Vector2 direction)
     {
         if (_swordSlashZones.Count == 0)
@@ -386,6 +454,34 @@ public class PlayerController : MonoBehaviour, IEnemy
         }
         TurnOffSlashZones();
     }
+
+    private void DamageEnemiesHeavyFinisher()
+    {
+        if (_swordSlashZones.Count == 0)
+            return;
+
+        var enemies = Physics2D.OverlapCircleAll(this.transform.position, HeavyFinishedRadius);
+
+        foreach (var item in enemies)
+        {
+            if (item.gameObject.tag == "EnemyHitCollider")
+            {
+                IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
+                if (iEnemy == null)
+                {
+                    iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
+                }
+
+                if (iEnemy == null)
+                {
+                    iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
+                }
+
+                iEnemy.TakeDamage(HeavyFinisherDamage, HeavyFinisherForce, this.transform.position);
+            }
+        }
+    }
+
     private void HandleDash()
     {
         if(_movementInput == Vector2.zero)
@@ -400,7 +496,7 @@ public class PlayerController : MonoBehaviour, IEnemy
                 _dashDirection = _movementInput;
                 canDash = false;
 
-                dashing = true;
+                _isDashing = true;
                 StartCoroutine(Dash());
             }
         }
@@ -415,9 +511,9 @@ public class PlayerController : MonoBehaviour, IEnemy
             renderer.flip = DashVector();
         }
         dashEffect.Play();
-        Debug.Log(dashEffect.isPlaying);
+        
         yield return new WaitForSeconds(dashTime);
-        dashing = false;
+        _isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
@@ -447,9 +543,12 @@ public class PlayerController : MonoBehaviour, IEnemy
         if (input == Vector2.zero)
             return;
 
+        if (_isHeavyAttacking || _isStunned)
+            return;
+
         float movementSpeed = 0;
 
-        if (!_isHeavyAttacking)
+        if (!_isAttacking)
         {
             if (_sprintInProgress)
             {
@@ -467,10 +566,7 @@ public class PlayerController : MonoBehaviour, IEnemy
 
         CameraManagement.SetPlayersSpeed(movementSpeed);
 
-        //if (TryMove(input, movementSpeed).Count == 0)
-        //{
         _rigidBody2D.MovePosition(_rigidBody2D.position + input * movementSpeed * Time.fixedDeltaTime);
-        //}
     }
 
     private List<RaycastHit2D> TryMove(Vector2 direction, float movementSpeed)
@@ -530,11 +626,11 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     private void OnFire()
     {
-        if (!_isSwordSlashInProgress && Time.time > _lastSlashTime + SwordAttackCooldown && !ActionLocked)
+        if (!_isSwordSlashInProgress && Time.time > _lastSlashTime + SwordAttackCooldown && !ActionLocked && !_isStunned)
         {
             _lastSlashTime = Time.time;
             _animator.Play("Player_Attack");
-            _isHeavyAttacking = true;
+            _isAttacking = true;
             AdjustAttackDirection();
         }
 
@@ -549,8 +645,10 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     private void OnSprint()
     {
-        if (!ActionLocked)
+        if (!ActionLocked && !_isStunned)
+        {
             StartSprint();
+        }
     }
 
     private void OnFireLaser()
@@ -565,6 +663,22 @@ public class PlayerController : MonoBehaviour, IEnemy
             HopeAI.OnThrow();
     }
 
+    private void OnHeavyAttack()
+    {
+        if (!_isSwordSlashInProgress && !ActionLocked && !_isStunned)
+        {
+            _lastSlashTime = Time.time;
+            _animator.Play("ComboAttack");
+            _isHeavyAttacking = true;
+            AdjustAttackDirection();
+        }
+    }
+
+    public void PlayerTakesDamageEnd()
+    {
+        _isStunned = false;
+    }
+
     private void OnExplode()
     {
         if (!ActionLocked)
@@ -573,7 +687,13 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     public bool TakeDamage(float damage, float force, Vector2 origin)
     {
+        if (_isDashing)
+            return false;
+
         _currentHP -= damage;
+        AttacksEnd();
+        _animator.Play("PlayerTakeDamage");
+        _isStunned = true;
         if (_currentHP <= 0)
             Die();
         AdjustHealthBar();

@@ -300,6 +300,7 @@ MonoBehaviour:
     maxNormalAngle: 0
   AggroColider: {fileID: 2565003934881450045}
   GraphicsTransform: {fileID: 2565003936322571077}
+  AttackAnimator: {fileID: 0}
   DebugControlComponent: {fileID: 0}
   PlayerTransform: {fileID: 0}
   HopeTransform: {fileID: 0}
@@ -327,6 +328,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Seeker: {fileID: 2565003934881450046}
   MovementSpeed: 14
+  _mainSprite: {fileID: 0}
+  MainAnimator: {fileID: 0}
+  Damage: 20
   CrossingCooldown: 5
   CrossingChance: 5
   CrossingSpeed: 25
@@ -425,7 +429,7 @@ Transform:
   m_GameObject: {fileID: 2565003936322571076}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 0.154524, y: 0.154524, z: 0.154524}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4428870901625356850}
@@ -473,7 +477,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0a094d4a6173faf42bf5761fa6d1d8c2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 566eac91d5b1ae74b9671bf47efa28b1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -640,14 +644,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8255390475278055918}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: -5.7, y: -0.26, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.91, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2565003936322571077}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!96 &6148935318932271957
 TrailRenderer:
   serializedVersion: 3
@@ -693,7 +697,7 @@ TrailRenderer:
   m_Time: 2
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 14.668772
+    widthMultiplier: 1.6434659
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -721,9 +725,9 @@ TrailRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 0, g: 0, b: 0, a: 0.7764706}
-      key2: {r: 0, g: 0, b: 0, a: 0.24313726}
-      key3: {r: 0, g: 0, b: 0, a: 0}
+      key1: {r: 0, g: 0, b: 0, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0.39607844}
+      key3: {r: 0, g: 0, b: 0, a: 0.07058824}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
@@ -737,16 +741,16 @@ TrailRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 37008
-      atime2: 58596
-      atime3: 65535
-      atime4: 0
+      atime1: 17540
+      atime2: 37779
+      atime3: 58596
+      atime4: 65535
       atime5: 0
       atime6: 0
       atime7: 0
       m_Mode: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 4
+      m_NumAlphaKeys: 5
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0

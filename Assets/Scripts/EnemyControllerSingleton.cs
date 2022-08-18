@@ -7,13 +7,13 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class EnemyControllerSingleton
+    public class EnemyControllerSingleton : MonoBehaviour
     {
         private static EnemyControllerSingleton _instance = new EnemyControllerSingleton();
 
         #region Settings
         private const int MAX_FIRE_AT_ONCE = 1;
-        private const float FIRE_DELAY = 3.5f;
+        private const float FIRE_DELAY = 2.5f;
         #endregion
 
         #region Private
@@ -22,6 +22,27 @@ namespace Assets.Scripts
         #endregion
         private EnemyControllerSingleton()
         {
+            Init();
+        }
+
+        private void Awake()
+        {
+            // If there is an instance, and it's not me, delete myself.
+
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this);
+            }
+            else
+            {
+                _instance = this;
+                _instance.Init();
+            }
+        }
+
+        private void Init()
+        {
+            _lastFires = new List<float>();
             for (int i = 0; i < MAX_FIRE_AT_ONCE; i++)
             {
                 _lastFires.Add(0);
