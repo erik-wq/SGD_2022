@@ -16,8 +16,8 @@ public class HopeIdle : BaseState
     }
     public override void Start()
     {
-        _machine.AI.follow.SetTarget(_machine.AI.target);
-        _machine.AI.target.position = RandomPos();
+        _machine.AI.follow.SetTarget(_machine.AI.player);
+        //_machine.AI.target.position = RandomPos();
     }
     public override void FixedUpdate()
     {
@@ -31,6 +31,7 @@ public class HopeIdle : BaseState
             Exit();
             return;
         }
+        /*
         if (CheckPosition())
         {
             Vector2 dest = RandomPos();
@@ -49,7 +50,7 @@ public class HopeIdle : BaseState
         if (Vector2.Distance(_machine.AI.transform.position, path[path.Count - 1]) < 1.4f)
         {
             Count();
-        }
+        }*/
     }
     public override void Exit()
     {
@@ -69,31 +70,32 @@ public class HopeIdle : BaseState
         _count = 0;
         return dest;
     }
-    private void Count()
-    {
-        if (_range == 0)
-        {
-            _range = Random.Range(8, 25);
-        }
-        _count++;
-        if (_count >= _range)
-        {
-            Vector2 dest = RandomPos();
-            if (dest == Vector2.zero)
-            {
-                return;
-            }
-            _machine.AI.target.position = dest;
-            _range = 0;
-        }
-    }
-    private bool CheckPosition()
-    {
-        if (Physics2D.OverlapCircle(_machine.AI.target.position, 0.75f, _machine.AI.objectMask))
-        {
-            return true;
-        }
-        return false;
-    }
+    //private void Count()
+    //{
+    //    if (_range == 0)
+    //    {
+    //        _range = Random.Range(8, 25);
+    //    }
+    //    _count++;
+    //    if (_count >= _range)
+    //    {
+    //        Vector2 dest = RandomPos();
+    //        if (dest == Vector2.zero)
+    //        {
+    //            return;
+    //        }
+    //        _machine.AI.target.position = dest;
+    //        _range = 0;
+    //    }
+    //}
+    
+    //private bool CheckPosition()
+    //{
+    //    if (Physics2D.OverlapCircle(_machine.AI.target.position, 0.75f, _machine.AI.objectMask))
+    //    {
+    //        return true;
+    //    }
+    //    return false;
+    //}
     #endregion
 }

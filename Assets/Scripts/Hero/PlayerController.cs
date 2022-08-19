@@ -136,7 +136,6 @@ public class PlayerController : MonoBehaviour, IEnemy
             dashSlider.fillAmount = value;
         }
 
-        HandleDash();
         
         if (_movementInput != Vector2.zero && !IsMovementLocked)
         {
@@ -157,6 +156,13 @@ public class PlayerController : MonoBehaviour, IEnemy
         if (_isDashing)
         {
             dashEffect.transform.position = transform.position + effectOfset;
+        }
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            HandleDash();
         }
     }
 
@@ -493,24 +499,26 @@ public class PlayerController : MonoBehaviour, IEnemy
     {
         if(dashSlider.fillAmount < 0.5f)
         {
+            Debug.Log("ammount");
             return;
         }
         if(_movementInput == Vector2.zero)
         {
+            Debug.Log("no input");
             return;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+            Debug.Log("input");
+        if (canDash)
         {
-            if (canDash)
-            {
-                dashSlider.fillAmount -= 0.5f;
-                dashEffect.transform.position = transform.position + effectOfset;
-                _dashDirection = _movementInput;
+            dashSlider.fillAmount -= 0.5f;
+            dashEffect.transform.position = transform.position + effectOfset;
+            _dashDirection = _movementInput;
 
-                _isDashing = true;
-                StartCoroutine(Dash());
-            }
+            _isDashing = true;
+            StartCoroutine(Dash());
+            return;
         }
+        Debug.Log("cant dash");
     }
 
     private IEnumerator Dash()
@@ -719,6 +727,8 @@ public class PlayerController : MonoBehaviour, IEnemy
         if (collision.gameObject.tag == "Enemy") return;
         if (_isDashing)
         {
+            StopAllCoroutines();
+            canDash = true;
             _isDashing = false;
         }
     }
