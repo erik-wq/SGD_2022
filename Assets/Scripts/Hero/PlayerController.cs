@@ -65,6 +65,9 @@ public class PlayerController : MonoBehaviour, IEnemy
     [SerializeField] private float EnergyRechardDelayWhileRunning = 0.8f;
     [SerializeField] private float dashRechargePerSecond = 0.1f;
 
+
+    [SerializeField] private Animator _animator;
+    [SerializeField] private PlayerImpactControl ImpactControl;
     #endregion
 
     #region Private
@@ -75,7 +78,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     private float _currentEnergy = 0;
 
     private List<Collider2D> _swordSlashZones = new List<Collider2D>();
-    private Animator _animator;
+    
     private float _currentHP;
 
     //Sprint
@@ -117,8 +120,6 @@ public class PlayerController : MonoBehaviour, IEnemy
         _currentHP = MaxHP;
         _rigidBody2D = GetComponent<Rigidbody2D>();
         IsMovementLocked = false;
-        _animator = GetComponentInChildren<Animator>();
-
         Global.Instance.PlayerTransform = this.transform;
         Global.Instance.PlayerScript = this;
         GenerateSlashZones();
@@ -739,7 +740,13 @@ public class PlayerController : MonoBehaviour, IEnemy
             Die();
         AdjustHealthBar();
         ApplyForce(force, origin);
+        PlayImpactAnimation();
         return false;
+    }
+
+    private void PlayImpactAnimation()
+    {
+        ImpactControl.Play();
     }
 
     protected void ApplyForce(float force, Vector2 origin)

@@ -39,6 +39,9 @@ namespace Assets.Scripts.Totems
         [SerializeField] private int MaxGhosts = 3;
 
         [SerializeField] private Animator _animator;
+
+        [SerializeField] private AudioSource AudioSourceMember;
+        [SerializeField] private AudioClip AudioDying;
         #endregion
 
         #region Private
@@ -51,6 +54,7 @@ namespace Assets.Scripts.Totems
         private event Action _onDestroyed;
         private int _meleeCount = 0;
         private int _shadowCount = 0;
+        private bool _isDead = false;
         #endregion
         private void Start()
         {
@@ -78,11 +82,12 @@ namespace Assets.Scripts.Totems
         private void Die()
         {
             _isRunning = false;
+            _isDead = true;
             NameText.enabled = false;
             HealImage.enabled = false;
             _hasBeenDestroyed = true;
 
-            if(_onDestroyed != null)
+            if (_onDestroyed != null)
             {
                 _onDestroyed();
             }
@@ -205,10 +210,13 @@ namespace Assets.Scripts.Totems
 
         public bool TakeDamage(float damage)
         {
+            if (_isDead)
+                return false;
             _currentHP -= damage;
             if (_currentHP <= 0)
             {
                 Die();
+                AudioSourceMember.PlayOneShot(AudioDying);
                 _animator.SetBool("IsDead", true);
             }
             else
@@ -221,7 +229,7 @@ namespace Assets.Scripts.Totems
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if(collision.gameObject.tag == "Player" && !_hasBeenDestroyed)
+            if (collision.gameObject.tag == "Player" && !_hasBeenDestroyed)
             {
                 StartEncounter();
                 NameText.text = Name;

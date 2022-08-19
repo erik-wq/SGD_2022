@@ -14,6 +14,8 @@ namespace Assets.Scripts.Totems
         public delegate void OnSpawnedDelegate(GameObject obj);
         public float SpawnTime = 1f;
         public GameObject SpawnMeele;
+        public AudioClip ThunderAudioClip;
+        public AudioSource MainAudioSource;
         #endregion
 
         #region Private
@@ -56,6 +58,7 @@ namespace Assets.Scripts.Totems
             _isLightingSpawned = true;
             var script = LightingObject.GetComponent<Thunder>();
             script.OnThunderEnds += OnLightingFinishes;
+            MainAudioSource.PlayOneShot(ThunderAudioClip);
             LightingObject.SetActive(true);
         }
 
@@ -63,13 +66,13 @@ namespace Assets.Scripts.Totems
         {
             var obj = Instantiate(SpawnMeele, this.transform.position, Quaternion.identity);
             _onSpawned(obj);
-            Wait();
-            Destroy(this.gameObject);
+            StartCoroutine(Wait());
         }
 
         IEnumerator Wait()
         {
-            yield return new WaitForSecondsRealtime(1.5f);
+            yield return new WaitForSecondsRealtime(0.5f);
+            Destroy(this.gameObject);
         }
 
         private void AdjustVisibility()

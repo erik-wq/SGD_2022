@@ -22,7 +22,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     //[SerializeField] protected float KnockbackModifier = 1f;
     [SerializeField] protected float AttackKnockbackPower = 1f;
     [SerializeField] protected float AttackSpeed = 1f;
-    [SerializeField] protected float AttackRadius = 360; //Not yet implemented
+    [SerializeField] protected float AttackRadius = 360;
     [SerializeField] protected float AttackRangeDetection = 2.0f;
     [SerializeField] protected float AttackRange = 3.0f;
     [SerializeField] protected float AttackDelay = 1.3f;
@@ -197,7 +197,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
             _lastAttackTime = Time.time;
             if (CheckAttackRangeHit())
             {
-                Player.TakeDamage(Damage, AttackKnockbackPower, _rigidBody.position);
+                Player.TakeDamage(Damage, AttackKnockbackPower, _rigidBody.position); 
             }
 
             if (CheckAttackRangeHitHope())
