@@ -76,6 +76,9 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     protected float _circleRadius;
     protected float _circleRadiusLostDistance;
     protected bool _isDead = false;
+    protected event Action _onDeath;
+    protected bool _isFollowPause = false;
+
     #endregion
 
     // Start is called before the first frame update
@@ -94,7 +97,7 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
         _circleRadiusLostDistance = _circleRadius + CircleRadiusLost;
 
-        if ( HopeTransform == null || PlayerTransform == null)
+        if (HopeTransform == null || PlayerTransform == null)
         {
             //HopeAIScript = Global.Instance.HopeScript;
             HopeTransform = Global.Instance.HopeTransform;
@@ -114,8 +117,16 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         if (_isDead)
             return;
 
-        CheckTargets();
-        CheckDistance();
+        if (!_isFollowPause)
+        {
+            CheckTargets();
+            CheckDistance();
+        }
+    }
+
+    public void RegisterOnDeath(Action action)
+    {
+        _onDeath += action;
     }
 
     private void CheckDistance()
@@ -146,6 +157,20 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         _circleFollow.Paused = false;
         _circleFollow.InitCircle();
         _circleFollow.SetTarget(GetTarget());
+    }
+
+    public void PauseFollow()
+    {
+        _isFollowPause = true;
+        _seekingFollow.Paused = true;
+        _circleFollow.Paused = true;
+    }
+
+    public void UnPauseFollow()
+    {
+        _isFollowPause = false;
+        _seekingFollow.Paused = false;
+        _circleFollow.Paused = false;
     }
 
     private void SwitchToSeeking()
@@ -407,6 +432,11 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         {
             _isDead = true;
             AttackAnimator.Play("GhostDeath");
+            _circleFollow.enabled = false;
+            _seekingFollow.Paused = true;
+
+            if (_onDeath != null)
+                _onDeath();
         }
     }
 
@@ -423,5 +453,11 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         _circleFollow.enabled = false;
         _seekingFollow.Paused = true;
         _isDead = true;
+    }
+
+    public void ClearForces()
+    {
+        _rigidBody.velocity = Vector3.zero;
+        _rigidBody.angularVelocity = 0;
     }
 }

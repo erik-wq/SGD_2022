@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1845787438649449871}
   - component: {fileID: 1112854099773381599}
   - component: {fileID: 786975577572449212}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: trails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_LightType: 1
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 0.65723264, g: 0.7736216, b: 1, a: 1}
+  m_Color: {r: 0.9535253, g: 1, b: 0, a: 1}
   m_Intensity: 5.08
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -826,7 +826,7 @@ MonoBehaviour:
   m_LightType: 1
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.9974975, b: 0.6289308, a: 1}
   m_Intensity: 2.5
   m_LightVolumeIntensity: 0.12
   m_LightVolumeIntensityEnabled: 0
@@ -1417,7 +1417,7 @@ Transform:
   - {fileID: 3860632707701779683}
   - {fileID: 6823772154331511446}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &7311925748371843254
 Rigidbody2D:
@@ -1481,7 +1481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  uniqueID: 4000809891762559
+  uniqueID: 798534708563162459
   updateError: 0.2
   checkTime: 0.1
 --- !u!70 &7311925748371843262
@@ -1551,24 +1551,25 @@ MonoBehaviour:
   HopesTransform: {fileID: 7311925748371843255}
   PlayersTransform: {fileID: 0}
   PlayerController: {fileID: 0}
-  HopesSprite: {fileID: 0}
+  HopesSprite: {fileID: 624588316006356255}
   HopeScript: {fileID: 1294598064}
   LaserObject: {fileID: 0}
   LaserSpriteTransform: {fileID: 0}
   MainCamera: {fileID: 0}
   PlayerAnimator: {fileID: 0}
+  PlayerControlScript: {fileID: 0}
   Length: 2.1
-  EnergyCost: 15
+  EnergyCost: 90
   Range: 50
   Width: 4
   DirectionLocked: 0
   MovementLocked: 1
   RotationSpeed: 30
   DamagePerSecond: 50
-  Cooldown: 10
+  Cooldown: 25
   CooldownText: {fileID: 0}
   ProjectileSpeed: 20
-  AimObject: {fileID: 0}
+  AimObject: {fileID: 3895711242072366241}
 --- !u!114 &1294598057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1590,11 +1591,11 @@ MonoBehaviour:
   IndicatorTransform: {fileID: 0}
   PlayerControllerScript: {fileID: 0}
   HopeScript: {fileID: 1294598064}
-  EnergyCost: 25
-  MaxGrabRange: 25
-  MaxShootRange: 40
-  ProjectileSpeed: 15
-  Cooldown: 10
+  EnergyCost: 40
+  MaxGrabRange: 80
+  MaxShootRange: 80
+  ProjectileSpeed: 20
+  Cooldown: 30
   CooldownText: {fileID: 0}
 --- !u!114 &1294598064
 MonoBehaviour:
@@ -1609,7 +1610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 10
-  MaxHP: 100
+  MaxHP: 200
   StunnedLenght: 1.3
   MainSprite: {fileID: 624588316006356255}
   LightTransform: {fileID: 7531003618859278250}
@@ -1618,11 +1619,11 @@ MonoBehaviour:
   MaxLightIntensity: 2.5
   MinLightScale: 3
   MinLightIntensity: 0.5
-  LowEnergyState: 20
+  LowEnergyState: 40
   ObjectMaks:
     serializedVersion: 2
     m_Bits: 0
-  _hp: 0
+  _hp: 200
   target: {fileID: 0}
   idleRadius: 1
   player: {fileID: 0}
@@ -1661,7 +1662,7 @@ MonoBehaviour:
   ExplosionRadius: 10
   ExplosionDamage: 50
   CooldownText: {fileID: 0}
-  Cost: 15
+  Cost: 65
 --- !u!61 &4157463999772388707
 BoxCollider2D:
   m_ObjectHideFlags: 0
