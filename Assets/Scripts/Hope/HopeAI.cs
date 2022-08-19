@@ -24,6 +24,8 @@ public class HopeAI : MonoBehaviour, IEnemy
     [SerializeField] private float MinLightIntensity = 0.5f;
     [SerializeField] [Range(0, 100)] private float LowEnergyState = 30;
     [SerializeField] LayerMask ObjectMaks;
+    [SerializeField] private Animator MainAnimator;
+    [SerializeField] private Animator EffectsAnimator;
     #endregion
 
     #region Private
@@ -40,7 +42,8 @@ public class HopeAI : MonoBehaviour, IEnemy
     private bool _isMovementLocked = false;
     private bool _isAbilityLocked = false;
     private bool _isHopeLocked = false;
-    private Animator _animator;
+    
+    private bool _isInvulnerable = false;
     private Vector2 _lastPossition;
     private float _lastTimeChecked = 0;
     #endregion
@@ -129,13 +132,13 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     void Awake()
     {
-        _animator = GetComponentInChildren<Animator>();
+        MainAnimator = GetComponentInChildren<Animator>();
         _hopeLaser = GetComponent<HopeLaser>();
         _hopeThrow = GetComponent<HopeThrow>();
         _followScript = GetComponent<BasicFollow>();
         _hopeExplosion = GetComponent<HopeExplosion>();
         _hp = MaxHP;
-        _animator.SetFloat("Energy", _hp);
+        MainAnimator.SetFloat("Energy", _hp);
 
         Global.Instance.HopeTransform = this.transform;
         Global.Instance.HopeScript = this;
@@ -149,15 +152,18 @@ public class HopeAI : MonoBehaviour, IEnemy
         (_followScript as BasicFollow).BindOnMove(OnMove);
         (_followScript as BasicFollow).BindOnStopMoving(OnStopedMoving);
         _machine = new HopeStateMachine(this);
-        _animator = GetComponentInChildren<Animator>();
-        _animator.SetFloat("Energy", _hp);
+        MainAnimator.SetFloat("Energy", _hp);
+    }
+
+    public void ClearForces()
+    {
     }
 
     private void OnMove(Vector2 direction)
     {
         if (direction != Vector2.zero)
         {
-            _animator.SetBool("IsRunning", true);
+            MainAnimator.SetBool("IsRunning", true);
             AdjustFlip(direction);
         }
     }
@@ -179,17 +185,27 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     private void OnStopedMoving()
     {
-        _animator.SetBool("IsRunning", false);
+        MainAnimator.SetBool("IsRunning", false);
     }
 
     private void FixedUpdate()
-    {
+    { 
         if (_machine.state == null)
         {
             return;
         }
 
         _machine.state.FixedUpdate();
+    }
+
+    public void UnpauseFollow()
+    {
+
+    }
+
+    public void PauseFollow()
+    {
+
     }
 
     public void Collect()
@@ -205,8 +221,11 @@ public class HopeAI : MonoBehaviour, IEnemy
     #region damage
     public bool TakeDamage(float damage)
     {
+        if (_isInvulnerable)
+            return false;
+
         _hp -= damage;
-        _animator.SetFloat("Energy", _hp);
+        MainAnimator.SetFloat("Energy", _hp);
         AdjustColor();
         AdjustLight();
 
@@ -256,6 +275,7 @@ public class HopeAI : MonoBehaviour, IEnemy
                 if (_hopeThrow.Activate())
                 {
                     SetHP(_hp - _hopeThrow.GetCost());
+                    CheckState();
                 }
             }
         }
@@ -275,6 +295,7 @@ public class HopeAI : MonoBehaviour, IEnemy
                 if (_hopeLaser.Activate())
                 {
                     SetHP(_hp - _hopeLaser.GetCost());
+                    CheckState();
                 }
             }
         }
@@ -302,7 +323,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     private void SetHP(float hp)
     {
         this._hp = hp;
-        _animator.SetFloat("Energy", _hp);
+        MainAnimator.SetFloat("Energy", _hp);
         AdjustLight();
     }
 
@@ -322,9 +343,32 @@ public class HopeAI : MonoBehaviour, IEnemy
         SetHP(newHP);
     }
 
+    public void MakeInvulnerable()
+    {
+        _isInvulnerable = true;
+    }
+
+    public void MakeVulnerable()
+    {
+        _isInvulnerable = false;
+    }
+
     public bool TakeDamage(float damage, float force, Vector2 origin)
     {
         return this.TakeDamage(damage);
+    }
+    private void CheckState()
+    {
+        if(_machine.state.GetType() == typeof(HopeColect) || _machine.state.GetType() == typeof(HopeLowEnergy))
+        {
+            follow.SetTarget(null);
+            _machine.state.Exit();
+        }
+    }
+
+    public void UnPauseFollow()
+    {
+        throw new System.NotImplementedException();
     }
     #endregion
 }

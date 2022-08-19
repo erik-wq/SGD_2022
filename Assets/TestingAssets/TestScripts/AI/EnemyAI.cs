@@ -7,6 +7,7 @@ using Pathfinding;
 using UnityEngine.Rendering.Universal;
 using Assets.Scripts.Utils;
 using Assets.Scripts;
+using System;
 
 public class EnemyAI : MonoBehaviour, IEnemy
 {
@@ -21,7 +22,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     //[SerializeField] protected float KnockbackModifier = 1f;
     [SerializeField] protected float AttackKnockbackPower = 1f;
     [SerializeField] protected float AttackSpeed = 1f;
-    [SerializeField] protected float AttackRadius = 360; //Not yet implemented
+    [SerializeField] protected float AttackRadius = 360;
     [SerializeField] protected float AttackRangeDetection = 2.0f;
     [SerializeField] protected float AttackRange = 3.0f;
     [SerializeField] protected float AttackDelay = 1.3f;
@@ -61,6 +62,8 @@ public class EnemyAI : MonoBehaviour, IEnemy
     protected bool? _preChange;
 
     protected bool _hasAggro = false;
+    protected event Action _onDeath;
+    protected bool _isFollowPaused = false;
     #endregion
     public GameObject effect;
     // Start is called before the first frame update
@@ -118,6 +121,11 @@ public class EnemyAI : MonoBehaviour, IEnemy
         }
     }
 
+    public void RegisterOnDeath(Action action)
+    {
+        _onDeath += action;
+    }
+
     private void LoadBasics()
     {
         HopeAIScript = Global.Instance.HopeScript;
@@ -147,9 +155,22 @@ public class EnemyAI : MonoBehaviour, IEnemy
                 _rigidBody.velocity = Vector3.zero;
                 _rigidBody.angularVelocity = 0;
                 _knockbackCleared = true;
-                _followScript.Paused = false;
+                if (!_isFollowPaused)
+                    _followScript.Paused = false;
             }
         }
+    }
+
+    public void PauseFollow()
+    {
+        _followScript.Paused = true;
+        _isFollowPaused = true;
+    }
+
+    public void UnPauseFollow()
+    {
+        _followScript.Paused = false;
+        _isFollowPaused = false;
     }
 
     protected void CheckAttack()
@@ -162,6 +183,12 @@ public class EnemyAI : MonoBehaviour, IEnemy
         }
     }
 
+    public void ClearForces()
+    {
+        _rigidBody.velocity = Vector3.zero;
+        _rigidBody.angularVelocity = 0;
+    }
+
     public void DoMeleeDamageFromAnimation()
     {
         if (_executingAttack)
@@ -170,7 +197,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
             _lastAttackTime = Time.time;
             if (CheckAttackRangeHit())
             {
-                Player.TakeDamage(Damage, AttackKnockbackPower, _rigidBody.position);
+                Player.TakeDamage(Damage, AttackKnockbackPower, _rigidBody.position); 
             }
 
             if (CheckAttackRangeHitHope())
@@ -305,6 +332,11 @@ public class EnemyAI : MonoBehaviour, IEnemy
         foreach (Collider2D x in cols)
         {
             x.enabled = false;
+        }
+
+        if (_onDeath != null)
+        {
+            _onDeath();
         }
 
         GetComponent<Seeker>().enabled = false;

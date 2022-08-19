@@ -1,0 +1,404 @@
+[33mcommit ba8428972386c57dfdf3b5ff33f801f1e43c94d0[m
+Author: DESKTOP-CQDUMI2\Padmagriha <patriciasujova@gmail.com>
+Date:   Fri Aug 19 14:14:28 2022 +0200
+
+    fewf:
+
+[33mcommit a79ea0c7b849a454f341bfb158ecf400cf207938[m[33m ([m[1;31morigin/Jul[m[33m, [m[1;32mJul[m[33m)[m
+Author: DESKTOP-CQDUMI2\Padmagriha <patriciasujova@gmail.com>
+Date:   Fri Aug 19 14:14:28 2022 +0200
+
+    fewf:
+
+[33mcommit 1b4c3bce60834b66ecde0d2621f3c108d499e4fb[m
+Author: DESKTOP-CQDUMI2\Padmagriha <patriciasujova@gmail.com>
+Date:   Fri Aug 19 14:01:27 2022 +0200
+
+    Upszr
+
+[33mcommit 8b236d29027112256f134ef0b8f39e174971a51c[m[33m ([m[1;36mHEAD[m[33m)[m
+Author: DESKTOP-CQDUMI2\Padmagriha <patriciasujova@gmail.com>
+Date:   Fri Aug 19 14:01:27 2022 +0200
+
+    Upszr
+
+[33mcommit e02f4dc1bfd9b57d82f32dede88d3a25b3a69c4c[m[33m ([m[1;31morigin/Erik[m[33m)[m
+Merge: bfa6820 0587317
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Fri Aug 19 10:46:25 2022 +0200
+
+    Merge branch 'Jan' into Erik
+
+[33mcommit bfa68204ac015468d3fe043ff56683c3e380ff87[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Fri Aug 19 10:44:47 2022 +0200
+
+    hope and dash fix
+
+[33mcommit 058731708706148d36839df0bad8020c8101db06[m[33m ([m[1;31morigin/Jan[m[33m)[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Fri Aug 19 03:31:53 2022 +0200
+
+    throw
+
+[33mcommit c05c93a0d5f5de3f3a3a224730b3e9898b347038[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Thu Aug 18 17:04:11 2022 +0200
+
+    sprite shape
+
+[33mcommit 29a2f03748ae3f7f62a46e6236ebbc6e4ca2b5a2[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Thu Aug 18 14:52:06 2022 +0200
+
+    update
+
+[33mcommit 1e9f7d54bfe1075eb2e312e66a217b7616836fe5[m
+Merge: 68b519c 2e52e9a
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Thu Aug 18 13:45:11 2022 +0200
+
+    Merge branch 'Erik' of https://github.com/erik-wq/SGD_2022 into Jan
+
+[33mcommit 68b519c2dfdf23c0f8fae789a32a8af26b2d044a[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Thu Aug 18 13:44:44 2022 +0200
+
+    update
+
+[33mcommit 2e52e9ad29a5c77ca616aa56d8ce10a2d707b945[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Thu Aug 18 13:43:53 2022 +0200
+
+    dash fix, lightning
+
+[33mcommit aec814d640c8359e836414f90868199349d5023a[m
+Merge: 8572c4e f44ab0f
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Thu Aug 18 11:38:24 2022 +0200
+
+    Merge branch 'Jan' into Erik
+
+[33mcommit f44ab0fcfe5d86c5738a71545f9516c75e3ccc80[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Thu Aug 18 11:32:47 2022 +0200
+
+    Jul scena
+
+[33mcommit 633760d9bd71a6c2eb09f4249e2974ad3749e8b5[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Wed Aug 17 23:24:37 2022 +0200
+
+    laser2
+
+[33mcommit 8b8a1ea6b61163764d6bd05a19bc7df42d2f3328[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Wed Aug 17 18:55:56 2022 +0200
+
+    Laser
+
+[33mcommit 8572c4e51362f63a722bf9926e627e15733a0ddf[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Wed Aug 17 16:36:49 2022 +0200
+
+    chapadla
+
+[33mcommit bfef53ff165f117393588e9d087d77ff9ae8a0ea[m[33m ([m[1;32mJan[m[33m)[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Wed Aug 17 16:15:49 2022 +0200
+
+    test
+
+[33mcommit 5715f9b12fec6927cb4dab316ef69aa0a554e535[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Wed Aug 17 15:59:26 2022 +0200
+
+    Update
+
+[33mcommit 455cb0bc14ab02f26221fb9024a5db77629c577d[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Wed Aug 17 11:27:39 2022 +0200
+
+    lightning
+
+[33mcommit 00ae55fe0729957696efa03f483ee7c6e027256a[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Tue Aug 16 18:40:16 2022 +0200
+
+    update
+
+[33mcommit 9d16fd984671b3609301cc1cb149a7493b9c0c54[m
+Merge: b9c01fd 4f7d2ca
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Tue Aug 16 15:01:06 2022 +0200
+
+    Merge branch 'Hope_Fix' into Erik
+
+[33mcommit 40e5d8f8296049cafb64d3e886f81051989260c0[m
+Merge: e1a7e84 4f7d2ca
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Tue Aug 16 14:13:19 2022 +0200
+
+    Merge branch 'Idle_Movement_modifi' of https://github.com/erik-wq/SGD_2022 into Jan
+
+[33mcommit e1a7e849ad5557aac8e5837592e6881030cd08ad[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Tue Aug 16 14:11:23 2022 +0200
+
+    Totems
+
+[33mcommit 4f7d2ca59536f2604a78b695f5c30dbe0e52069d[m[33m ([m[1;31morigin/Idle_Movement_modifi[m[33m)[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Tue Aug 16 14:06:45 2022 +0200
+
+    player dash
+
+[33mcommit b543a6fcbfe3b1d5ba8b56002778de17bfdb34c1[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Tue Aug 16 11:32:39 2022 +0200
+
+    hope AI fix
+
+[33mcommit 835b540e3ef32e14430bdb03ef8c01abfb2ed4fe[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Mon Aug 15 00:56:08 2022 +0200
+
+    Level
+
+[33mcommit b9c01fd6b84d0c9ad7c215b0153e410cb0407f88[m
+Author: erik-K <e.keckes8@gmail.com>
+Date:   Sun Aug 14 21:35:54 2022 +0200
+
+    lightning
+
+[33mcommit 6204aff05fd9b5ced7de41e953b7b0e80771655e[m
+Merge: c6d357c e855880
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Thu Aug 11 10:43:27 2022 +0200
+
+    Merge branch 'Jan' into Erik
+
+[33mcommit e8558800fd99b1b8f6ef3b586a8bbca699ee8c6b[m
+Merge: 1bd8d80 63738f2
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Thu Aug 11 10:29:19 2022 +0200
+
+    Merge branch 'Idle_Movement_modifi' of https://github.com/erik-wq/SGD_2022 into Jan
+
+[33mcommit c6d357c19c8f1c55e7a91dfe496229da356c3eca[m
+Merge: 63738f2 1bd8d80
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Thu Aug 11 10:20:04 2022 +0200
+
+    Merge branch 'Jan' into Erik
+
+[33mcommit 1bd8d800dc5ea0c4120c50f53e98656d9b76b97d[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Wed Aug 10 15:45:57 2022 +0200
+
+    Pre merge
+
+[33mcommit 63738f2c070d7a6146154a10f45c0736018f8627[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Wed Aug 10 15:04:26 2022 +0200
+
+    particles moving to hope
+
+[33mcommit fdd33b2afffcaa4fa6002a977b6cf98ff86e530e[m
+Merge: ae0ceef 6dd3e83
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Wed Aug 10 13:56:53 2022 +0200
+
+    Merge branch 'Idle_Movement_modifi' of https://github.com/erik-wq/SGD_2022 into Jan
+
+[33mcommit bb3adb6f4f8b51cebbdcbe1ef7fdbe4d4af24f3a[m
+Merge: 6dd3e83 ae0ceef
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Tue Aug 9 10:15:18 2022 +0200
+
+    Merge branch 'Jan' into Idle_Movement_modifi
+
+[33mcommit ae0ceefe5ab00440b1f34eecdd2d4d1c523acb41[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Mon Aug 8 21:29:20 2022 +0200
+
+    - Improved shadow enemies
+    - Basic animations
+
+[33mcommit 6dd3e83010cd97b4d5655bf831bfa24c543fa039[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Mon Aug 8 15:29:37 2022 +0200
+
+    idle movement fix
+
+[33mcommit b9e78fd139180669a1125684216089ab46cda553[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Mon Aug 8 13:11:56 2022 +0200
+
+    fix hope
+
+[33mcommit 949c88daa19ac36637e465350a5a871ab5e560af[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Mon Aug 8 11:13:07 2022 +0200
+
+    merge
+
+[33mcommit bcc96b5f393451f2b91c90caea56439e85823e80[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Sun Aug 7 21:44:12 2022 +0200
+
+    /Fix
+
+[33mcommit 7bdde1a02429e32a38c4014e1fa5f2e8ff451e86[m
+Merge: bbf913d 7f6c289
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Sun Aug 7 21:36:17 2022 +0200
+
+    Merge branch 'Idle_Movement_modifi' of https://github.com/erik-wq/SGD_2022 into Jan
+
+[33mcommit bbf913da2df34b36da03372bc4dffc49841341b0[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Sun Aug 7 15:52:10 2022 +0200
+
+    - Abilities
+    - Hopes light
+    - Ghosts put together
+
+[33mcommit 7f6c2899dde57a867c7b238aa5bdaadc80550e83[m
+Author: erik-K <e.keckes8@gmail.com>
+Date:   Sun Aug 7 11:44:32 2022 +0200
+
+    small fix
+
+[33mcommit 49b777972d2dcbf230907961f99b5d3e3785e8bb[m
+Author: erik-K <e.keckes8@gmail.com>
+Date:   Sun Aug 7 11:30:01 2022 +0200
+
+    hope AI fix
+
+[33mcommit 256ec1e21df66aa62161beeac28bff8b8647c977[m
+Author: erik-K <e.keckes8@gmail.com>
+Date:   Sat Aug 6 23:44:28 2022 +0200
+
+    Hope AI
+
+[33mcommit 0ba86faa2b451c69ea019e88b13547991c3594e7[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Sat Aug 6 21:20:58 2022 +0200
+
+    small change
+
+[33mcommit c4da7761f1226d495d00e69e6f86103767b2bdfc[m
+Merge: e3e5408 e6d8939
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Fri Aug 5 08:06:45 2022 +0200
+
+    Merge branch 'Jan' into Idle_Movement_modifi
+
+[33mcommit e6d89396402e748775a22d6530b3869b6de27410[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Thu Aug 4 22:37:12 2022 +0200
+
+    -Assets
+    -Hope throw
+    -Hope laser
+
+[33mcommit e3e5408037d4202dbc79dbfd4debd980948dcf44[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Thu Aug 4 19:20:40 2022 +0200
+
+    wander ai modified
+
+[33mcommit 86aa6e30ca5c25faadde0d38e06e7bcf0ce20171[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Tue Aug 2 10:40:23 2022 +0200
+
+    scenes control , main menu
+    
+    main menu setup
+    scenes controls with loading screen
+
+[33mcommit 7d05f8f7713d52c688c880c9a2f970638f5796e8[m
+Merge: 35908ad fbfc578
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Mon Aug 1 10:17:21 2022 +0200
+
+    Merge remote-tracking branch 'origin/Wandering_AI' into Jan
+
+[33mcommit 35908ada2ce15e5f1b94e6d289a548e1d587b788[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Mon Aug 1 10:15:05 2022 +0200
+
+    - Combat
+    - Sprint
+    - První assety importované
+
+[33mcommit fbfc578e253ef69078d7e24169dbff897e39ee1c[m[33m ([m[1;31morigin/Wandering_AI[m[33m)[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Mon Aug 1 10:14:23 2022 +0200
+
+    chase player fix
+
+[33mcommit 80ebafddfb15b13707973484f17ef59ee80f5327[m
+Author: erik-K <e.keckes8@gmail.com>
+Date:   Sun Jul 31 22:07:38 2022 +0200
+
+    unfinished changes
+
+[33mcommit 89a42ab3a187eaaed90fde64532b3a02f7e10893[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Sun Jul 31 20:20:23 2022 +0200
+
+    start wandering AI
+
+[33mcommit 958b6715fc0b5217cc20f2372fab24ce56334830[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Thu Jul 28 16:02:05 2022 +0200
+
+    polygon detection
+
+[33mcommit c5e290501700dc680693329f01d02d0a1262f219[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Tue Jul 26 07:39:46 2022 +0200
+
+    - Dynamické oddalování kamery podle rychlosti hráče
+
+[33mcommit 0233c6bdea41839b771f92ef938fb6d75aa0008a[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Tue Jul 26 01:39:38 2022 +0200
+
+    - Cinematic camera
+    - Sprint
+
+[33mcommit 30933c4f757adc5ade94aa5a2b0aa28403db1883[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Mon Jul 25 19:24:38 2022 +0200
+
+    - Základní AI
+    - Pathfinding/kontrola kolizí
+    - Základní nepřátelé, velký nepřítel, základní stíny
+
+[33mcommit 1acbced0ab56a38a8dee66215f5e83abdef6d21a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Jan Michalík <janmalinskymichalik@gmail.com>
+Date:   Fri Jul 22 13:08:05 2022 +0200
+
+    - Testing git, first commit
+    - Creating testing scene for Jan Michalík (JanTestScene.unity)
+
+[33mcommit 1a9056a1ca9eda7003303b8ed7267f8c9d867bb7[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Fri Jul 22 12:51:36 2022 +0200
+
+    URP
+
+[33mcommit e47e267cea255cf118040f7810b9df61a0650546[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Wed Jul 20 14:34:50 2022 +0200
+
+    create project
+
+[33mcommit 7b06fd4f84b4da13e5bd46b4a0b52bce0ee4464a[m
+Author: erik <82457761+erik-wq@users.noreply.github.com>
+Date:   Wed Jul 20 14:28:47 2022 +0200
+
+    Initial commit

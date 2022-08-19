@@ -40,6 +40,11 @@ public class FlyingGhostAI : MonoBehaviour, IShadowEnemy
         
     }
 
+    public void ClearForces()
+    {
+
+    }
+
     private void FixedUpdate()
     {
         if(Time.time > _lastCrossing + CrossingCooldown)
@@ -117,5 +122,15 @@ public class FlyingGhostAI : MonoBehaviour, IShadowEnemy
                 _followScript.SetTarget(col.transform);
             }
         }
+    }
+
+    public void PauseFollow()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UnPauseFollow()
+    {
+        throw new NotImplementedException();
     }
 }

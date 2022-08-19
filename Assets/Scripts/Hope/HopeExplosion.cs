@@ -14,6 +14,7 @@ namespace Assets.Scripts.Hope
         #region Serialized
         //System
         [SerializeField] private Animator HopesAnimator;
+        [SerializeField] private Animator EffectsAnimator;
         [SerializeField] private float Cooldown;
         [SerializeField] private float AnimationLockLength = 1.5f;
         [SerializeField] private float ExplosionRadius = 10;
@@ -66,12 +67,17 @@ namespace Assets.Scripts.Hope
             if (Time.time > _lastUsedTime + Cooldown)
             {
                 _lastUsedTime = Time.time;
-                HopesAnimator.Play("Hope_Explosion");
+                EffectsAnimator.Play("Hope_Explosion");
                 _isExploding = true;
-                DamageEnemies();
                 return true;
             }
             return false;
+        }
+
+        public void ExplodeFromAnimation()
+        {
+            HopesAnimator.Play("Hope_Explosion");
+            DamageEnemies();
         }
 
         private void DamageEnemies()

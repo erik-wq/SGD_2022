@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     [SerializeField] private float MaxHP = 100;
     [SerializeField] private Image HealthBar;
     [SerializeField] private float HPRegen = 1.5f;
+    [SerializeField] private float KnockbackLenght = 0.5f;
 
     [SerializeField] private float CollisionOffset = 0.05f;
 
@@ -62,6 +63,11 @@ public class PlayerController : MonoBehaviour, IEnemy
     [SerializeField] private float EnergyRechargeRateWhileRunning = 15;
     [SerializeField] private float EnergyRechardDelayWhileStaying = 0.4f;
     [SerializeField] private float EnergyRechardDelayWhileRunning = 0.8f;
+    [SerializeField] private float dashRechargePerSecond = 0.1f;
+
+
+    [SerializeField] private Animator _animator;
+    [SerializeField] private PlayerImpactControl ImpactControl;
     #endregion
 
     #region Private
@@ -72,7 +78,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     private float _currentEnergy = 0;
 
     private List<Collider2D> _swordSlashZones = new List<Collider2D>();
-    private Animator _animator;
+    
     private float _currentHP;
 
     //Sprint
@@ -88,6 +94,8 @@ public class PlayerController : MonoBehaviour, IEnemy
     private bool canDash = true;
     private Vector3 effectOfset;
     private bool _isStunned = false;
+    private float _knockbackStart = 0;
+    private bool _knockbackCleared = true;
     #endregion
 
     #region Public
@@ -98,6 +106,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     public float dashSpeedModifier = 5;
     public float dashCooldown = 1.25f;
     public ParticleSystem dashEffect;
+    public Image dashSlider;
     #endregion
 
     private void Awake()
@@ -111,8 +120,6 @@ public class PlayerController : MonoBehaviour, IEnemy
         _currentHP = MaxHP;
         _rigidBody2D = GetComponent<Rigidbody2D>();
         IsMovementLocked = false;
-        _animator = GetComponentInChildren<Animator>();
-
         Global.Instance.PlayerTransform = this.transform;
         Global.Instance.PlayerScript = this;
         GenerateSlashZones();
@@ -126,13 +133,26 @@ public class PlayerController : MonoBehaviour, IEnemy
             return;
         }
 
+        ClearKnockback();
+
+        if (dashSlider.fillAmount < 1)
+        {
+            float value = dashSlider.fillAmount + dashRechargePerSecond * Time.fixedDeltaTime;
+            value = Math.Clamp(value, 0, 1);
+            dashSlider.fillAmount = value;
+        }
+
         HandleDash();
-        
+
         if (_movementInput != Vector2.zero && !IsMovementLocked)
         {
-            Move(_movementInput);
+            if(_knockbackCleared)
+            {
+                Move(_movementInput);
+                _animator.SetBool("IsRunning", true);
+            }
+
             AdjustFlip(_movementInput);
-            _animator.SetBool("IsRunning", true);
         }
         else
         {
@@ -382,6 +402,19 @@ public class PlayerController : MonoBehaviour, IEnemy
         DamageEnemiesHeavyFinisher();
     }
 
+    protected void ClearKnockback()
+    {
+        if (!_knockbackCleared)
+        {
+            if (Time.time > _knockbackStart + KnockbackLenght)
+            {
+                _rigidBody2D.velocity = Vector3.zero;
+                _rigidBody2D.angularVelocity = 0;
+                _knockbackCleared = true;
+            }
+        }
+    }
+
     private void DamageEnemiesHeavyAttackPhases(Vector2 direction)
     {
         if (_swordSlashZones.Count == 0)
@@ -441,7 +474,7 @@ public class PlayerController : MonoBehaviour, IEnemy
                     iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
                 }
 
-                if(iEnemy == null)
+                if (iEnemy == null)
                 {
                     iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
                 }
@@ -481,7 +514,11 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     private void HandleDash()
     {
-        if(_movementInput == Vector2.zero)
+        if (dashSlider.fillAmount < 0.48f)
+        {
+            return;
+        }
+        if (_movementInput == Vector2.zero)
         {
             return;
         }
@@ -489,9 +526,9 @@ public class PlayerController : MonoBehaviour, IEnemy
         {
             if (canDash)
             {
+                dashSlider.fillAmount -= 0.5f;
                 dashEffect.transform.position = transform.position + effectOfset;
                 _dashDirection = _movementInput;
-                canDash = false;
 
                 _isDashing = true;
                 StartCoroutine(Dash());
@@ -499,32 +536,40 @@ public class PlayerController : MonoBehaviour, IEnemy
         }
     }
 
+    public void PauseFollow()
+    {
+
+    }
+
+    public void UnpauseFollow()
+    {
+
+    }
+
     private IEnumerator Dash()
     {
         ParticleSystemRenderer renderer;
         dashEffect.TryGetComponent<ParticleSystemRenderer>(out renderer);
-        if(renderer != null)
+        if (renderer != null)
         {
             renderer.flip = DashVector();
         }
         dashEffect.Play();
-        
+
         yield return new WaitForSeconds(dashTime);
         _isDashing = false;
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
     }
     private Vector3 DashVector()
     {
-        if(_dashDirection.x > 0)
+        if (_dashDirection.x > 0)
         {
             return Vector3.zero;
         }
-        if(_dashDirection.x == 0)
+        if (_dashDirection.x == 0)
         {
             return Vector3.zero;
         }
-        return new Vector3(1,0,0);
+        return new Vector3(1, 0, 0);
     }
 
     #region Inputs registering
@@ -694,7 +739,22 @@ public class PlayerController : MonoBehaviour, IEnemy
         if (_currentHP <= 0)
             Die();
         AdjustHealthBar();
+        ApplyForce(force, origin);
+        PlayImpactAnimation();
         return false;
+    }
+
+    private void PlayImpactAnimation()
+    {
+        ImpactControl.Play();
+    }
+
+    protected void ApplyForce(float force, Vector2 origin)
+    {
+        _knockbackStart = Time.time;
+        _knockbackCleared = false;
+        var direction = ((Vector2)this.transform.position - origin).normalized;
+        this._rigidBody2D.AddForce(direction * force, ForceMode2D.Force);
     }
 
     public bool TakeDamage(float damage)
@@ -702,4 +762,23 @@ public class PlayerController : MonoBehaviour, IEnemy
         return this.TakeDamage(damage, 0, Vector2.zero);
     }
     #endregion
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy") return;
+        if (_isDashing)
+        {
+            _isDashing = false;
+        }
+    }
+
+    public void ClearForces()
+    {
+        _rigidBody2D.velocity = Vector3.zero;
+        _rigidBody2D.angularVelocity = 0;
+    }
+
+    public void UnPauseFollow()
+    {
+        throw new NotImplementedException();
+    }
 }

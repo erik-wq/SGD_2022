@@ -39,6 +39,7 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     [SerializeField] private float AroundCircleReachTolerance = 0.5f;
     [SerializeField] private float CrossingReachTolerance = 0.1f;
     [SerializeField] private float CollisionRadius = 1f;
+    [SerializeField] private float TakenDamageRecoveryDelay = 3f;
 
     [SerializeField] private Transform DebugTransform;
     [SerializeField] private Transform AttackAnimationTransform;
@@ -63,6 +64,7 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     private bool _isAnimationLocked = false;
     private bool _hitPlayer = false;
     private bool _hitHope = false;
+    private float _takenDamageTime = 0;
     #endregion
 
     #region Public
@@ -299,6 +301,7 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
         {
             var toTarget = GetDirectionToTarget();
             var toPoint = GetDirectionToNextPoint();
+            _takenDamageTime = Time.time;
 
             if (Vector2.Dot(toTarget, toPoint) > 0.25f)
             {
@@ -318,6 +321,9 @@ public class ShadowCircleFollow : MonoBehaviour, IFollow
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Hope")
         {
+            if (Time.time < _takenDamageTime + TakenDamageRecoveryDelay)
+                return;
+
             if (collision.gameObject.tag == "Player" && _hitPlayer)
             {
                 return;
