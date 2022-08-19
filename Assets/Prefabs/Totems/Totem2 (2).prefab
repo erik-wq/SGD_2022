@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6184064234360375916}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.24, y: 83.44, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -65,18 +65,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.3465774, y: 3.249855}
+  m_Offset: {x: 0.045676947, y: 4.840703}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.4975628, y: 0.07554524}
+    oldSize: {x: 27.459997, y: 25.783972}
+    newSize: {x: 27.459997, y: 25.783972}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.8541722, y: 5.095642}
+  m_Size: {x: 3.0696635, y: 4.877714}
   m_EdgeRadius: 0
 --- !u!61 &7429895419838298909
 BoxCollider2D:
@@ -91,18 +91,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.06819129, y: 10.533226}
+  m_Offset: {x: -0.06819129, y: 11.601051}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.4975628, y: 0.07554524}
+    oldSize: {x: 27.459997, y: 25.783972}
+    newSize: {x: 27.459997, y: 25.783972}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.772974, y: 8.51503}
+  m_Size: {x: 2.772974, y: 8.20993}
   m_EdgeRadius: 0
 --- !u!114 &3793109693918038673
 MonoBehaviour:
@@ -124,12 +124,12 @@ MonoBehaviour:
   m_SelfShadows: 0
   m_ApplyToSortingLayers: 00000000
   m_ShapePath:
-  - {x: -1.8433437, y: 0.94049835, z: 0}
+  - {x: -1.5382576, y: 2.553133, z: -0.00000016932209}
   - {x: -1.5792089, y: 4.4884415, z: 0}
-  - {x: -1.5612531, y: 7.6531296, z: 0}
-  - {x: 1.6406016, y: 6.502701, z: 0}
-  - {x: 1.5259957, y: 0.6099167, z: 0}
-  m_ShapePathHash: -1808228233
+  - {x: -1.3433342, y: 6.4327555, z: -0.00000015058735}
+  - {x: 1.2919312, y: 6.5027037, z: -0.00000012092124}
+  - {x: 1.1773243, y: 2.8763287, z: -0.00000014187093}
+  m_ShapePathHash: 1292507726
   m_Mesh: {fileID: 0}
   m_InstanceId: -120462
 --- !u!1 &6910180747250179512
@@ -177,9 +177,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.86}
+  m_Offset: {x: -1, y: -6.61}
   serializedVersion: 2
-  m_Radius: 24.9
+  m_Radius: 13.91
 --- !u!1 &6910180747519984534
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,7 +225,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.06320572, y: 2.9286034}
+  m_Offset: {x: -0.06320572, y: 9.138876}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -236,7 +236,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.9075394, y: 7.447142}
+  m_Size: {x: 3.9075394, y: 14.150298}
   m_EdgeRadius: 0
 --- !u!1 &6910180748593115998
 GameObject:
@@ -284,9 +284,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.12}
+  m_Offset: {x: -15.84, y: -16.3}
   serializedVersion: 2
-  m_Radius: 25.6
+  m_Radius: 15.72
 --- !u!114 &6910180748593115968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,18 +305,22 @@ MonoBehaviour:
   HopeAIScript: {fileID: 0}
   MeleePrefab: {fileID: 2900693511232905233, guid: e1f7eb8e01b4548418e3d01d4125786f, type: 3}
   GhostPrefab: {fileID: 2565003934881450017, guid: 245965862bcf30340833e0cc88521c84, type: 3}
-  MaxHP: 1000
+  SpawnerPrefab: {fileID: 5520562130725945712, guid: d550fc854fc7cdf42b4efe80c51b684b, type: 3}
+  MaxHP: 650
   NumberOfStages: 4
-  SpawnTick: 10
+  SpawnTick: 5
   SpawnTickDecrese: 1
   SpawnRateMelee: 2
-  SpawnRateMeleeIncrease: 1
+  SpawnRateMeleeIncrease: 0
   SpawnRateGhost: 0
   SpawnRateGhostIncrease: 0
   SpawnCircle: {fileID: 6910180747250179514}
-  Name: Totem of Hate
+  Name: Totem of Disease
   NameText: {fileID: 0}
   HealImage: {fileID: 0}
+  MaxMelee: 10
+  MaxGhosts: 3
+  _animator: {fileID: 1971582088}
 --- !u!1 &9081264746948154879
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,6 +331,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5816717221659284632}
   - component: {fileID: 4936567426139942401}
+  - component: {fileID: 1971582088}
   m_Layer: 0
   m_Name: Graphics
   m_TagString: Untagged
@@ -342,7 +347,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9081264746948154879}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -0.18, y: 2.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -390,7 +395,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f53ce4fa8b49d2345a07df6111f0b488, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6006727bbbfa3564aaa60704ab9d4e57, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -401,3 +406,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!95 &1971582088
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9081264746948154879}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 433d888ddaf4e024f8733937bb2fd44c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

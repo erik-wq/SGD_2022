@@ -41,6 +41,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     private bool _isAbilityLocked = false;
     private bool _isHopeLocked = false;
     private Animator _animator;
+    private bool _isInvulnerable = false;
     private Vector2 _lastPossition;
     private float _lastTimeChecked = 0;
     #endregion
@@ -153,6 +154,10 @@ public class HopeAI : MonoBehaviour, IEnemy
         _animator.SetFloat("Energy", _hp);
     }
 
+    public void ClearForces()
+    {
+    }
+
     private void OnMove(Vector2 direction)
     {
         if (direction != Vector2.zero)
@@ -183,13 +188,23 @@ public class HopeAI : MonoBehaviour, IEnemy
     }
 
     private void FixedUpdate()
-    {
+    { 
         if (_machine.state == null)
         {
             return;
         }
 
         _machine.state.FixedUpdate();
+    }
+
+    public void UnpauseFollow()
+    {
+
+    }
+
+    public void PauseFollow()
+    {
+
     }
 
     public void Collect()
@@ -205,6 +220,9 @@ public class HopeAI : MonoBehaviour, IEnemy
     #region damage
     public bool TakeDamage(float damage)
     {
+        if (_isInvulnerable)
+            return false;
+
         _hp -= damage;
         _animator.SetFloat("Energy", _hp);
         AdjustColor();
@@ -324,6 +342,16 @@ public class HopeAI : MonoBehaviour, IEnemy
         SetHP(newHP);
     }
 
+    public void MakeInvulnerable()
+    {
+        _isInvulnerable = true;
+    }
+
+    public void MakeVulnerable()
+    {
+        _isInvulnerable = false;
+    }
+
     public bool TakeDamage(float damage, float force, Vector2 origin)
     {
         return this.TakeDamage(damage);
@@ -335,6 +363,11 @@ public class HopeAI : MonoBehaviour, IEnemy
             follow.SetTarget(null);
             _machine.state.Exit();
         }
+    }
+
+    public void UnPauseFollow()
+    {
+        throw new System.NotImplementedException();
     }
     #endregion
 }

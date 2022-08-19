@@ -31,6 +31,13 @@ namespace Assets.Scripts.Hope
         [SerializeField] private float ProjectileSpeed = 50;
         [SerializeField] private float Cooldown = 10;
         [SerializeField] private TMP_Text CooldownText;
+
+        [SerializeField] private float PullLength = 4;
+        [SerializeField] private float PullForce = 400;
+        [SerializeField] private float PullForceTick = 0.8f;
+        [SerializeField] private float PullRadius = 25;
+        [SerializeField] private float PullRadiusForDamage = 15;
+        [SerializeField] private float PullRadiusDamagePerTick = 10;
         #endregion
 
         #region Private
@@ -38,6 +45,11 @@ namespace Assets.Scripts.Hope
         private bool _isFireing = false;
         private Vector2 _target;
         private float _lastUsed = 0;
+
+        private bool _isHaloActive = false;
+        private bool _hasHaloFinished = false;
+        private float _haloStarted = 0;
+        private float _lastTick = 0;
         #endregion
 
         public void Start()
@@ -57,11 +69,131 @@ namespace Assets.Scripts.Hope
             {
                 if (MoveHopeToTarget())
                 {
-                    UnlockHope();
+                    ActivateHalo();
                 }
             }
 
+            if (_isHaloActive)
+            {
+                HaloTick();
+            }
+
             AdjustCooldownText();
+        }
+
+        private void ActivateHalo()
+        {
+            HopeScript.MakeInvulnerable();
+            _isHaloActive = true;
+            _hasHaloFinished = false;
+            _isFireing = false;
+            _haloStarted = Time.time;
+        }
+
+        private void HaloTick()
+        {
+            if (Time.time > _lastTick + PullForceTick)
+            {
+                Pull();
+                PullDamage();
+                _lastTick = Time.time;
+            }
+
+            if (Time.time > _haloStarted + PullLength)
+            {
+                _isHaloActive = false;
+                _hasHaloFinished = true;
+                UnlockHope();
+                UnlockEnemies();
+            }
+        }
+
+        private void UnlockEnemies()
+        {
+            var enemies = Physics2D.OverlapCircleAll(this.transform.position, PullRadius).ToList();
+            enemies = enemies.Where(a => a.tag == "Enemy").ToList();
+
+            foreach (var item in enemies)
+            {
+                var direction = (this.transform.position - item.transform.position).normalized;
+                var rigidBody = item.GetComponent<Rigidbody2D>();
+                if (rigidBody != null)
+                {
+                    IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
+                    if (iEnemy == null)
+                    {
+                        iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
+                    }
+
+                    if (iEnemy == null)
+                    {
+                        iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
+                    }
+
+                    if (iEnemy is EnemyAI)
+                    {
+                        iEnemy.UnPauseFollow();
+                        iEnemy.ClearForces();
+                    }
+                }
+            }
+        }
+
+        private void Pull()
+        {
+            var enemies = Physics2D.OverlapCircleAll(this.transform.position, PullRadius).ToList();
+            enemies = enemies.Where(a => a.tag == "Enemy").ToList();
+
+            foreach (var item in enemies)
+            {
+                var direction = (this.transform.position - item.transform.position).normalized;
+                var rigidBody = item.GetComponent<Rigidbody2D>();
+                if (rigidBody != null)
+                {
+                    IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
+                    if (iEnemy == null)
+                    {
+                        iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
+                    }
+
+                    if (iEnemy == null)
+                    {
+                        iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
+                    }
+
+                    if (iEnemy is EnemyAI)
+                    {
+                        iEnemy.PauseFollow();
+                        item.GetComponent<Rigidbody2D>().AddForce(PullForce * direction, ForceMode2D.Force);
+                    }
+                }
+            }
+        }
+
+        private void PullDamage()
+        {
+            var enemies = Physics2D.OverlapCircleAll(this.transform.position, PullRadiusForDamage).ToList();
+            enemies = enemies.Where(a => a.tag == "Enemy").ToList();
+
+            foreach (var item in enemies)
+            {
+                var rigidBody = item.GetComponent<Rigidbody2D>();
+                if (rigidBody != null)
+                {
+                    IEnemy iEnemy = item.gameObject.GetComponent<IEnemy>();
+                    if (iEnemy == null)
+                    {
+                        iEnemy = item.gameObject.GetComponentInParent<IEnemy>();
+                    }
+
+                    if (iEnemy == null)
+                    {
+                        iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
+                    }
+
+                    iEnemy.TakeDamage(PullRadiusDamagePerTick);
+                }
+            }
         }
 
         private void AdjustCooldownText()
@@ -82,6 +214,7 @@ namespace Assets.Scripts.Hope
             HopeScript.IsMovementLocked = false;
             HopeScript.IsHopeLocked = false;
             HopesSprite.enabled = true;
+            HopeScript.MakeVulnerable();
             AimObject.SetActive(false);
             _isFireing = false;
         }

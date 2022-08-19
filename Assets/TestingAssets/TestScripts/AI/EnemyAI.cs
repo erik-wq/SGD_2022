@@ -63,6 +63,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
 
     protected bool _hasAggro = false;
     protected event Action _onDeath;
+    protected bool _isFollowPaused = false;
     #endregion
     public GameObject effect;
     // Start is called before the first frame update
@@ -154,9 +155,22 @@ public class EnemyAI : MonoBehaviour, IEnemy
                 _rigidBody.velocity = Vector3.zero;
                 _rigidBody.angularVelocity = 0;
                 _knockbackCleared = true;
-                _followScript.Paused = false;
+                if (!_isFollowPaused)
+                    _followScript.Paused = false;
             }
         }
+    }
+
+    public void PauseFollow()
+    {
+        _followScript.Paused = true;
+        _isFollowPaused = true;
+    }
+
+    public void UnPauseFollow()
+    {
+        _followScript.Paused = false;
+        _isFollowPaused = false;
     }
 
     protected void CheckAttack()
@@ -167,6 +181,12 @@ public class EnemyAI : MonoBehaviour, IEnemy
             _executionStartedAt = Time.time;
             _animator.Play("SpikeMeeleAttack");
         }
+    }
+
+    public void ClearForces()
+    {
+        _rigidBody.velocity = Vector3.zero;
+        _rigidBody.angularVelocity = 0;
     }
 
     public void DoMeleeDamageFromAnimation()
@@ -314,7 +334,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
             x.enabled = false;
         }
 
-        if(_onDeath != null)
+        if (_onDeath != null)
         {
             _onDeath();
         }

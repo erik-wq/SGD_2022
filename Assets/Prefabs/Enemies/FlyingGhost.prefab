@@ -256,7 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   CollisionGraphMaskName: Shadows
-  MovementSpeed: 25
+  MovementSpeed: 10
   CollisionOffset: 1
   NextWaypointDistance: 0.5
   MaximumRotationSpeed: 50
@@ -332,7 +332,7 @@ MonoBehaviour:
   Damage: 20
   CrossingCooldown: 5
   CrossingChance: 5
-  CrossingSpeed: 35
+  CrossingSpeed: 30
   CrossingCurve:
     serializedVersion: 2
     m_Curve:
@@ -346,8 +346,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.17308854
-      value: 1.0494334
+      time: 0.43250263
+      value: 0.97545755
       inSlope: 0.42602298
       outSlope: 0.42602298
       tangentMode: 0

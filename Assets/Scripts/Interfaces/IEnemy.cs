@@ -11,5 +11,8 @@ namespace Assets.TestingAssets
     {
         bool TakeDamage(float damage, float force, Vector2 origin);
         bool TakeDamage(float damage);
+        void ClearForces();
+        void PauseFollow();
+        void UnPauseFollow();
     }
 }

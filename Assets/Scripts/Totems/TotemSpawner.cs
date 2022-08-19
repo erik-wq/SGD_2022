@@ -12,9 +12,8 @@ namespace Assets.Scripts.Totems
     {
         #region Public
         public delegate void OnSpawnedDelegate(GameObject obj);
-        public float SpawnTime = 2.5f;
-        public GameObject SpawnObject;
-        [SerializeField] private GameObject LightingObject;
+        public float SpawnTime = 1f;
+        public GameObject SpawnMeele;
         #endregion
 
         #region Private
@@ -22,10 +21,13 @@ namespace Assets.Scripts.Totems
         private float _startTime = 0;
         private bool _isLightingSpawned = false;
         private event OnSpawnedDelegate _onSpawned;
+        private bool _initCompleted = false;
+        private GameObject LightingObject;
         #endregion
 
         private void Start()
         {
+            LightingObject = this.transform.Find("Thunder").gameObject;
             _fogSprite = GetComponent<SpriteRenderer>();
             _fogSprite.color = new Color(1, 1, 1, 0);
             _startTime = Time.time;
@@ -38,32 +40,29 @@ namespace Assets.Scripts.Totems
 
         private void FixedUpdate()
         {
-            if(Time.time < _startTime + SpawnTime)
+            if (Time.time < _startTime + SpawnTime)
             {
                 AdjustVisibility();
             }
-            else if(!_isLightingSpawned)
+            else if (!_isLightingSpawned)
             {
+                AdjustVisibility();
                 SpawnLighting();
             }
         }
 
         private void SpawnLighting()
         {
+            _isLightingSpawned = true;
+            var script = LightingObject.GetComponent<Thunder>();
+            script.OnThunderEnds += OnLightingFinishes;
             LightingObject.SetActive(true);
-            var script = LightingObject.GetComponent<LightningArea>();
-            script.SpawnThunder(this.transform.position);
-            script.RegisterOnDamageFinished(OnLightingFinishes);
         }
 
         private void OnLightingFinishes()
         {
-            if (SpawnObject != null)
-            {
-                var obj = Instantiate(SpawnObject, this.transform.position, Quaternion.identity);
-                _onSpawned(obj);
-            }
-
+            var obj = Instantiate(SpawnMeele, this.transform.position, Quaternion.identity);
+            _onSpawned(obj);
             Wait();
             Destroy(this.gameObject);
         }
@@ -75,11 +74,11 @@ namespace Assets.Scripts.Totems
 
         private void AdjustVisibility()
         {
-            var perc = Time.time / (_startTime + SpawnTime);
+            var perc = (Time.time - _startTime) / SpawnTime;
             if (perc > 1)
                 perc = 1;
 
-            _fogSprite.color =  new Color(1, 1, 1, perc);
+            _fogSprite.color = new Color(1, 1, 1, perc);
         }
     }
 }

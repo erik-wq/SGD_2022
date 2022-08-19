@@ -20,6 +20,7 @@ namespace Assets.Scripts.Totems
         [SerializeField] HopeAI HopeAIScript;
         [SerializeField] private GameObject MeleePrefab;
         [SerializeField] private GameObject GhostPrefab;
+        [SerializeField] private GameObject SpawnerPrefab;
 
         [SerializeField] private float MaxHP = 1000;
         [SerializeField] private int NumberOfStages = 4;
@@ -36,6 +37,8 @@ namespace Assets.Scripts.Totems
 
         [SerializeField] private int MaxMelee = 10;
         [SerializeField] private int MaxGhosts = 3;
+
+        [SerializeField] private Animator _animator;
         #endregion
 
         #region Private
@@ -49,7 +52,6 @@ namespace Assets.Scripts.Totems
         private int _meleeCount = 0;
         private int _shadowCount = 0;
         #endregion
-
         private void Start()
         {
             _currentHP = MaxHP;
@@ -115,17 +117,27 @@ namespace Assets.Scripts.Totems
 
         private void SpawnMelee(Vector2 possition)
         {
-            var obj = Instantiate(MeleePrefab, possition, Quaternion.identity);
-            obj.GetComponent<EnemyAI>().RegisterOnDeath(OnDeathMelee);
+            var obj = Instantiate(SpawnerPrefab, possition, Quaternion.identity);
+            var script = obj.GetComponent<TotemSpawner>();
+            script.RegisterOnSpawned(OnSpawnedMelee);
             _meleeCount++;
 
+        }
+
+        private void OnSpawnedMelee(GameObject obj)
+        {
+            obj.GetComponent<EnemyAI>().RegisterOnDeath(OnDeathMelee);
         }
 
         private void SpawnGhost(Vector2 possition)
         {
             var obj = Instantiate(GhostPrefab, possition, Quaternion.identity);
-            obj.GetComponent<BasicShadowAI>().RegisterOnDeath(OnDeathGhost);
+            obj.GetComponent<BasicShadowAI>().RegisterOnDeath(OnDeathMelee);
             _shadowCount++;
+        }
+
+        public void ClearForces()
+        {
         }
 
         private void OnDeathMelee()
@@ -197,6 +209,7 @@ namespace Assets.Scripts.Totems
             if (_currentHP <= 0)
             {
                 Die();
+                _animator.SetBool("IsDead", true);
             }
             else
             {
@@ -216,6 +229,16 @@ namespace Assets.Scripts.Totems
                 NameText.enabled = true;
                 HealImage.enabled = true;
             }
+        }
+
+        public void PauseFollow()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnPauseFollow()
+        {
+            throw new NotImplementedException();
         }
     }
 }
