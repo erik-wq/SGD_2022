@@ -67,7 +67,7 @@ namespace Assets.Scripts.Hope
             if (Time.time > _lastUsedTime + Cooldown)
             {
                 _lastUsedTime = Time.time;
-                EffectsAnimator.Play("Hope_Explosion");
+                HopesAnimator.Play("HopeIsCharging");
                 _isExploding = true;
                 return true;
             }
@@ -76,7 +76,7 @@ namespace Assets.Scripts.Hope
 
         public void ExplodeFromAnimation()
         {
-            HopesAnimator.Play("Hope_Explosion");
+            EffectsAnimator.Play("Hope_Explosion");
             DamageEnemies();
         }
 

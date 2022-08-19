@@ -29,12 +29,12 @@ Transform:
   m_GameObject: {fileID: 736287339077964093}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 1}
+  m_LocalScale: {x: 0.470975, y: 0.470975, z: 1.8839}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1106977009680355273}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4448719476096301081
 MonoBehaviour:
@@ -173,7 +173,7 @@ MonoBehaviour:
   - {x: -1.1916127, y: 3.4214585, z: 0}
   m_ShapePathHash: 1142403932
   m_Mesh: {fileID: 0}
-  m_InstanceId: 38066
+  m_InstanceId: -15784
 --- !u!60 &2252991838410042190
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -184,7 +184,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 5.75}
@@ -233,7 +233,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.648072, y: 19.096521}

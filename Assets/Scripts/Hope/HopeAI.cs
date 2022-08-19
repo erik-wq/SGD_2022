@@ -117,8 +117,6 @@ public class HopeAI : MonoBehaviour, IEnemy
         }
     }
 
-    [Header("PathFinding")]
-    public Transform target;
 
     [Header("Idle parameters")]
     public float idleRadius;
@@ -148,7 +146,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     }
     private void Start()
     {
-        _followScript.SetTarget(target);
+        _followScript.SetTarget(player);
         (_followScript as BasicFollow).BindOnMove(OnMove);
         (_followScript as BasicFollow).BindOnStopMoving(OnStopedMoving);
         _machine = new HopeStateMachine(this);

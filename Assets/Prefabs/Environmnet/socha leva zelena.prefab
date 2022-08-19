@@ -10,6 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5014203994824620871}
   - component: {fileID: 3813227406369524001}
+  - component: {fileID: 3222132741179044654}
+  - component: {fileID: 2679275646669763484}
+  - component: {fileID: 4737535878272464989}
+  - component: {fileID: 1152690624377809844}
   m_Layer: 0
   m_Name: socha leva zelena
   m_TagString: Untagged
@@ -30,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 60
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3813227406369524001
 SpriteRenderer:
@@ -84,3 +88,98 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!61 &3222132741179044654
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7569268818104945313}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0093804, y: 1.0604689}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.46575135, y: 0.031201368}
+    oldSize: {x: 3.66, y: 5.37}
+    newSize: {x: 3.66, y: 5.37}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.928609, y: 2.45604}
+  m_EdgeRadius: 0
+--- !u!114 &2679275646669763484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7569268818104945313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000754dc726
+  m_ShapePath:
+  - {x: -1.6142976, y: 0.45430374, z: 0.0000019509482}
+  - {x: -1.2113696, y: 0.73420715, z: 0.0000008836705}
+  - {x: -1.2870115, y: 1.5916634, z: 0.0000024924964}
+  - {x: 1.3182629, y: 1.383975, z: 0.0000009836467}
+  - {x: 1.2201782, y: 0.6309166, z: 0.0000008227524}
+  - {x: 1.6641257, y: 0.30463696, z: 0.00000029405552}
+  - {x: -0.04062449, y: -0.03309822, z: 0.00000053173915}
+  m_ShapePathHash: -961712811
+  m_Mesh: {fileID: 0}
+  m_InstanceId: -320020
+--- !u!61 &4737535878272464989
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7569268818104945313}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.12535, y: 3.951576}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.46575135, y: 0.031201368}
+    oldSize: {x: 3.66, y: 5.37}
+    newSize: {x: 3.66, y: 5.37}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3.66, y: 2.5017457}
+  m_EdgeRadius: 0
+--- !u!114 &1152690624377809844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7569268818104945313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f39382a4fc7bc4b86cdcc674ab240b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AlphaTarget: 0.8

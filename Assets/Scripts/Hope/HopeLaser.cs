@@ -155,6 +155,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
         private void TurnOffLaster()
         {
             _isActive = false;
+            PlayerControlScript.ActionLocked = false;
             PlayerController.IsMovementLocked = false;
             HopeScript.IsAbilityLocked = false;
             PlayerAnimator.SetBool("IsLaserOn", false);
@@ -236,6 +237,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
             PlayerAnimator.Play("PlayerLaserPrepare");
             var mouseDirection = CustomUtilities.GetMouseDirection(MainCamera, PlayersTransform);
             PlayerControlScript.AdjustFlip(mouseDirection);
+            PlayerControlScript.ActionLocked = true;
             _lastUsed = Time.time;
             _startTime = Time.time;
             HopeScript.IsAbilityLocked = true;
