@@ -3,8 +3,6 @@ using Assets.TestingAssets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,6 +32,7 @@ namespace Assets.Scripts.Totems
         [SerializeField] private string Name;
         [SerializeField] private TMP_Text NameText;
         [SerializeField] private Image HealImage;
+        [SerializeField] private GameObject UI;
 
         [SerializeField] private int MaxMelee = 10;
         [SerializeField] private int MaxGhosts = 3;
@@ -89,6 +88,7 @@ namespace Assets.Scripts.Totems
             NameText.enabled = false;
             HealImage.enabled = false;
             _hasBeenDestroyed = true;
+            UI.SetActive(false);
 
             if (DeleteBarrier != null)
             {
@@ -239,11 +239,11 @@ namespace Assets.Scripts.Totems
 
             return true;
         }
-
         public void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.tag == "Player" && !_hasBeenDestroyed)
             {
+                UI.SetActive(true);
                 StartEncounter();
                 NameText.text = Name;
                 AdjustHP();
