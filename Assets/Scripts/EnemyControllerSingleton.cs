@@ -11,6 +11,11 @@ namespace Assets.Scripts
     {
         private static EnemyControllerSingleton _instance = new EnemyControllerSingleton();
 
+        public static EnemyControllerSingleton Instance
+        {
+            get { return _instance; }
+        }
+
         #region Settings
         private const int MAX_FIRE_AT_ONCE = 1;
         private const float FIRE_DELAY = 3f;
@@ -19,6 +24,11 @@ namespace Assets.Scripts
         #region Private
         private List<EnemyAI> _activeEnemies = new List<EnemyAI>();
         private List<float> _lastFires = new List<float>();
+
+        private float _lastMeleeDamaged;
+        private float _lastFlyingDamaged;
+        private float _lastMeleeDying;
+        private float _lastFlyingDying;
         #endregion
         private EnemyControllerSingleton()
         {
@@ -42,6 +52,11 @@ namespace Assets.Scripts
 
         private void Init()
         {
+            _lastMeleeDamaged = 0;
+            _lastMeleeDying = 0;
+            _lastFlyingDamaged = 0;
+            _lastFlyingDying = 0;
+
             _lastFires = new List<float>();
             for (int i = 0; i < MAX_FIRE_AT_ONCE; i++)
             {
@@ -76,6 +91,46 @@ namespace Assets.Scripts
                 }
             }
 
+            return false;
+        }
+
+        public bool CanPlayMeleeDamage()
+        {
+            if(Time.time > _lastMeleeDamaged + 2.5f)
+            {
+                _lastMeleeDamaged = Time.time;
+                return true;
+            }
+            return false;
+        }
+
+        public bool CanPlayMeeleDeath()
+        {
+            if (Time.time > _lastMeleeDying + 2.5f)
+            {
+                _lastMeleeDying = Time.time;
+                return true;
+            }
+            return false;
+        }
+
+        public bool CanPlayFlyingDeath()
+        {
+            if (Time.time > _lastFlyingDying + 2.5f)
+            {
+                _lastFlyingDying = Time.time;
+                return true;
+            }
+            return false;
+        }
+
+        public bool CanPlayFlyingDamage()
+        {
+            if (Time.time > _lastFlyingDamaged + 2.5f)
+            {
+                _lastFlyingDamaged = Time.time;
+                return true;
+            }
             return false;
         }
     }

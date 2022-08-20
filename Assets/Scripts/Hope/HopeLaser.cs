@@ -102,11 +102,11 @@ namespace Assets.TestingAssets.TestScripts.Hope
             if (Time.time < _lastUsed + Cooldown)
             {
                 var time = Math.Round(Time.time - (_lastUsed + Cooldown));
-                CooldownText.text = Convert.ToString(time);
+                //CooldownText.text = Convert.ToString(time);
             }
             else
             {
-                CooldownText.text = "";
+                //CooldownText.text = "";
             }
         }
 

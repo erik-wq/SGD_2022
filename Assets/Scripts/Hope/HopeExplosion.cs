@@ -57,11 +57,11 @@ namespace Assets.Scripts.Hope
             if (Time.time < _lastUsedTime + Cooldown)
             {
                 var time = Math.Round(Time.time - (_lastUsedTime + Cooldown));
-                CooldownText.text = Convert.ToString(time);
+                //CooldownText.text = Convert.ToString(time);
             }
             else
             {
-                CooldownText.text = "";
+                //CooldownText.text = "";
             }
         }
 

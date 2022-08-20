@@ -18,6 +18,6 @@ public class FlameController : MonoBehaviour
 
     public void Die()
     {
-        Destroy(this.gameObject);
+        Destroy(this.transform.gameObject);
     }
 }

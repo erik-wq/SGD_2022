@@ -410,13 +410,20 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         if (_hp < 0)
         {
             OnDeath();
-            AudioSourceComponent.PlayOneShot(DeathClip);
+            if (EnemyControllerSingleton.Instance.CanPlayFlyingDeath())
+            {
+                AudioSourceComponent.PlayOneShot(DeathClip);
+            }
+
             GhostsControlsSingleton.GetInstance().RemoveMe(_circleFollow);
             return true;
         }
         else
         {
-            AudioSourceComponent.PlayOneShot(DamageClip);
+            if (EnemyControllerSingleton.Instance.CanPlayFlyingDamage())
+            {
+                AudioSourceComponent.PlayOneShot(DamageClip);
+            }
             AdjustOpacity();
             return false;
         }

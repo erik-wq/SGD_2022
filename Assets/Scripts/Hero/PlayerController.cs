@@ -525,15 +525,12 @@ public class PlayerController : MonoBehaviour, IEnemy
     {
         if (dashSlider.fillAmount < 0.48f)
         {
-            Debug.Log("ammount");
             return;
         }
         if (_movementInput == Vector2.zero)
         {
-            Debug.Log("no input");
             return;
         }
-            Debug.Log("input");
         if (canDash)
         {
             AudioSourceComponent.PlayOneShot(DashClip);
@@ -545,7 +542,6 @@ public class PlayerController : MonoBehaviour, IEnemy
             StartCoroutine(Dash());
             return;
         }
-        Debug.Log("cant dash");
     }
 
     public void PauseFollow()

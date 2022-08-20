@@ -259,7 +259,10 @@ public class EnemyAI : MonoBehaviour, IEnemy
         else
         {
             //AdjustOpacity();
-            AudioSourceComponent.PlayOneShot(HitClip);
+            if (EnemyControllerSingleton.Instance.CanPlayMeleeDamage())
+            {
+                AudioSourceComponent.PlayOneShot(HitClip);
+            }
             ApplyForce(force, origin);
             _animator.Play("SpikeTakeDamage");
             return false;
@@ -329,7 +332,10 @@ public class EnemyAI : MonoBehaviour, IEnemy
     private void Killed()
     {
         _rigidBody.velocity = Vector2.zero;
-        AudioSourceComponent.PlayOneShot(DeathClip);
+        if (EnemyControllerSingleton.Instance.CanPlayMeeleDeath())
+        {
+            AudioSourceComponent.PlayOneShot(DeathClip);
+        }
         MainSprite.enabled = false;
         _isDead = true;
         effect.SetActive(true);
