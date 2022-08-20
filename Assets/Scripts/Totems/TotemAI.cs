@@ -42,6 +42,9 @@ namespace Assets.Scripts.Totems
 
         [SerializeField] private AudioSource AudioSourceMember;
         [SerializeField] private AudioClip AudioDying;
+
+        [SerializeField] private GameObject DeleteBarrier;
+        [SerializeField] private Animator TotemAnimator;
         #endregion
 
         #region Private
@@ -86,6 +89,16 @@ namespace Assets.Scripts.Totems
             NameText.enabled = false;
             HealImage.enabled = false;
             _hasBeenDestroyed = true;
+
+            if (DeleteBarrier != null)
+            {
+                DeleteBarrier.SetActive(false);
+            }
+
+            if(TotemAnimator != null)
+            {
+                TotemAnimator.Play("FlameFate");
+            }
 
             if (_onDestroyed != null)
             {

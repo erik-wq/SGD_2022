@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6184064234360375916}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.24, y: 83.44, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.86967176, y: 0.86967176, z: 0.86967176}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5816717221659284632}
@@ -256,7 +256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6910180748593115969
 Transform:
   m_ObjectHideFlags: 0
@@ -321,9 +321,11 @@ MonoBehaviour:
   HealImage: {fileID: 0}
   MaxMelee: 10
   MaxGhosts: 3
-  _animator: {fileID: 1971582088}
+  _animator: {fileID: 0}
   AudioSourceMember: {fileID: 253928533}
   AudioDying: {fileID: 8300000, guid: b01e5f8fd37b9954488205269ea5a5d6, type: 3}
+  DeleteBarrier: {fileID: 0}
+  TotemAnimator: {fileID: 0}
 --- !u!82 &253928533
 AudioSource:
   m_ObjectHideFlags: 0
@@ -430,7 +432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5816717221659284632}
   - component: {fileID: 4936567426139942401}
-  - component: {fileID: 1971582088}
+  - component: {fileID: 1971582085}
   m_Layer: 0
   m_Name: Graphics
   m_TagString: Untagged
@@ -505,7 +507,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!95 &1971582088
+--- !u!95 &1971582085
 Animator:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -515,7 +517,7 @@ Animator:
   m_GameObject: {fileID: 9081264746948154879}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 433d888ddaf4e024f8733937bb2fd44c, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7762b8302411f924497c312bf199860f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

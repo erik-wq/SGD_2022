@@ -68,6 +68,9 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     [SerializeField] private Animator _animator;
     [SerializeField] private PlayerImpactControl ImpactControl;
+
+    [SerializeField] private AudioSource AudioSourceComponent;
+    [SerializeField] private AudioClip DashClip;
     #endregion
 
     #region Private
@@ -533,6 +536,7 @@ public class PlayerController : MonoBehaviour, IEnemy
             Debug.Log("input");
         if (canDash)
         {
+            AudioSourceComponent.PlayOneShot(DashClip);
             dashSlider.fillAmount -= 0.5f;
             dashEffect.transform.position = transform.position + effectOfset;
             _dashDirection = _movementInput;

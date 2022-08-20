@@ -134,7 +134,7 @@ Transform:
   m_GameObject: {fileID: 8607334223257179033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 142.6, y: 24.1, z: 0}
-  m_LocalScale: {x: 2.0083654, y: 2.0083654, z: 2.0083654}
+  m_LocalScale: {x: 3.0607128, y: 3.0607128, z: 3.0607128}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8221444307590516077}
@@ -236,7 +236,7 @@ MonoBehaviour:
   - {x: 0.6366481, y: 0.2576821, z: 0}
   m_ShapePathHash: -992438350
   m_Mesh: {fileID: 0}
-  m_InstanceId: -13786
+  m_InstanceId: -4816
 --- !u!1 &9026539321629584043
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,15 +248,15 @@ GameObject:
   - component: {fileID: 9026539321629584052}
   - component: {fileID: 9026539321629584054}
   - component: {fileID: 9026539321629584053}
-  - component: {fileID: 5501266989390349696}
   - component: {fileID: 757805408}
+  - component: {fileID: 5501266989390349696}
   m_Layer: 8
   m_Name: TotemEcounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &9026539321629584052
 Transform:
   m_ObjectHideFlags: 0
@@ -285,7 +285,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -6.503062, y: 0.87244755}
+  m_Offset: {x: -38.6, y: 4.47}
   serializedVersion: 2
   m_Radius: 16.999601
 --- !u!114 &9026539321629584053
@@ -324,20 +324,8 @@ MonoBehaviour:
   _animator: {fileID: 6703505706090571444}
   AudioSourceMember: {fileID: 757805408}
   AudioDying: {fileID: 8300000, guid: 9afd055cb4661884384f45663dafeaac, type: 3}
---- !u!114 &5501266989390349696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9026539321629584043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1856009be3d09ef46ae0106de65106ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Rocks: {fileID: 0}
-  Gate: {fileID: 0}
+  DeleteBarrier: {fileID: 0}
+  TotemAnimator: {fileID: 0}
 --- !u!82 &757805408
 AudioSource:
   m_ObjectHideFlags: 0
@@ -434,6 +422,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5501266989390349696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9026539321629584043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1856009be3d09ef46ae0106de65106ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rocks: {fileID: 0}
+  Gate: {fileID: 0}
 --- !u!1 &9026539322436093005
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,9 +481,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1.4453609}
+  m_Offset: {x: 0, y: -13.1}
   serializedVersion: 2
-  m_Radius: 13.453006
+  m_Radius: 40.54
 --- !u!1 &9026539322703944291
 GameObject:
   m_ObjectHideFlags: 0

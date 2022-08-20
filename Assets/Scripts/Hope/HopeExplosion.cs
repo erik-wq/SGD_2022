@@ -21,6 +21,9 @@ namespace Assets.Scripts.Hope
         [SerializeField] private float ExplosionDamage = 15;
         [SerializeField] private TMP_Text CooldownText;
 
+        [SerializeField] private AudioSource AudioSourceComponent;
+        [SerializeField] private AudioClip SpellAudio;
+
         //GD
         [SerializeField] private float Cost;
         #endregion
@@ -77,6 +80,7 @@ namespace Assets.Scripts.Hope
         public void ExplodeFromAnimation()
         {
             EffectsAnimator.Play("Hope_Explosion");
+            AudioSourceComponent.PlayOneShot(SpellAudio);
             DamageEnemies();
         }
 

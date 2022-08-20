@@ -40,6 +40,9 @@ namespace Assets.TestingAssets.TestScripts.Hope
         [SerializeField] private GameObject AimObject;
         //[SerializeField] private bool Knockback = false;
         //[SerializeField] private float KnockbackForce = 100;
+
+        [SerializeField] private AudioSource AudioSourceComponent;
+        [SerializeField] private AudioClip SpellAudio;
         #endregion
 
         #region Private
@@ -235,6 +238,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
             _movingToPlayer = false;
             PlayerAnimator.SetBool("IsLaserOn", true);
             PlayerAnimator.Play("PlayerLaserPrepare");
+            AudioSourceComponent.PlayOneShot(SpellAudio);
             var mouseDirection = CustomUtilities.GetMouseDirection(MainCamera, PlayersTransform);
             PlayerControlScript.AdjustFlip(mouseDirection);
             PlayerControlScript.ActionLocked = true;

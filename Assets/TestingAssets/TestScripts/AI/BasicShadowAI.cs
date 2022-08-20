@@ -55,6 +55,10 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
     [SerializeField] private float PlayerLooseAggroDelay = 50;
 
     [SerializeField] private float CircleRadiusLost = 5;
+
+    [SerializeField] private AudioSource AudioSourceComponent;
+    [SerializeField] private AudioClip DeathClip;
+    [SerializeField] private AudioClip DamageClip;
     #endregion
 
     #region Private
@@ -406,11 +410,13 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
         if (_hp < 0)
         {
             OnDeath();
+            AudioSourceComponent.PlayOneShot(DeathClip);
             GhostsControlsSingleton.GetInstance().RemoveMe(_circleFollow);
             return true;
         }
         else
         {
+            AudioSourceComponent.PlayOneShot(DamageClip);
             AdjustOpacity();
             return false;
         }

@@ -38,6 +38,9 @@ namespace Assets.Scripts.Hope
         [SerializeField] private float PullRadius = 25;
         [SerializeField] private float PullRadiusForDamage = 15;
         [SerializeField] private float PullRadiusDamagePerTick = 10;
+
+        [SerializeField] private AudioSource AudioSourceComponent;
+        [SerializeField] private AudioClip SpellAudio;
         #endregion
 
         #region Private
@@ -270,6 +273,7 @@ namespace Assets.Scripts.Hope
         private void Fire()
         {
             _target = GetMouseTarget();
+            AudioSourceComponent.PlayOneShot(SpellAudio);
             HopeScript.IsAbilityLocked = false;
             PlayerControllerScript.ActionLocked = false;
             _isFireing = true;
@@ -329,6 +333,7 @@ namespace Assets.Scripts.Hope
                 if (CheckHopesDistance())
                 {
                     StartAiming();
+                    AudioSourceComponent.PlayOneShot(SpellAudio);
                     HopeScript.IsAbilityLocked = true;
                     HopeScript.IsHopeLocked = true;
                     return true;

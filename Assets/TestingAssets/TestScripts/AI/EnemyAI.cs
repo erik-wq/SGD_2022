@@ -40,6 +40,9 @@ public class EnemyAI : MonoBehaviour, IEnemy
     [SerializeField] protected float SpikesRange = 100;
     [SerializeField] protected float SpikeSpawnRange = 4;
 
+    [SerializeField] protected AudioSource AudioSourceComponent;
+    [SerializeField] protected AudioClip DeathClip;
+    [SerializeField] protected AudioClip HitClip;
     #endregion
 
     #region Private
@@ -256,6 +259,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
         else
         {
             //AdjustOpacity();
+            AudioSourceComponent.PlayOneShot(HitClip);
             ApplyForce(force, origin);
             _animator.Play("SpikeTakeDamage");
             return false;
@@ -325,6 +329,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
     private void Killed()
     {
         _rigidBody.velocity = Vector2.zero;
+        AudioSourceComponent.PlayOneShot(DeathClip);
         MainSprite.enabled = false;
         _isDead = true;
         effect.SetActive(true);
