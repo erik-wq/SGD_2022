@@ -225,6 +225,7 @@ namespace Assets.Scripts.Totems
         {
             if (_isDead)
                 return false;
+
             _currentHP -= damage;
             if (_currentHP <= 0)
             {
@@ -234,6 +235,7 @@ namespace Assets.Scripts.Totems
             }
             else
             {
+                _animator.Play("TotemTakeDamage");
                 AdjustHP();
             }
 

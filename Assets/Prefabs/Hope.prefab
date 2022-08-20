@@ -1512,6 +1512,7 @@ GameObject:
   - component: {fileID: 1294598066}
   - component: {fileID: 4157463999772388707}
   - component: {fileID: 1294598078}
+  - component: {fileID: 1883613463}
   m_Layer: 6
   m_Name: Hope
   m_TagString: Hope
@@ -1537,7 +1538,7 @@ Transform:
   - {fileID: 6823772154331511446}
   - {fileID: 9105625074010286273}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &7311925748371843254
 Rigidbody2D:
@@ -1601,7 +1602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  uniqueID: 2069610154115394749
+  uniqueID: 798534708563162459
   updateError: 0.2
   checkTime: 0.1
 --- !u!70 &7311925748371843262
@@ -1679,17 +1680,19 @@ MonoBehaviour:
   PlayerAnimator: {fileID: 0}
   PlayerControlScript: {fileID: 0}
   Length: 2.1
-  EnergyCost: 90
+  EnergyCost: 65
   Range: 50
   Width: 4
   DirectionLocked: 0
   MovementLocked: 1
   RotationSpeed: 30
   DamagePerSecond: 50
-  Cooldown: 25
+  Cooldown: 30
   CooldownText: {fileID: 0}
   ProjectileSpeed: 20
   AimObject: {fileID: 3895711242072366241}
+  AudioSourceComponent: {fileID: 1883613463}
+  SpellAudio: {fileID: 8300000, guid: 601ddd5a1ddb8114ab7d600409aad8c9, type: 3}
 --- !u!114 &1294598057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1711,11 +1714,11 @@ MonoBehaviour:
   IndicatorTransform: {fileID: 0}
   PlayerControllerScript: {fileID: 0}
   HopeScript: {fileID: 1294598064}
-  EnergyCost: 40
+  EnergyCost: 60
   MaxGrabRange: 80
   MaxShootRange: 80
   ProjectileSpeed: 20
-  Cooldown: 0
+  Cooldown: 30
   CooldownText: {fileID: 0}
   PullLength: 3
   PullForce: 125
@@ -1723,6 +1726,9 @@ MonoBehaviour:
   PullRadius: 15
   PullRadiusForDamage: 6
   PullRadiusDamagePerTick: 5
+  AudioSourceComponent: {fileID: 1883613463}
+  SpellAudio: {fileID: 8300000, guid: f856ae976e399904087227111379aa1f, type: 3}
+  MainAnimator: {fileID: 7468614994557167827}
 --- !u!114 &1294598064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1787,10 +1793,12 @@ MonoBehaviour:
   EffectsAnimator: {fileID: 2552779215445142631}
   Cooldown: 15
   AnimationLockLength: 1
-  ExplosionRadius: 5
+  ExplosionRadius: 6
   ExplosionDamage: 50
   CooldownText: {fileID: 0}
-  Cost: 65
+  AudioSourceComponent: {fileID: 1883613463}
+  SpellAudio: {fileID: 8300000, guid: c669f94ab0b72454dbdac82b80841564, type: 3}
+  Cost: 35
 --- !u!61 &4157463999772388707
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1839,3 +1847,99 @@ MonoBehaviour:
   bezierTangentLength: 0.4
   offset: 0.2
   factor: 0.1
+--- !u!82 &1883613463
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7311925748371843252}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

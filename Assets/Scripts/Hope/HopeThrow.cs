@@ -41,6 +41,7 @@ namespace Assets.Scripts.Hope
 
         [SerializeField] private AudioSource AudioSourceComponent;
         [SerializeField] private AudioClip SpellAudio;
+        [SerializeField] private Animator MainAnimator;
         #endregion
 
         #region Private
@@ -87,6 +88,10 @@ namespace Assets.Scripts.Hope
         private void ActivateHalo()
         {
             HopeScript.MakeInvulnerable();
+            MainAnimator.SetBool("IsMagnetRunning", true);
+            MainAnimator.Play("MagnetPrepare");
+            AimObject.SetActive(false);
+            HopesSprite.enabled = true;
             _isHaloActive = true;
             _hasHaloFinished = false;
             _isFireing = false;
@@ -216,9 +221,9 @@ namespace Assets.Scripts.Hope
         {
             HopeScript.IsMovementLocked = false;
             HopeScript.IsHopeLocked = false;
-            HopesSprite.enabled = true;
+            PlayerControllerScript.ActionLocked = false;
+            MainAnimator.SetBool("IsMagnetRunning", false);
             HopeScript.MakeVulnerable();
-            AimObject.SetActive(false);
             _isFireing = false;
         }
 
@@ -275,9 +280,9 @@ namespace Assets.Scripts.Hope
             _target = GetMouseTarget();
             AudioSourceComponent.PlayOneShot(SpellAudio);
             HopeScript.IsAbilityLocked = false;
-            PlayerControllerScript.ActionLocked = false;
             _isFireing = true;
             _isAiming = false;
+            Cursor.visible = true;
             IndicatorSprite.enabled = false;
         }
 
@@ -312,6 +317,7 @@ namespace Assets.Scripts.Hope
             {
                 _lastUsed = Time.time;
                 _isAiming = true;
+                Cursor.visible = false;
                 IndicatorSprite.enabled = true;
                 HopesSprite.enabled = false;
                 AimObject.SetActive(true);
