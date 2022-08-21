@@ -37,8 +37,8 @@ namespace Assets.Scripts.Environment
                     var playerTransform = Global.Instance.PlayerTransform;
                     var hopeTransform = Global.Instance.HopeTransform;
 
-                    playerTransform.position = new Vector3(39, 199, 0);
-                    hopeTransform.position = new Vector3(39, 198, 0);
+                    playerTransform.position = new Vector3(43.28f, 199.25f, 0);
+                    hopeTransform.position = new Vector3(43.28f, 198, 0);
                 }
             }
         }

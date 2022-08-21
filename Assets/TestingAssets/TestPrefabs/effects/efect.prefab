@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 778218715066272940}
   m_Layer: 31
   m_Name: efect
-  m_TagString: Untagged
+  m_TagString: LightMana
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

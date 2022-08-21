@@ -12,10 +12,16 @@ namespace Assets.Scripts.Hope
     class HopeEventHandler : MonoBehaviour
     {
         [SerializeField] private HopeExplosion _explosionScript;
+        [SerializeField] private GlobalController _globalController;
 
         public void Awake()
         {
             
+        }
+
+        public void EndTheGame()
+        {
+            _globalController.EndSequence();
         }
 
         public void RunExplosion()

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.TestingAssets.TestScripts.Hope
 {
@@ -43,6 +44,9 @@ namespace Assets.TestingAssets.TestScripts.Hope
 
         [SerializeField] private AudioSource AudioSourceComponent;
         [SerializeField] private AudioClip SpellAudio;
+
+        [SerializeField] private Image CDImage;
+        [SerializeField] private Image OOMImage;
         #endregion
 
         #region Private
@@ -63,6 +67,26 @@ namespace Assets.TestingAssets.TestScripts.Hope
         private void Update()
         {
 
+        }
+
+        public void AdjustMana(float mana)
+        {
+            if (this.EnergyCost > mana)
+            {
+                OOMImage.enabled = true;
+            }
+            else
+            {
+                OOMImage.enabled = false;
+            }
+        }
+
+        private void AdjustCooldown()
+        {
+            var perc = (Time.time - _lastUsed) / Cooldown;
+            if (perc > 1)
+                perc = 1;
+            CDImage.fillAmount = 1 - perc;
         }
 
         private void FixedUpdate()
@@ -94,7 +118,7 @@ namespace Assets.TestingAssets.TestScripts.Hope
                 }
             }
 
-            AdjustCooldownText();
+            AdjustCooldown();
         }
 
         private void AdjustCooldownText()

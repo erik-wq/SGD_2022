@@ -3,8 +3,6 @@ using Assets.TestingAssets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,6 +32,7 @@ namespace Assets.Scripts.Totems
         [SerializeField] private string Name;
         [SerializeField] private TMP_Text NameText;
         [SerializeField] private Image HealImage;
+        [SerializeField] private GameObject UI;
 
         [SerializeField] private int MaxMelee = 10;
         [SerializeField] private int MaxGhosts = 3;
@@ -45,6 +44,17 @@ namespace Assets.Scripts.Totems
 
         [SerializeField] private GameObject DeleteBarrier;
         [SerializeField] private Animator TotemAnimator;
+
+        [SerializeField] private AudioSource BackgroundMusicSource;
+        [SerializeField] private AudioClip BattleMusic;
+        [SerializeField] private AudioClip IdleMusic;
+        [SerializeField] private GlobalController GlobalController;
+
+        [SerializeField] private AudioSource MainSource;
+        [SerializeField] private AudioClip RoarClip;
+        [SerializeField] private AudioClip TakeDamageClip;
+
+        [SerializeField] private bool Pandora = false;
         #endregion
 
         #region Private
@@ -58,6 +68,7 @@ namespace Assets.Scripts.Totems
         private int _meleeCount = 0;
         private int _shadowCount = 0;
         private bool _isDead = false;
+        private bool _musicStarted = false;
         #endregion
         private void Start()
         {
@@ -89,13 +100,18 @@ namespace Assets.Scripts.Totems
             NameText.enabled = false;
             HealImage.enabled = false;
             _hasBeenDestroyed = true;
+            UI.SetActive(false);
+            GlobalController.MoveStage();
+
+            BackgroundMusicSource.clip = IdleMusic;
+            BackgroundMusicSource.Play();
 
             if (DeleteBarrier != null)
             {
                 DeleteBarrier.SetActive(false);
             }
 
-            if(TotemAnimator != null)
+            if (TotemAnimator != null)
             {
                 TotemAnimator.Play("FlameFate");
             }
@@ -104,6 +120,31 @@ namespace Assets.Scripts.Totems
             {
                 _onDestroyed();
             }
+
+            if(Pandora)
+            {
+                GlobalController.Win();
+                Destroy(gameObject);
+            }
+        }
+
+        public void Reset()
+        {
+            _isRunning = false;
+            _currentHP = MaxHP;
+            BackgroundMusicSource.clip = IdleMusic;
+            BackgroundMusicSource.Play();
+            NameText.enabled = false;
+            HealImage.enabled = false;
+            UI.SetActive(false);
+            _isActive = true;
+            _currentStage = 0;
+            _isRunning = false;
+            _hasBeenDestroyed = false;
+            _meleeCount = 0;
+            _shadowCount = 0;
+            _isDead = false;
+            _musicStarted = false;
         }
 
         public void RegisterOnDestroy(Action action)
@@ -113,6 +154,12 @@ namespace Assets.Scripts.Totems
 
         private void Spawn()
         {
+            if (Pandora)
+            {
+                _animator.Play("Roar");
+                MainSource.PlayOneShot(RoarClip);
+            }
+
             int meleeCount = Mathf.RoundToInt(SpawnRateMelee + _currentStage * SpawnRateMeleeIncrease);
             int ghostCount = Mathf.RoundToInt(SpawnRateGhost + _currentStage * SpawnRateGhostIncrease);
 
@@ -226,12 +273,20 @@ namespace Assets.Scripts.Totems
             if (_isDead)
                 return false;
 
+            if (Pandora)
+            {
+                if (EnemyControllerSingleton.Instance.CanPlayMotherDamage())
+                {
+                    MainSource.PlayOneShot(TakeDamageClip);
+                }
+            }
+
             _currentHP -= damage;
             if (_currentHP <= 0)
             {
-                Die();
                 AudioSourceMember.PlayOneShot(AudioDying);
                 _animator.SetBool("IsDead", true);
+                Die();
             }
             else
             {
@@ -241,11 +296,17 @@ namespace Assets.Scripts.Totems
 
             return true;
         }
-
         public void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.tag == "Player" && !_hasBeenDestroyed)
             {
+                if (!_musicStarted)
+                {
+                    BackgroundMusicSource.clip = BattleMusic;
+                    BackgroundMusicSource.Play();
+                    _musicStarted = true;
+                }
+                UI.SetActive(true);
                 StartEncounter();
                 NameText.text = Name;
                 AdjustHP();

@@ -29,6 +29,7 @@ namespace Assets.Scripts
         private float _lastFlyingDamaged;
         private float _lastMeleeDying;
         private float _lastFlyingDying;
+        private float _lastMotherDamage;
         #endregion
         private EnemyControllerSingleton()
         {
@@ -129,6 +130,16 @@ namespace Assets.Scripts
             if (Time.time > _lastFlyingDamaged + 2.5f)
             {
                 _lastFlyingDamaged = Time.time;
+                return true;
+            }
+            return false;
+        }
+
+        public bool CanPlayMotherDamage()
+        {
+            if (Time.time > _lastMotherDamage + 2.5f)
+            {
+                _lastMotherDamage = Time.time;
                 return true;
             }
             return false;

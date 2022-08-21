@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Hope
 {
@@ -42,6 +43,10 @@ namespace Assets.Scripts.Hope
         [SerializeField] private AudioSource AudioSourceComponent;
         [SerializeField] private AudioClip SpellAudio;
         [SerializeField] private Animator MainAnimator;
+        [SerializeField] private Animator EffectAnimator;
+
+        [SerializeField] private Image CDImage;
+        [SerializeField] private Image OOMImage;
         #endregion
 
         #region Private
@@ -59,6 +64,26 @@ namespace Assets.Scripts.Hope
         public void Start()
         {
             IndicatorSprite.enabled = false;
+        }
+
+        public void AdjustMana(float mana)
+        {
+            if (this.EnergyCost > mana)
+            {
+                OOMImage.enabled = true;
+            }
+            else
+            {
+                OOMImage.enabled = false;
+            }
+        }
+
+        private void AdjustCooldown()
+        {
+            var perc = (Time.time - _lastUsed) / Cooldown;
+            if (perc > 1)
+                perc = 1;
+            CDImage.fillAmount = 1 - perc;
         }
 
         public void FixedUpdate()
@@ -82,14 +107,18 @@ namespace Assets.Scripts.Hope
                 HaloTick();
             }
 
-            AdjustCooldownText();
+            AdjustCooldown();
         }
 
         private void ActivateHalo()
         {
             HopeScript.MakeInvulnerable();
+
             MainAnimator.SetBool("IsMagnetRunning", true);
             MainAnimator.Play("MagnetPrepare");
+            EffectAnimator.SetBool("IsMagnetActive", true);
+            EffectAnimator.Play("MagnetAoe");
+
             AimObject.SetActive(false);
             HopesSprite.enabled = true;
             _isHaloActive = true;
@@ -111,6 +140,7 @@ namespace Assets.Scripts.Hope
             {
                 _isHaloActive = false;
                 _hasHaloFinished = true;
+                EffectAnimator.SetBool("IsMagnetActive", false);
                 UnlockHope();
                 UnlockEnemies();
             }
@@ -221,7 +251,7 @@ namespace Assets.Scripts.Hope
         {
             HopeScript.IsMovementLocked = false;
             HopeScript.IsHopeLocked = false;
-            PlayerControllerScript.ActionLocked = false;
+            HopeScript.IsAbilityLocked = false;
             MainAnimator.SetBool("IsMagnetRunning", false);
             HopeScript.MakeVulnerable();
             _isFireing = false;
@@ -279,7 +309,7 @@ namespace Assets.Scripts.Hope
         {
             _target = GetMouseTarget();
             AudioSourceComponent.PlayOneShot(SpellAudio);
-            HopeScript.IsAbilityLocked = false;
+            PlayerControllerScript.ActionLocked = false;
             _isFireing = true;
             _isAiming = false;
             Cursor.visible = true;

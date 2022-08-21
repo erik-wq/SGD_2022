@@ -26,6 +26,7 @@ public class HopeAI : MonoBehaviour, IEnemy
     [SerializeField] LayerMask ObjectMaks;
     [SerializeField] private Animator MainAnimator;
     [SerializeField] private Animator EffectsAnimator;
+    [SerializeField] private GlobalController GlobalControl;
     #endregion
 
     #region Private
@@ -130,6 +131,7 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     void Awake()
     {
+        Time.timeScale = 1;
         MainAnimator = GetComponentInChildren<Animator>();
         _hopeLaser = GetComponent<HopeLaser>();
         _hopeThrow = GetComponent<HopeThrow>();
@@ -155,6 +157,11 @@ public class HopeAI : MonoBehaviour, IEnemy
 
     public void ClearForces()
     {
+    }
+
+    public void Reset()
+    {
+        SetHP(MaxHP);
     }
 
     private void OnMove(Vector2 direction)
@@ -194,6 +201,14 @@ public class HopeAI : MonoBehaviour, IEnemy
         }
 
         _machine.state.FixedUpdate();
+        AdjustSpellsUI();
+    }
+
+    private void AdjustSpellsUI()
+    {
+        _hopeExplosion.AdjustMana(_hp);
+        _hopeThrow.AdjustMana(_hp);
+        _hopeLaser.AdjustMana(_hp);
     }
 
     public void UnpauseFollow()
@@ -204,6 +219,18 @@ public class HopeAI : MonoBehaviour, IEnemy
     public void PauseFollow()
     {
 
+    }
+
+    public void Win()
+    {
+        MainAnimator.Play("HopeWin");
+        StartCoroutine(Wait());
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSecondsRealtime(4.85f);
+        GlobalControl.EndSequence();
     }
 
     public void Collect()
@@ -224,12 +251,24 @@ public class HopeAI : MonoBehaviour, IEnemy
 
         _hp -= damage;
         MainAnimator.SetFloat("Energy", _hp);
+        MainAnimator.Play("HopeTakeDamage");
         AdjustColor();
         AdjustLight();
 
         if (_hp > 0)
+        {
             return false;
+        }
+        else
+        {
+            Die();
+        }
         return true;
+    }
+
+    private void Die()
+    {
+        GlobalControl.Die();
     }
 
     private void AdjustColor()

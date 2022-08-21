@@ -11,5 +11,6 @@ namespace Assets.TestingAssets
     {
         public bool Activate();
         public float GetCost();
+        public void AdjustMana(float mana);
     }
 }

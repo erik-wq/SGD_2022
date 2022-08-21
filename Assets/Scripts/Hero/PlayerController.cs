@@ -16,9 +16,9 @@ public class PlayerController : MonoBehaviour, IEnemy
     [SerializeField] private float MovementSpeedForwardSideway = 8f;
     [SerializeField] private float MovementSpeedBackwards = 4f;
     [SerializeField] private float MovementSpeedBackwardsSideway = 3f;
-    [SerializeField] private float MaxHP = 100;
+    [SerializeField] private float MaxHPSet = 100;
     [SerializeField] private Image HealthBar;
-    [SerializeField] private float HPRegen = 1.5f;
+    [SerializeField] private float HPRegenSet = 1.5f;
     [SerializeField] private float KnockbackLenght = 0.5f;
 
     [SerializeField] private float CollisionOffset = 0.05f;
@@ -41,12 +41,12 @@ public class PlayerController : MonoBehaviour, IEnemy
     [SerializeField] private float SwordAnimationDistance = 4;
     [SerializeField] private float SwordSlashRadius = 4;
     [SerializeField] private ContactFilter2D EnemyFilter;
-    [SerializeField] private float SwordDamage = 25;
+    [SerializeField] private float SwordDamageSet = 25;
     [SerializeField] private float SwordForce = 500;
-    [SerializeField] private float SwordHeavyPhaseDamage = 15;
+    [SerializeField] private float SwordHeavyPhaseDamageSet = 15;
     [SerializeField] private float HeavyPhaseForce = 0;
     [SerializeField] private float HeavyFinishedRadius = 5;
-    [SerializeField] private float HeavyFinisherDamage = 30;
+    [SerializeField] private float HeavyFinisherDamageSet = 30;
     [SerializeField] private float HeavyFinisherForce = 650;
 
     [SerializeField] private float AttackMovementspeedForward = 10;
@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     [SerializeField] private AudioSource AudioSourceComponent;
     [SerializeField] private AudioClip DashClip;
+    [SerializeField] private GlobalController GlobalControl;
     #endregion
 
     #region Private
@@ -81,7 +82,7 @@ public class PlayerController : MonoBehaviour, IEnemy
     private float _currentEnergy = 0;
 
     private List<Collider2D> _swordSlashZones = new List<Collider2D>();
-    
+
     private float _currentHP;
 
     //Sprint
@@ -99,6 +100,13 @@ public class PlayerController : MonoBehaviour, IEnemy
     private bool _isStunned = false;
     private float _knockbackStart = 0;
     private bool _knockbackCleared = true;
+    private bool _easyMode = false;
+
+    private float MaxHP;
+    private float HPRegen;
+    private float SwordHeavyPhaseDamage;
+    private float SwordDamage;
+    private float HeavyFinisherDamage;
     #endregion
 
     #region Public
@@ -120,6 +128,12 @@ public class PlayerController : MonoBehaviour, IEnemy
     // Start is called before the first frame update
     private void Start()
     {
+        MaxHP = MaxHPSet;
+        HPRegen = HPRegenSet;
+        SwordDamage = SwordDamageSet;
+        SwordHeavyPhaseDamage = SwordHeavyPhaseDamageSet;
+        HeavyFinisherDamage = HeavyFinisherDamageSet;
+
         _currentHP = MaxHP;
         _rigidBody2D = GetComponent<Rigidbody2D>();
         IsMovementLocked = false;
@@ -128,11 +142,37 @@ public class PlayerController : MonoBehaviour, IEnemy
         GenerateSlashZones();
     }
 
+    public void Reset()
+    {
+        _currentHP = MaxHP;
+    }
+
+    public void TurnOnEasyMode()
+    {
+        MaxHP = MaxHPSet * 2;
+        HPRegen = HPRegenSet * 4.5f;
+        SwordDamage = SwordDamageSet * 2.5f;
+        SwordHeavyPhaseDamage = SwordHeavyPhaseDamageSet * 2.5f;
+        HeavyFinisherDamage = HeavyFinisherDamage * 2.5f;
+    }
+
+    public void TurnOffEasyMode()
+    {
+        MaxHP = MaxHPSet;
+        HPRegen = HPRegenSet;
+        SwordDamage = SwordDamageSet;
+        SwordHeavyPhaseDamage = SwordHeavyPhaseDamageSet;
+        HeavyFinisherDamage = HeavyFinisherDamageSet;
+    }
+
     private void FixedUpdate()
     {
         if (_isDashing)
         {
-            _rigidBody2D.MovePosition(_rigidBody2D.position + _dashDirection * MovementSpeedForward * dashSpeedModifier * Time.fixedDeltaTime);
+            if (TryMove(_dashDirection, MovementSpeedForward * dashSpeedModifier * Time.fixedDeltaTime).Count == 0)
+            {
+                _rigidBody2D.MovePosition(_rigidBody2D.position + _dashDirection * MovementSpeedForward * dashSpeedModifier * Time.fixedDeltaTime);
+            }
             return;
         }
 
@@ -145,10 +185,10 @@ public class PlayerController : MonoBehaviour, IEnemy
             dashSlider.fillAmount = value;
         }
 
-        
+
         if (_movementInput != Vector2.zero && !IsMovementLocked)
         {
-            if(_knockbackCleared)
+            if (_knockbackCleared)
             {
                 Move(_movementInput);
                 _animator.SetBool("IsRunning", true);
@@ -656,7 +696,7 @@ public class PlayerController : MonoBehaviour, IEnemy
 
     private void Die()
     {
-
+        GlobalControl.Die();
     }
 
     private void AdjustAttackDirection()

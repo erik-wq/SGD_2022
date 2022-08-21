@@ -81,6 +81,7 @@ MonoBehaviour:
   Name: Totem of Hate
   NameText: {fileID: 0}
   HealImage: {fileID: 0}
+  UI: {fileID: 0}
   MaxMelee: 4
   MaxGhosts: 0
   _animator: {fileID: 336755339}
@@ -88,6 +89,9 @@ MonoBehaviour:
   AudioDying: {fileID: 8300000, guid: 6198ebffcd23b7d4f87ab863edd05884, type: 3}
   DeleteBarrier: {fileID: 0}
   TotemAnimator: {fileID: 0}
+  BackgroundMusicSource: {fileID: 0}
+  BattleMusic: {fileID: 0}
+  IdleMusic: {fileID: 0}
 --- !u!82 &580295785325420355
 AudioSource:
   m_ObjectHideFlags: 0
@@ -421,7 +425,7 @@ MonoBehaviour:
   - {x: 0.501536, y: -0.06117519, z: 0}
   m_ShapePathHash: -360742569
   m_Mesh: {fileID: 0}
-  m_InstanceId: -4130
+  m_InstanceId: -127166
 --- !u!1 &8393343527485515763
 GameObject:
   m_ObjectHideFlags: 0

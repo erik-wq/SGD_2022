@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Hope
 {
@@ -17,12 +18,16 @@ namespace Assets.Scripts.Hope
         [SerializeField] private Animator EffectsAnimator;
         [SerializeField] private float Cooldown;
         [SerializeField] private float AnimationLockLength = 1.5f;
+
         [SerializeField] private float ExplosionRadius = 10;
         [SerializeField] private float ExplosionDamage = 15;
         [SerializeField] private TMP_Text CooldownText;
 
         [SerializeField] private AudioSource AudioSourceComponent;
         [SerializeField] private AudioClip SpellAudio;
+
+        [SerializeField] private Image CDImage;
+        [SerializeField] private Image OOMImage;
 
         //GD
         [SerializeField] private float Cost;
@@ -49,7 +54,27 @@ namespace Assets.Scripts.Hope
                 }
             }
 
-            AdjustCooldownText();
+            AdjustCooldown();
+        }
+
+        public void AdjustMana(float mana)
+        {
+            if(this.Cost > mana)
+            {
+                OOMImage.enabled = true;
+            }
+            else
+            {
+                OOMImage.enabled = false;
+            }
+        }
+
+        private void AdjustCooldown()
+        {
+            var perc = (Time.time - _lastUsedTime) / Cooldown;
+            if (perc > 1)
+                perc = 1;
+            CDImage.fillAmount = 1 - perc;
         }
 
         private void AdjustCooldownText()
