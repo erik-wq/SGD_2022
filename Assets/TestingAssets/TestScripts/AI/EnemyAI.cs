@@ -318,6 +318,7 @@ public class EnemyAI : MonoBehaviour, IEnemy
             projectileLogic.ProjectileDamage = SpikesDamage;
             projectileLogic.ProjectileSpeed = SpikesSpeed;
             projectileLogic.SetDirection(direction);
+            newSpike.transform.parent = transform.parent.parent.transform;
         }
     }
 

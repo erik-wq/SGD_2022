@@ -1,18 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
-    [SerializeField] public GameObject LoadingScreen;
-    private bool _isLoading = false;
-
     public void Play()
     {
-        LoadingScreen.SetActive(true);
-        SceneManager.LoadScene("MainLevel");
+        GameData.sceneManagement.LoadScene("MainLevel","Menu");
     }
 
     public void Quit()
@@ -20,8 +14,4 @@ public class Menu : MonoBehaviour
         Application.Quit();
     }
 
-    void Update()
-    {
-
-    }
 }

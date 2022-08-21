@@ -213,7 +213,10 @@ namespace Assets.TestingAssets.TestScripts.Hope
                     {
                         iEnemy = item.transform.parent.GetComponentInChildren<IEnemy>();
                     }
-                    iEnemy.TakeDamage(DamagePerSecond * Time.deltaTime);
+                    if (iEnemy != null)
+                    {
+                        iEnemy.TakeDamage(DamagePerSecond * Time.deltaTime);
+                    }
                 }
             }
         }

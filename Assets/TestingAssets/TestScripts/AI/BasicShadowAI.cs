@@ -118,6 +118,13 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     private void FixedUpdate()
     {
+        if (HopeTransform == null || PlayerTransform == null)
+        {
+            //HopeAIScript = Global.Instance.HopeScript;
+            HopeTransform = Global.Instance.HopeTransform;
+            //Player = Global.Instance.PlayerScript;
+            PlayerTransform = Global.Instance.PlayerTransform;
+        }
         if (_isDead)
             return;
 

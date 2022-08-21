@@ -183,6 +183,7 @@ namespace Assets.Scripts.Totems
         private void SpawnMelee(Vector2 possition)
         {
             var obj = Instantiate(SpawnerPrefab, possition, Quaternion.identity);
+            obj.transform.parent = transform;
             var script = obj.GetComponent<TotemSpawner>();
             script.RegisterOnSpawned(OnSpawnedMelee);
             _meleeCount++;
@@ -198,6 +199,7 @@ namespace Assets.Scripts.Totems
         {
             var obj = Instantiate(GhostPrefab, possition, Quaternion.identity);
             obj.GetComponent<BasicShadowAI>().RegisterOnDeath(OnDeathMelee);
+            obj.transform.parent = transform;
             _shadowCount++;
         }
 
