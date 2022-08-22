@@ -1030,7 +1030,7 @@ Transform:
   - {fileID: 2971582132239377100}
   - {fileID: 2870847751712475626}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2306140239702955531
 SpriteRenderer:
@@ -1196,10 +1196,10 @@ MonoBehaviour:
   - {x: 2.6952586, y: 0.0331429, z: 0}
   - {x: 1.1476941, y: -0.49996516, z: 0}
   - {x: -0.66555506, y: -0.4605449, z: 0}
-  - {x: -1.9663663, y: -0.5393812, z: 0}
-  m_ShapePathHash: 43712571
+  - {x: -1.8870456, y: -0.18243694, z: 0}
+  m_ShapePathHash: 106048485
   m_Mesh: {fileID: 0}
-  m_InstanceId: -333730
+  m_InstanceId: 90576
 --- !u!1 &8189151261757897109
 GameObject:
   m_ObjectHideFlags: 0

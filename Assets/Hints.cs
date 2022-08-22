@@ -28,7 +28,7 @@ class Hints : MonoBehaviour
             if(!_hintShowned)
             {
                 _hintShowned = true;
-                GlobalControl.ShowHint(Index);
+                //GlobalControl.ShowHint(Index);
             }
         }
     }
@@ -40,7 +40,7 @@ class Hints : MonoBehaviour
             if (!_hintShowned)
             {
                 _hintShowned = true;
-                GlobalControl.ShowHint(Index);
+                //GlobalControl.ShowHint(Index);
             }
         }
     }

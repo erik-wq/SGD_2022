@@ -1,12 +1,9 @@
 ﻿using Assets.Scripts.Totems;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace Assets.Scripts
 {
@@ -28,18 +25,17 @@ namespace Assets.Scripts
         [SerializeField] public GameObject UI;
         [SerializeField] public GameObject EndScreen;
         [SerializeField] public GameObject EndgameLights;
-        [SerializeField] public GameObject HintsUI;
+        //[SerializeField] public GameObject HintsUI;
 
-        [SerializeField] public Image Hint1;
-        [SerializeField] public Image Hint2;
-        [SerializeField] public Image Hint3;
-        [SerializeField] public Image Hint4;
-        [SerializeField] public Image Hint5;
+        //[SerializeField] public Image Hint1;
+        //[SerializeField] public Image Hint2;
+        //[SerializeField] public Image Hint3;
+        //[SerializeField] public Image Hint4;
+        //[SerializeField] public Image Hint5;
 
         [SerializeField] public Transform Hero;
         [SerializeField] public GameObject Hope;
 
-        [SerializeField] private Animator _endgameAnimator;
 
         private Vector3 _startLocation = new Vector3(46.1f, -46.4f, 0);
         private Vector3 _firstCoords = new Vector3(45.13f, -3.07f, 0);
@@ -51,11 +47,11 @@ namespace Assets.Scripts
         private List<TotemAI> _totems;
         private List<GameObject> _groups;
         private List<Vector3> _respawnPoints;
-        private List<Image> _hints;
+        //private List<Image> _hints;
 
         private PlayerController _playerScript;
         private HopeAI _hopeScript;
-        private bool _isHintActive = false;
+        //private bool _isHintActive = false;
 
         public void Awake()
         {
@@ -80,48 +76,42 @@ namespace Assets.Scripts
             _respawnPoints.Add(_thirdCoords);
             _respawnPoints.Add(_fourthCoords);
 
-            _hints = new List<Image>();
-            _hints.Add(Hint1);
-            _hints.Add(Hint2);
-            _hints.Add(Hint3);
-            _hints.Add(Hint4);
-            _hints.Add(Hint5);
+            //_hints = new List<Image>();
+            //_hints.Add(Hint1);
+            //_hints.Add(Hint2);
+            //_hints.Add(Hint3);
+            //_hints.Add(Hint4);
+            //_hints.Add(Hint5);
 
             _playerScript = Hero.GetComponent<PlayerController>();
             _hopeScript = Hope.GetComponent<HopeAI>();
         }
 
-        private void FixedUpdate()
-        {
+        //public void HideHint()
+        //{
+        //    HideHints();
+        //    _isHintActive = false;
+        //    Time.timeScale = 1;
+        //}
 
+        //public void ShowHint(int index)
+        //{
+        //    _isHintActive = true;
+        //    _hints[index].enabled = true;
+        //    HintsUI.SetActive(true);
+        //    Time.timeScale = 0;
+        //}
 
-        }
+        //private void HideHints()
+        //{
+        //    Hint1.enabled = false;
+        //    Hint2.enabled = false;
+        //    Hint3.enabled = false;
+        //    Hint4.enabled = false;
+        //    Hint5.enabled = false;
 
-        public void HideHint()
-        {
-            HideHints();
-            _isHintActive = false;
-            Time.timeScale = 1;
-        }
-
-        public void ShowHint(int index)
-        {
-            _isHintActive = true;
-            _hints[index].enabled = true;
-            HintsUI.SetActive(true);
-            Time.timeScale = 0;
-        }
-
-        private void HideHints()
-        {
-            Hint1.enabled = false;
-            Hint2.enabled = false;
-            Hint3.enabled = false;
-            Hint4.enabled = false;
-            Hint5.enabled = false;
-
-            HintsUI.SetActive(false);
-        }
+        //    HintsUI.SetActive(false);
+        //}
 
 
         public void Die()
@@ -137,7 +127,6 @@ namespace Assets.Scripts
             EndScreen.SetActive(true);
             UI.SetActive(false);
             Menu.SetActive(false);
-            _endgameAnimator.Play("EdngameScreen");
         }
 
         public void Win()
@@ -149,7 +138,8 @@ namespace Assets.Scripts
 
         public void Exit()
         {
-            SceneManager.LoadScene("Menu");
+            Time.timeScale = 1;
+            GameData.sceneManagement.LoadScene("Menu", "MainLevel");
         }
 
         public void Respawn()
@@ -180,16 +170,16 @@ namespace Assets.Scripts
 
         private void HideMenu()
         {
+            Time.timeScale = 1;
             Menu.SetActive(false);
             UI.SetActive(true);
         }
-
         private void ShowMenu()
         {
             Menu.SetActive(true);
             UI.SetActive(false);
+            Time.timeScale = 0;
         }
-
         private void KillEnemies()
         {
             GameObject[] objs;
