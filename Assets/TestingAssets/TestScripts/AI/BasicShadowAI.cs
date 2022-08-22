@@ -317,6 +317,8 @@ public class BasicShadowAI : MonoBehaviour, IShadowEnemy
 
     private float DistanceFromPlayer()
     {
+        if (PlayerTransform == null)
+            return 999;
         return Vector2.Distance(this.transform.position, PlayerTransform.position);
     }
 
